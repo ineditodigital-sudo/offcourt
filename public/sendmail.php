@@ -160,6 +160,15 @@ $mime .= "--$boundary--";
 
 $encodedSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
 
+// Copia del mensaje en la bandeja del panel de administración, por si el
+// correo se pierde o cae en spam. Si el panel no está desplegado, no pasa nada.
+$libMensajes = __DIR__ . '/cms/lib/mensajes.php';
+if (is_file($libMensajes)) {
+    require_once __DIR__ . '/cms/lib/comun.php';
+    require_once $libMensajes;
+    oc_mensaje_registrar(['nombre' => $name, 'email' => $email, 'telefono' => $phone, 'mensaje' => $message]);
+}
+
 if (@mail($to, $encodedSubject, $mime, $headers)) {
     echo json_encode(['success' => true]);
 } else {

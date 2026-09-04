@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { resolve } from 'node:path'
 
 /**
  * NOTA sobre el CSS y por qué se dejó bloqueante.
@@ -22,4 +23,22 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  build: {
+    rollupOptions: {
+      /*
+       * Dos aplicaciones en el mismo proyecto:
+       *
+       *   index.html        el sitio público
+       *   admin/index.html  el panel de administración (dist/admin/)
+       *
+       * Comparten React, los tipos del contenido (src/cms) y las tipografías,
+       * pero son bundles separados: quien visita el sitio no descarga ni un
+       * byte del panel.
+       */
+      input: {
+        sitio: resolve(import.meta.dirname, 'index.html'),
+        admin: resolve(import.meta.dirname, 'admin/index.html'),
+      },
+    },
+  },
 })

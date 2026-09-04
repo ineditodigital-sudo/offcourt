@@ -18,6 +18,13 @@ dist-ssr
 !.env.example
 .deploy-backup
 
+# Estado del CMS. Vive solo en el servidor; en local aparece al probar con
+# php -S y no debe subirse al repositorio (contraseña, contenido, mensajes).
+public/cms/data/*
+!public/cms/data/.htaccess
+public/media/*
+!public/media/.htaccess
+
 # ---------------------------------------------------------------------------
 # Material fuente pesado (~350 MB): PDFs de brochures, videos sin comprimir,
 # ZIPs de fotos, ejecutables e imágenes descartadas. No hacen falta para

@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import { App } from './App.tsx';
+import { ContenidoProvider, leerDocumentoInicial } from './cms/ContenidoContext';
 
 /**
  * El hero ya está pintado: index.html trae una versión estática generada desde
@@ -17,10 +18,16 @@ import { App } from './App.tsx';
  */
 document.documentElement.classList.add('oc-intro-hecha');
 
+// El contenido publicado viene inyectado en el HTML por index.php (o son los
+// valores por defecto si no hay CMS detrás). Se lee una sola vez, aquí.
+const documento = leerDocumentoInicial();
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ContenidoProvider inicial={documento}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ContenidoProvider>
   </StrictMode>,
 );

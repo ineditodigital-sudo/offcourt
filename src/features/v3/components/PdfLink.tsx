@@ -7,22 +7,21 @@ const isSafari =
   typeof navigator !== 'undefined' &&
   /^((?!chrome|android|crios|fxios|edg|opr).)*safari/i.test(navigator.userAgent);
 
-interface PdfLinkProps {
+interface PdfLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
-  className?: string;
   children: React.ReactNode;
 }
 
-export const PdfLink: React.FC<PdfLinkProps> = ({ href, className, children }) => {
+export const PdfLink: React.FC<PdfLinkProps> = ({ href, children, ...rest }) => {
   if (isSafari) {
     return (
-      <a href={href} download className={className}>
+      <a {...rest} href={href} download>
         {children}
       </a>
     );
   }
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+    <a {...rest} href={href} target="_blank" rel="noopener noreferrer">
       {children}
     </a>
   );

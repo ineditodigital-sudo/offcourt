@@ -12,10 +12,15 @@ npm run dev          # http://localhost:5173
 ```
 
 ```bash
-npm run build        # compila, pre-renderiza y genera el HTML de cada ruta
-npm run preview      # sirve dist/ tal como quedará en producción
+npm run build        # compila el sitio y el panel, pre-renderiza y genera el HTML de cada ruta
+npm run servir       # sirve dist/ con PHP en http://localhost:8080 (sitio + panel + CMS)
+npm run preview      # sirve dist/ sin PHP: solo el sitio, sin CMS
 npm run lint
 ```
+
+`npm run servir` es el que hay que usar para probar de verdad: `vite preview` no
+ejecuta PHP, así que ni el panel ni la inyección del contenido publicado
+funcionan ahí.
 
 ## Despliegue
 
@@ -32,6 +37,48 @@ El despliegue es incremental y seguro: respalda los archivos de servidor
 (`php.ini`, `.user.ini`) y aborta si `dist/` parece un build incompleto. Al
 terminar comprueba por HTTP que el sitio responde y sirve el bundle nuevo.
 
+## El panel de administración
+
+El sitio se administra desde **`/admin`**, sin tocar código y sin recompilar:
+textos, fotos, PDFs, colores, tipografías, orden de las secciones, SEO por
+página, datos de contacto y los identificadores de Google Analytics o Meta Pixel.
+
+La primera vez, el despliegue imprime un **código de instalación** de un solo
+uso; con él se crea la contraseña desde el propio panel. Si algún día se pierde
+el acceso, basta con borrar `cms/data/config.php` por FTP y volver a desplegar.
+
+**Cómo funciona**
+
+- El contenido vive como datos (`cms/data/publicado.json` en el servidor), nunca
+  mezclado con el diseño. Editarlo no puede tocar el marcado ni el layout.
+- La estructura editable está descrita una sola vez en
+  [`src/cms/definicion.ts`](src/cms/definicion.ts): de ese árbol salen a la vez
+  los valores por defecto del sitio, los formularios del panel y los tipos.
+  Añadir un campo es añadirlo ahí.
+- Los componentes pintan con `<Tx>`, `<Im>`, `<Btn>` y `<Rico>`
+  ([`src/cms/Editable.tsx`](src/cms/Editable.tsx)), que además marcan cada
+  elemento en el DOM para que se pueda seleccionar haciendo clic en la vista
+  previa.
+- `index.php` sirve cada página inyectando el contenido publicado: reescribe el
+  `<head>` de SEO, sustituye los textos del hero pre-renderizado, incrusta el
+  JSON que React lee al arrancar y escribe las variables de color. Sin petición
+  extra y sin parpadeo.
+- Publicar es instantáneo: **no hace falta recompilar** para cambiar contenido.
+  Solo se recompila cuando cambia el código.
+
+**Límites de diseño, a propósito**
+
+Los ajustes de aspecto son acotados: el tamaño se mueve en pasos dentro de la
+escala responsiva (ver [`src/cms/estilos.ts`](src/cms/estilos.ts)), los pesos y
+colores salen de listas cerradas, y el texto con formato pasa por un saneador
+([`src/cms/sanitizar.ts`](src/cms/sanitizar.ts)) que solo deja negrita, cursiva,
+listas, títulos y enlaces. No hay forma de escribir HTML ni CSS desde el panel.
+
+Las clases que esos ajustes pueden generar están declaradas en `@source inline`
+dentro de [`src/index.css`](src/index.css). **Si se amplían los controles de
+estilo, hay que ampliar esa lista**: Tailwind solo compila las clases que ve
+escritas, y una clase que no esté ahí simplemente no existirá en producción.
+
 ## Estructura
 
 ```
@@ -43,6 +90,14 @@ src/
   features/landing/   Diseño original, servido en /v1 (noindex)
   features/legacy/    Envoltorios de esas dos versiones
   components/layout/  Navbar, Footer y formularios compartidos
+  cms/                Capa de contenido del sitio
+    definicion.ts     TODO lo editable, con sus valores por defecto
+    dsl.ts            Mini-lenguaje del árbol (defaults + esquema + tipos)
+    Editable.tsx      Tx, Im, Btn, Rico: los componentes que pintan contenido
+    estilos.ts        Traduce los ajustes de aspecto a clases de Tailwind
+    sanitizar.ts      Limpia el HTML del texto con formato
+    puente.ts         postMessage con el panel (solo dentro del iframe)
+  admin/              El panel (segunda aplicación, se compila a dist/admin/)
   hooks/useSeo.ts     Título, descripción, Open Graph y canónica en runtime
   lib/metaRutas.ts    Textos SEO de cada ruta — fuente única de verdad
   lib/gsapLazy.ts     Carga diferida de GSAP + ScrollTrigger
@@ -50,8 +105,15 @@ src/
   prerender/          Entrada SSR del build: hero estático y tabla de rutas
 scripts/
   generar-paginas.mjs Cierre del build (ver abajo)
+  servidor-local.php  Router para probar con PHP en local
+admin/index.html      Punto de entrada del panel
 public/               Estáticos: fotos, fuentes, vídeos, brochures, .htaccess,
-                      sendmail.php, robots.txt, sitemap.xml
+                      robots.txt, sitemap.xml
+  index.php           Sirve cada página con el contenido publicado inyectado
+  sendmail.php        Formulario de contacto (correo + copia en el panel)
+  cms/                Backend del panel: api.php y lib/*.php
+  cms/data/           Contenido, contraseña, mensajes. Solo en el servidor.
+  media/              Archivos subidos desde el panel. Solo en el servidor.
 ```
 
 ## Cómo se compila
@@ -95,6 +157,12 @@ El código lleva comentarios explicando el porqué de cada una; en resumen:
   dejaba un `requestAnimationFrame` huérfano por cada navegación.
 - **El vídeo del hero no se descarga en móvil** ni con ahorro de datos: pesa
   10 MB y ahí basta el póster WebP de 31 kB.
+- **El contenido lo inyecta PHP, no una petición del navegador.** Pedirlo por
+  `fetch` al arrancar añadiría un salto a la red antes de poder pintar y
+  devolvería el parpadeo que costó tanto quitar.
+- **`deploy.cjs` nunca toca `cms/data/` ni `media/`**: son el estado que solo
+  existe en el servidor. Un despliegue que los borrara dejaría el sitio sin sus
+  textos y sin las fotos que subió el cliente.
 
 ## Pendientes de información del cliente
 
@@ -102,7 +170,9 @@ El código lleva comentarios explicando el porqué de cada una; en resumen:
   apuntan a WhatsApp. Falta la URL del agente.
 - **Redes sociales**: los iconos existen pero están ocultos tras la constante
   `SHOW_SOCIAL` en `ContactFormV3`. Faltan los perfiles oficiales.
-- **Analítica**: el sitio no tiene GA4, GTM ni ningún otro medidor instalado.
+- **Analítica**: ya se puede activar sola desde el panel (Todo el sitio →
+  Mediciones) pegando el identificador de Google Analytics o Meta Pixel. Falta
+  que el cliente cree la propiedad y facilite el ID.
 
 Ver [`COPY WEB - Offcourt Sports Group.md`](COPY%20WEB%20-%20Offcourt%20Sports%20Group.md)
 para el copy aprobado y sus pendientes.

@@ -33,7 +33,10 @@ function setCanonical(pathname: string) {
   el.setAttribute('href', SITE + limpia);
 }
 
-export function useSeo(title: string, description: string, image: string = DEFAULT_IMAGE) {
+export function useSeo(title: string, description: string, imagen: string = DEFAULT_IMAGE) {
+  // La imagen elegida en el panel se guarda como ruta relativa (/media/x.webp);
+  // las redes sociales exigen la dirección completa.
+  const image = /^https?:\/\//i.test(imagen) ? imagen : SITE + (imagen.startsWith('/') ? imagen : '/' + imagen);
   useEffect(() => {
     document.title = title;
     setMeta('description', description);

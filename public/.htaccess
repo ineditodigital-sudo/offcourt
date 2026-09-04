@@ -1,4 +1,4 @@
-DirectoryIndex index.html
+DirectoryIndex index.php index.html
 
 # BEGIN cPanel-generated php ini directives, do not edit
 <IfModule php8_module>
@@ -41,26 +41,37 @@ DirectoryIndex index.html
   RewriteCond %{HTTPS} off
   RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [L,R=301]
 
+  # Panel de administración del contenido.
+  RewriteRule ^admin/?$ /admin/index.html [L]
+
+  # Todo el HTML del sitio pasa por index.php, que inyecta el contenido
+  # publicado desde el panel (textos, SEO, colores, mediciones). Incluye las
+  # peticiones directas a un .html, salvo dentro de /admin/.
+  RewriteCond %{REQUEST_URI} !^/admin/
+  RewriteRule ^((?:[^./]+/)?[^./]+\.html)$ /index.php?archivo=$1 [L,QSA]
+
+  # Archivos reales (bundles, fotos, PDFs, la propia API): se sirven tal cual.
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+
   # Cada ruta tiene su propio HTML, generado en el build con su <title>, su
-  # descripción y sus Open Graph ya escritos (scripts/generar-paginas.mjs).
-  # Sin esto, todas las rutas recibían el index.html de la portada y cualquier
-  # enlace compartido en WhatsApp o LinkedIn mostraba la ficha de la portada,
-  # porque esos rastreadores no ejecutan el JavaScript que las corregía.
+  # descripción y sus Open Graph (scripts/generar-paginas.mjs); index.php los
+  # reescribe con lo publicado. Sin esto, todas las rutas recibían el
+  # index.html de la portada y cualquier enlace compartido en WhatsApp o
+  # LinkedIn mostraba la ficha de la portada, porque esos rastreadores no
+  # ejecutan el JavaScript que las corregía.
   #
-  #   /nosotros            -> nosotros.html
-  #   /servicios/athletes  -> servicios/athletes.html
+  #   /nosotros            -> index.php?archivo=nosotros.html
+  #   /servicios/athletes  -> index.php?archivo=servicios/athletes.html
   #
   # Las dos reglas solo actúan si el archivo existe de verdad: si un despliegue
-  # no los subiera, no casan y todo cae en el index.html de siempre.
-  RewriteCond %{REQUEST_FILENAME} !-f
+  # no los subiera, no casan y todo cae en la portada, como siempre.
   RewriteCond %{DOCUMENT_ROOT}/$1.html -f
-  RewriteRule ^([^./]+)/?$ /$1.html [L]
+  RewriteRule ^([^./]+)/?$ /index.php?archivo=$1.html [L,QSA]
 
-  RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{DOCUMENT_ROOT}/$1/$2.html -f
-  RewriteRule ^([^./]+)/([^./]+)/?$ /$1/$2.html [L]
+  RewriteRule ^([^./]+)/([^./]+)/?$ /index.php?archivo=$1/$2.html [L,QSA]
 
-  # Servir index.html para la raíz y rutas del SPA (todo lo que NO sea archivo real)
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^ index.html [L]
+  # Raíz y rutas del SPA (todo lo que NO sea archivo real): la portada.
+  RewriteRule ^ /index.php?archivo=index.html [L,QSA]
 </IfModule>

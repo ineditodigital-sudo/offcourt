@@ -29,6 +29,15 @@ export function scrollToSection(id: string) {
   }
 }
 
+/** Desplaza hasta un elemento concreto, dejándolo bajo el navbar. Lo usa el editor. */
+export function scrollToElement(el: HTMLElement) {
+  if (instance) {
+    instance.scrollTo(el, { offset: -140, duration: 0.8 });
+  } else {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
 /** Sube al inicio con animación. Se usa en el botón del footer. */
 export function scrollToTopSmooth() {
   if (instance) {

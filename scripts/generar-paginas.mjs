@@ -82,9 +82,11 @@ function cabecera({ ruta, title, description, noindex }) {
   const url = SITIO + (ruta === '/' ? '' : ruta);
   const t = attr(title);
   const d = attr(description);
+  // Los marcadores se conservan en la salida: index.php los usa para sustituir
+  // este bloque por el SEO que la persona haya escrito en el panel.
   return [
-    '<!-- Generado por scripts/generar-paginas.mjs. No editar a mano: se',
-    '         reescribe en cada build a partir de src/lib/metaRutas.ts. -->',
+    '<!-- SEO:INICIO — generado por scripts/generar-paginas.mjs a partir de',
+    '         src/lib/metaRutas.ts; index.php lo reescribe con lo publicado. -->',
     `    <title>${texto(title)}</title>`,
     `    <meta name="description" content="${d}" />`,
     noindex ? '    <meta name="robots" content="noindex, nofollow" />' : null,
@@ -100,6 +102,7 @@ function cabecera({ ruta, title, description, noindex }) {
     `    <meta name="twitter:description" content="${d}" />`,
     `    <meta name="twitter:image" content="${SITIO}/og-image.png" />`,
     `    <link rel="canonical" href="${url}" />`,
+    '    <!-- SEO:FIN -->',
   ]
     .filter(Boolean)
     .join('\n');

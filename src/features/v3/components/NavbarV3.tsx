@@ -3,6 +3,10 @@ import { Sun, Moon, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { scrollToSection } from '../../../lib/smoothScroll';
+import { useContenido } from '../../../cms/ContenidoContext';
+import { Tx } from '../../../cms/Editable';
+
+const KN = 'global.navegacion';
 
 interface NavbarV3Props {
   theme: 'dark' | 'light';
@@ -13,6 +17,11 @@ export const NavbarV3: React.FC<NavbarV3Props> = ({ theme, toggleTheme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const contenido = useContenido();
+  const whatsappUrl = `https://wa.me/${contenido.global.contacto.whatsapp}`;
+  const verticales = contenido.paginas.servicios.items
+    .map((item, indice) => ({ item, indice }))
+    .filter(({ item }) => item.visible);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,21 +43,22 @@ export const NavbarV3: React.FC<NavbarV3Props> = ({ theme, toggleTheme }) => {
     scrollToSection(id);
   };
 
+  const enlaceCls = 'hover:text-marca transition-colors text-gris-oscuro dark:text-gris-claro';
+
   return (
     <nav className="fixed top-6 left-0 right-0 z-50 transition-all duration-300 px-4 md:px-8">
       {/* El cristal esmerilado solo en escritorio: en móvil, un backdrop-blur en
           barra fija obliga a recomponer toda la pantalla en cada fotograma de
           scroll y es de las mayores causas de tirones. Ahí va casi opaco. */}
-      <div className={`max-w-7xl mx-auto rounded-[32px] border border-black/10 dark:border-white/10 bg-white/95 dark:bg-[#1b1b1b]/95 md:bg-white/80 md:dark:bg-[#1b1b1b]/80 md:backdrop-blur-xl px-6 py-4 flex items-center justify-between transition-all duration-300 ${scrolled ? 'shadow-[0_8px_32px_rgba(0,0,0,0.1)]' : ''}`}>
-        
+      <div className={`max-w-7xl mx-auto rounded-[32px] border border-black/10 dark:border-white/10 bg-white/95 dark:bg-negro/95 md:bg-white/80 md:dark:bg-negro/80 md:backdrop-blur-xl px-6 py-4 flex items-center justify-between transition-all duration-300 ${scrolled ? 'shadow-[0_8px_32px_rgba(0,0,0,0.1)]' : ''}`}>
+
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3">
           <div className="bg-transparent flex items-center justify-center">
-            <img 
-              src={theme === 'dark' ? '/logo_blanco.svg' : '/logo_negro.svg'} 
-              alt="Offcourt Logo" 
+            <img
+              src={theme === 'dark' ? '/logo_blanco.svg' : '/logo_negro.svg'}
+              alt="Offcourt Logo"
               width="738" height="404"
-              
               className="h-10 md:h-12 w-auto object-contain"
             />
           </div>
@@ -56,64 +66,62 @@ export const NavbarV3: React.FC<NavbarV3Props> = ({ theme, toggleTheme }) => {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8 font-sarabun font-semibold text-sm uppercase tracking-wider">
-          <Link to="/" onClick={(e) => handleSectionClick(e, 'hero')} className="hover:text-[#fda211] transition-colors text-[#2e2f30] dark:text-[#e4e4e4]">Inicio</Link>
-          <Link to="/nosotros" className="hover:text-[#fda211] transition-colors text-[#2e2f30] dark:text-[#e4e4e4]">Nosotros</Link>
-          
+          <Link to="/" onClick={(e) => handleSectionClick(e, 'hero')} className={enlaceCls}><Tx k={`${KN}.inicio`} /></Link>
+          <Link to="/nosotros" className={enlaceCls}><Tx k={`${KN}.nosotros`} /></Link>
+
           <div className="relative group">
-            <Link to="/#soluciones" onClick={(e) => handleSectionClick(e, 'soluciones')} className="hover:text-[#fda211] transition-colors text-[#2e2f30] dark:text-[#e4e4e4] flex items-center gap-1 cursor-pointer">
-              Soluciones
+            <Link to="/#soluciones" onClick={(e) => handleSectionClick(e, 'soluciones')} className={`${enlaceCls} flex items-center gap-1 cursor-pointer`}>
+              <Tx k={`${KN}.soluciones`} />
             </Link>
-            
+
             <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-              <div className="bg-white dark:bg-[#1b1b1b] border border-black/10 dark:border-white/10 rounded-2xl shadow-xl overflow-hidden min-w-[280px] py-2 flex flex-col font-sarabun text-sm font-semibold normal-case tracking-normal">
-                <Link to="/servicios/consulting" className="px-6 py-3 hover:bg-black/5 dark:hover:bg-white/5 text-[#2e2f30] dark:text-[#e4e4e4] transition-colors">OFF COURT Consulting</Link>
-                <Link to="/servicios/experiences" className="px-6 py-3 hover:bg-black/5 dark:hover:bg-white/5 text-[#2e2f30] dark:text-[#e4e4e4] transition-colors">OFF COURT Experiences</Link>
-                <Link to="/servicios/marketing" className="px-6 py-3 hover:bg-black/5 dark:hover:bg-white/5 text-[#2e2f30] dark:text-[#e4e4e4] transition-colors">OFF COURT Marketing</Link>
-                <Link to="/servicios/athletes" className="px-6 py-3 hover:bg-black/5 dark:hover:bg-white/5 text-[#2e2f30] dark:text-[#e4e4e4] transition-colors">OFF COURT Athletes</Link>
-                <Link to="/servicios/creators" className="px-6 py-3 hover:bg-black/5 dark:hover:bg-white/5 text-[#2e2f30] dark:text-[#e4e4e4] transition-colors">OFF COURT Creators</Link>
-                <Link to="/servicios/media" className="px-6 py-3 hover:bg-black/5 dark:hover:bg-white/5 text-[#2e2f30] dark:text-[#e4e4e4] transition-colors">OFF COURT Media</Link>
-                <Link to="/servicios/ventures" className="px-6 py-3 hover:bg-black/5 dark:hover:bg-white/5 text-[#2e2f30] dark:text-[#e4e4e4] transition-colors">OFF COURT Ventures</Link>
+              <div className="bg-white dark:bg-negro border border-black/10 dark:border-white/10 rounded-2xl shadow-xl overflow-hidden min-w-[280px] py-2 flex flex-col font-sarabun text-sm font-semibold normal-case tracking-normal">
+                {verticales.map(({ item, indice }) => (
+                  <Link key={item.id} to={`/servicios/${item.id}`} className="px-6 py-3 hover:bg-black/5 dark:hover:bg-white/5 text-gris-oscuro dark:text-gris-claro transition-colors">
+                    <Tx k={`paginas.servicios.items.${indice}.titulo`} sel={`paginas.servicios.items.${indice}.titulo`} />
+                  </Link>
+                ))}
               </div>
             </div>
           </div>
 
-          <Link to="/#alianza" onClick={(e) => handleSectionClick(e, 'alianza')} className="hover:text-[#fda211] transition-colors text-[#2e2f30] dark:text-[#e4e4e4]">Proyectos</Link>
+          <Link to="/#alianza" onClick={(e) => handleSectionClick(e, 'alianza')} className={enlaceCls}><Tx k={`${KN}.proyectos`} /></Link>
         </div>
 
         {/* Right side options */}
         <div className="hidden md:flex items-center gap-4">
           {/* Theme Toggle */}
-          <button 
-            onClick={toggleTheme} 
-            className="w-10 h-10 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/10 text-[#1b1b1b] dark:text-white transition-colors cursor-pointer"
+          <button
+            onClick={toggleTheme}
+            className="w-10 h-10 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/10 text-negro dark:text-white transition-colors cursor-pointer"
             aria-label="Toggle Theme"
           >
-            {theme === 'dark' ? <Sun size={18} className="text-[#fda211]" /> : <Moon size={18} />}
+            {theme === 'dark' ? <Sun size={18} className="text-marca" /> : <Moon size={18} />}
           </button>
-          
+
           {/* CTA Button */}
-          <a 
-            href="https://wa.me/523314825847"
+          <a
+            href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#fda211] text-[#1b1b1b] hover:bg-[#e5920f] px-6 py-3 rounded-[20px] font-sarabun font-bold text-sm uppercase tracking-wider transition-colors duration-300 cursor-pointer shadow-lg shadow-[#fda211]/20 inline-flex items-center gap-2"
+            className="bg-marca text-negro hover:bg-marca-oscuro px-6 py-3 rounded-[20px] font-sarabun font-bold text-sm uppercase tracking-wider transition-colors duration-300 cursor-pointer shadow-lg shadow-marca/20 inline-flex items-center gap-2"
           >
-            <WhatsAppIcon size={18} /> WhatsApp
+            <WhatsAppIcon size={18} /> <Tx k={`${KN}.whatsapp`} />
           </a>
         </div>
 
         {/* Mobile menu trigger */}
         <div className="flex items-center gap-4 md:hidden">
-          <button 
-            onClick={toggleTheme} 
-            className="w-8 h-8 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center text-[#1b1b1b] dark:text-white cursor-pointer"
+          <button
+            onClick={toggleTheme}
+            className="w-8 h-8 rounded-full border border-black/10 dark:border-white/10 flex items-center justify-center text-negro dark:text-white cursor-pointer"
             aria-label="Toggle Theme"
           >
-            {theme === 'dark' ? <Sun size={16} className="text-[#fda211]" /> : <Moon size={16} />}
+            {theme === 'dark' ? <Sun size={16} className="text-marca" /> : <Moon size={16} />}
           </button>
-          <button 
-            onClick={() => setIsOpen(!isOpen)} 
-            className="text-[#1b1b1b] dark:text-white cursor-pointer"
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-negro dark:text-white cursor-pointer"
             aria-label="Menu"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -123,32 +131,28 @@ export const NavbarV3: React.FC<NavbarV3Props> = ({ theme, toggleTheme }) => {
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className="md:hidden absolute top-24 left-4 right-4 border border-black/5 dark:border-white/10 bg-white/95 dark:bg-[#1b1b1b]/95 backdrop-blur-xl rounded-[24px] p-3 shadow-2xl flex flex-col font-sarabun animate-fade-in text-[#1b1b1b] dark:text-white">
-          <Link to="/" onClick={(e) => handleSectionClick(e, 'hero')} className="px-4 py-3.5 text-sm font-bold uppercase tracking-wider rounded-xl hover:bg-black/5 dark:hover:bg-white/5 hover:text-[#fda211] transition-colors">Inicio</Link>
-          <Link to="/nosotros" onClick={() => setIsOpen(false)} className="px-4 py-3.5 text-sm font-bold uppercase tracking-wider rounded-xl hover:bg-black/5 dark:hover:bg-white/5 hover:text-[#fda211] transition-colors">Nosotros</Link>
+        <div className="md:hidden absolute top-24 left-4 right-4 border border-black/5 dark:border-white/10 bg-white/95 dark:bg-negro/95 backdrop-blur-xl rounded-[24px] p-3 shadow-2xl flex flex-col font-sarabun animate-fade-in text-negro dark:text-white">
+          <Link to="/" onClick={(e) => handleSectionClick(e, 'hero')} className="px-4 py-3.5 text-sm font-bold uppercase tracking-wider rounded-xl hover:bg-black/5 dark:hover:bg-white/5 hover:text-marca transition-colors">{contenido.global.navegacion.inicio}</Link>
+          <Link to="/nosotros" onClick={() => setIsOpen(false)} className="px-4 py-3.5 text-sm font-bold uppercase tracking-wider rounded-xl hover:bg-black/5 dark:hover:bg-white/5 hover:text-marca transition-colors">{contenido.global.navegacion.nosotros}</Link>
 
           <div>
-            <Link to="/#soluciones" onClick={(e) => handleSectionClick(e, 'soluciones')} className="block px-4 py-3.5 text-sm font-bold uppercase tracking-wider rounded-xl hover:bg-black/5 dark:hover:bg-white/5 hover:text-[#fda211] transition-colors">Soluciones</Link>
+            <Link to="/#soluciones" onClick={(e) => handleSectionClick(e, 'soluciones')} className="block px-4 py-3.5 text-sm font-bold uppercase tracking-wider rounded-xl hover:bg-black/5 dark:hover:bg-white/5 hover:text-marca transition-colors">{contenido.global.navegacion.soluciones}</Link>
             <div className="flex flex-col mt-0.5 mb-1">
-                <Link to="/servicios/consulting" onClick={() => setIsOpen(false)} className="px-4 pl-9 py-2.5 text-sm font-medium text-[#2e2f30]/70 dark:text-white/60 hover:text-[#fda211] transition-colors">OFF COURT Consulting</Link>
-                <Link to="/servicios/experiences" onClick={() => setIsOpen(false)} className="px-4 pl-9 py-2.5 text-sm font-medium text-[#2e2f30]/70 dark:text-white/60 hover:text-[#fda211] transition-colors">OFF COURT Experiences</Link>
-                <Link to="/servicios/marketing" onClick={() => setIsOpen(false)} className="px-4 pl-9 py-2.5 text-sm font-medium text-[#2e2f30]/70 dark:text-white/60 hover:text-[#fda211] transition-colors">OFF COURT Marketing</Link>
-                <Link to="/servicios/athletes" onClick={() => setIsOpen(false)} className="px-4 pl-9 py-2.5 text-sm font-medium text-[#2e2f30]/70 dark:text-white/60 hover:text-[#fda211] transition-colors">OFF COURT Athletes</Link>
-                <Link to="/servicios/creators" onClick={() => setIsOpen(false)} className="px-4 pl-9 py-2.5 text-sm font-medium text-[#2e2f30]/70 dark:text-white/60 hover:text-[#fda211] transition-colors">OFF COURT Creators</Link>
-                <Link to="/servicios/media" onClick={() => setIsOpen(false)} className="px-4 pl-9 py-2.5 text-sm font-medium text-[#2e2f30]/70 dark:text-white/60 hover:text-[#fda211] transition-colors">OFF COURT Media</Link>
-                <Link to="/servicios/ventures" onClick={() => setIsOpen(false)} className="px-4 pl-9 py-2.5 text-sm font-medium text-[#2e2f30]/70 dark:text-white/60 hover:text-[#fda211] transition-colors">OFF COURT Ventures</Link>
+              {verticales.map(({ item }) => (
+                <Link key={item.id} to={`/servicios/${item.id}`} onClick={() => setIsOpen(false)} className="px-4 pl-9 py-2.5 text-sm font-medium text-gris-oscuro/70 dark:text-white/60 hover:text-marca transition-colors">{item.titulo}</Link>
+              ))}
             </div>
           </div>
 
-          <Link to="/#alianza" onClick={(e) => handleSectionClick(e, 'alianza')} className="px-4 py-3.5 text-sm font-bold uppercase tracking-wider rounded-xl hover:bg-black/5 dark:hover:bg-white/5 hover:text-[#fda211] transition-colors">Proyectos</Link>
+          <Link to="/#alianza" onClick={(e) => handleSectionClick(e, 'alianza')} className="px-4 py-3.5 text-sm font-bold uppercase tracking-wider rounded-xl hover:bg-black/5 dark:hover:bg-white/5 hover:text-marca transition-colors">{contenido.global.navegacion.proyectos}</Link>
 
           <a
-            href="https://wa.me/523314825847"
+            href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3 w-full bg-[#fda211] hover:bg-[#e5920f] text-[#1b1b1b] py-4 rounded-[16px] font-bold text-sm shadow-lg shadow-[#fda211]/20 cursor-pointer flex items-center justify-center gap-2.5"
+            className="mt-3 w-full bg-marca hover:bg-marca-oscuro text-negro py-4 rounded-[16px] font-bold text-sm shadow-lg shadow-marca/20 cursor-pointer flex items-center justify-center gap-2.5"
           >
-            <WhatsAppIcon size={20} /> WhatsApp
+            <WhatsAppIcon size={20} /> {contenido.global.navegacion.whatsapp}
           </a>
         </div>
       )}

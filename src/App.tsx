@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { Routes, Route, useLocation, Outlet } from 'react-router-dom';
+import { Routes, Route, useLocation, Outlet, useNavigate } from 'react-router-dom';
 import Lenis from 'lenis';
 
 import { registerLenis, scrollToSection, scrollToTop } from './lib/smoothScroll';
@@ -20,7 +20,7 @@ const AppV1 = lazy(() => import('./features/legacy/AppV1'));
 const AppV2 = lazy(() => import('./features/legacy/AppV2'));
 
 const AppV3Layout: React.FC<{ theme: 'dark' | 'light'; toggleTheme: () => void }> = ({ theme, toggleTheme }) => (
-  <div className="min-h-screen bg-[#e4e4e4] dark:bg-[#1b1b1b] text-[#1b1b1b] dark:text-white transition-colors duration-300 flex flex-col">
+  <div className="min-h-screen bg-gris-claro dark:bg-negro text-negro dark:text-white transition-colors duration-300 flex flex-col">
     <NavbarV3 theme={theme} toggleTheme={toggleTheme} />
     <main className="flex-grow">
       <Outlet />
@@ -40,6 +40,19 @@ const RouteFallback: React.FC = () => <div className="min-h-screen" />;
  */
 const ScrollManager: React.FC = () => {
   const { pathname, hash } = useLocation();
+  const navigate = useNavigate();
+
+  // Cuando el sitio corre dentro del panel de administración, el puente
+  // (src/cms/puente.ts) necesita cambiar de página y enterarse de los cambios
+  // de ruta. Fuera del panel estas dos funciones no existen y esto no hace nada.
+  useEffect(() => {
+    window.__ocNavegar = (ruta: string) => navigate(ruta);
+    return () => { delete window.__ocNavegar; };
+  }, [navigate]);
+
+  useEffect(() => {
+    window.__ocAlNavegar?.(pathname + hash);
+  }, [pathname, hash]);
 
   useEffect(() => {
     if (hash) {

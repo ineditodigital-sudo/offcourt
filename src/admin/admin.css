@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+/* El panel es una herramienta aparte del sitio: tema claro fijo, mismas
+   tipografías de la marca (alojadas en el propio dominio) y el naranja como
+   único acento. Los tokens de color coinciden con los de index.css para que
+   los botones del panel y los del sitio hablen el mismo idioma. */
+@theme {
+  --color-marca: #fda211;
+  --color-marca-oscuro: #e5920f;
+  --color-negro: #1b1b1b;
+  --color-gris-oscuro: #2e2f30;
+  --color-gris-claro: #e4e4e4;
+  --color-lienzo: #f4f4f2;
+  --font-outfit: 'Outfit', sans-serif;
+  --font-sarabun: 'Sarabun', sans-serif;
+}
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('/fonts/outfit-400-900-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Sarabun';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/sarabun-400-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Sarabun';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/sarabun-600-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Sarabun';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/sarabun-700-latin.woff2') format('woff2');
+}
+
+html, body, #root { height: 100%; }
+body { font-family: var(--font-sarabun); -webkit-font-smoothing: antialiased; }
+
+.font-outfit { font-family: var(--font-outfit); }
+
+/* Campos de formulario del panel */
+.oc-campo {
+  @apply w-full rounded-xl border border-black/10 bg-white px-3.5 py-2.5 text-[15px] text-negro outline-none transition-colors placeholder:text-neutral-400 focus:border-marca focus:ring-4 focus:ring-marca/15;
+}
+.oc-etiqueta { @apply mb-1.5 block text-[13px] font-bold text-gris-oscuro; }
+.oc-ayuda { @apply mt-1.5 text-[12px] leading-snug text-neutral-500; }
+
+/* Editor de texto con formato */
+.oc-editor-html { min-height: 8rem; }
+.oc-editor-html:focus { outline: none; }
+.oc-editor-html h2 { font-size: 1.15rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; margin: 1rem 0 .5rem; }
+.oc-editor-html h3 { font-size: 1.02rem; font-weight: 700; text-transform: uppercase; margin: .8rem 0 .4rem; }
+.oc-editor-html p { margin: .5rem 0; }
+.oc-editor-html ul { list-style: disc; padding-left: 1.4rem; }
+.oc-editor-html ol { list-style: decimal; padding-left: 1.4rem; }
+.oc-editor-html a { color: #c98a10; text-decoration: underline; }
+.oc-editor-html blockquote { border-left: 3px solid #fda211; padding-left: .8rem; color: #555; }
+
+/* Barra de desplazamiento discreta en los paneles */
+.oc-scroll::-webkit-scrollbar { width: 8px; }
+.oc-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
+.oc-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,.3); }
+
+@keyframes oc-aparece { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.oc-aparece { animation: oc-aparece .18s ease-out both; }

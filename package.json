@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build && npm run prerender",
     "lint": "eslint .",
     "preview": "vite preview",
+    "servir": "php -S localhost:8080 -t dist scripts/servidor-local.php",
     "prerender": "vite build --ssr src/prerender/heroEstatico.tsx --outDir .prerender --logLevel error && node scripts/generar-paginas.mjs"
   },
   "dependencies": {

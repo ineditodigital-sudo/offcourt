@@ -108,6 +108,15 @@ async function main() {
   }
 
   const locales = inventarioLocal(LOCAL);
+
+  // Lo que vive SOLO en el servidor no se sube nunca desde aquí: el contenido
+  // publicado desde el panel (cms/data) y los archivos que la persona subió
+  // (media). Si una prueba local los hubiera creado en dist/, pisarían los
+  // reales. Sus .htaccess sí van, porque son parte del código.
+  const soloServidor = (rel) =>
+    (rel.startsWith('cms/data/') || rel.startsWith('media/')) && !rel.endsWith('/.htaccess');
+  for (const rel of Object.keys(locales)) if (soloServidor(rel)) delete locales[rel];
+
   const nLocal = Object.keys(locales).length;
   // Salvaguarda: si el build salió incompleto, no queremos que el paso de
   // limpieza arrase con el sitio entero.
@@ -135,14 +144,22 @@ async function main() {
 
     // --- 1. Respaldo de los archivos de servidor -----------------------------
     // Son los únicos que no se pueden regenerar desde el código.
-    const críticos = ['.htaccess', 'sendmail.php', 'index.php'];
+    const críticos = [
+      '.htaccess', 'sendmail.php', 'index.php',
+      // El estado del CMS solo existe en el servidor: se baja una copia en
+      // cada despliegue, que es el respaldo más reciente que se puede tener.
+      'cms/data/config.php', 'cms/data/publicado.json', 'cms/data/borrador.json',
+      'cms/data/medios.json', 'cms/data/mensajes.json',
+    ];
     const dirBackup = path.join(__dirname, '.deploy-backup');
     if (!SECO) fs.mkdirSync(dirBackup, { recursive: true });
     for (const f of críticos) {
       if (!remotos[f]) continue;
       if (SECO) { log('  [seco] respaldaría ' + f); continue; }
       try {
-        await client.downloadTo(path.join(dirBackup, f), REMOTO + '/' + f);
+        const destino = path.join(dirBackup, f);
+        fs.mkdirSync(path.dirname(destino), { recursive: true });
+        await client.downloadTo(destino, REMOTO + '/' + f);
         log('  respaldado  ' + f);
       } catch (e) {
         log('  aviso: no se pudo respaldar ' + f + ' (' + e.message + ')');
@@ -204,6 +221,10 @@ async function main() {
       /^error_log$/i,
       /^\.ftpquota$/i,
       /^cpanel/i,
+      // Estado del CMS: contenido publicado, contraseña, mensajes, subidas.
+      // No existe en local; borrarlo dejaría el sitio sin sus textos.
+      /^cms\/data\//i,
+      /^media\//i,
     ];
     const protegido = (r) => INTOCABLES.some((re) => re.test(r));
 
@@ -228,6 +249,34 @@ async function main() {
       log('\nNo hay archivos obsoletos que retirar.');
     }
 
+    // --- 3b. Código de instalación del panel --------------------------------
+    // La primera vez, el panel pide un código para crear la contraseña. Se
+    // genera aquí, se sube al servidor (fuera del alcance del navegador) y se
+    // muestra UNA vez en esta salida. El panel lo destruye al usarlo.
+    const hayConfig = !!remotos['cms/data/config.php'];
+    const hayCodigo = !!remotos['cms/data/codigo.txt'];
+    if (!hayConfig && !hayCodigo && locales['cms/data/.htaccess']) {
+      const alfabeto = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      const trozo = () => Array.from({ length: 4 }, () => alfabeto[Math.floor(Math.random() * alfabeto.length)]).join('');
+      const codigo = 'OFFCOURT-' + trozo() + '-' + trozo();
+      if (SECO) {
+        log('\n[seco] Generaría un código de instalación para el panel.');
+      } else {
+        const local = path.join(dirBackup, 'codigo-cms.txt');
+        fs.writeFileSync(local, codigo + '\n');
+        await client.ensureDir(REMOTO + '/cms/data');
+        await client.uploadFrom(local, REMOTO + '/cms/data/codigo.txt');
+        log('\n================================================================');
+        log('  PANEL DE ADMINISTRACIÓN: primera instalación');
+        log('  Entra en ' + env.SITE_URL + '/admin y crea la contraseña con este código:');
+        log('');
+        log('      ' + codigo);
+        log('');
+        log('  (también queda en .deploy-backup/codigo-cms.txt)');
+        log('================================================================');
+      }
+    }
+
     client.close();
 
     // --- 4. Comprobar que el sitio quedó sano -------------------------------
@@ -243,7 +292,7 @@ async function main() {
       log('  bundle esperado      ' + bundle);
       log('  servido por el sitio ' + (home.cuerpo && home.cuerpo.includes(bundle) ? 'SÍ' : 'NO (puede ser caché de Cloudflare)'));
     }
-    const rutas = ['/nosotros', '/sendmail.php', '/hero-poster.webp'];
+    const rutas = ['/nosotros', '/sendmail.php', '/hero-poster.webp', '/admin', '/cms/api.php?accion=estado', '/cms/data/publicado.json'];
     for (const r of rutas) {
       const res = await verificar(env.SITE_URL + r);
       log('  ' + r.padEnd(20) + ' HTTP ' + res.status);

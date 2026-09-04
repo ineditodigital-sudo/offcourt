@@ -8,6 +8,30 @@
 /* Enable class-based dark mode for Tailwind v4 */
 @variant dark (&:where(.dark, .dark *));
 
+/* ---------------------------------------------------------------------------
+   Colores de marca como tokens de Tailwind.
+
+   Antes iban escritos a mano en cada clase (bg-[#fda211], text-[#1b1b1b]…),
+   lo que hacía imposible cambiarlos sin recompilar. Ahora las utilidades
+   apuntan a estas variables, y el panel de administración (y index.php al
+   servir la página) las sobrescribe sobre <html> con los colores elegidos.
+   Los valores de aquí son los originales del diseño.
+--------------------------------------------------------------------------- */
+@theme {
+  --color-marca: #fda211;
+  --color-marca-oscuro: #e5920f;
+  --color-negro: #1b1b1b;
+  --color-gris-oscuro: #2e2f30;
+  --color-gris-claro: #e4e4e4;
+}
+
+/* Clases que el editor puede generar al cambiar tamaño, peso o tipografía de
+   un elemento (ver src/cms/estilos.ts). Tailwind solo compila las clases que
+   encuentra escritas en el código, así que hay que declararlas aquí. */
+@source inline("{,sm:,md:,lg:,xl:,2xl:}text-{xs,sm,base,lg,xl,2xl,3xl,4xl,5xl,6xl,7xl,8xl,9xl}");
+@source inline("font-{normal,medium,semibold,bold,extrabold,black}");
+@source inline("{font-outfit,font-sarabun,italic,not-italic}");
+
 @layer base {
   :root {
     --color-gold: #B79657;
@@ -23,6 +47,12 @@
     --color-v3-light-gray: #e4e4e4;
     --color-v3-white: #ffffff;
     --font-outfit: 'Outfit', sans-serif;
+
+    /* Tipografías elegibles desde el panel (Colores y tipografías). Las
+       clases .font-outfit y .font-sarabun leen de aquí, no de la fuente
+       directamente, para poder cambiarlas en caliente. */
+    --fuente-titulos: var(--font-outfit);
+    --fuente-texto: var(--font-sarabun);
   }
 }
 
@@ -31,7 +61,7 @@
    que se quedan a medio camino). Es un requisito de la propia librería. */
 
 body {
-  font-family: var(--font-sarabun);
+  font-family: var(--fuente-texto);
   overflow-x: hidden;
   background-color: #050505;
   transition: background-color 0.3s ease;
@@ -63,11 +93,11 @@ html:not(.dark) body {
 }
 
 .font-sarabun {
-  font-family: var(--font-sarabun);
+  font-family: var(--fuente-texto);
 }
 
 .font-outfit {
-  font-family: var(--font-outfit);
+  font-family: var(--fuente-titulos);
 }
 
 /* V2 Premium Utilities */
@@ -184,7 +214,7 @@ html.oc-intro-hecha .v3-tactical-grid-line-h {
   position: absolute;
   inset: -3px;
   border-radius: 9999px;
-  background: conic-gradient(from 0deg, transparent 0deg, #fda211 90deg, #ffd37a 150deg, transparent 230deg);
+  background: conic-gradient(from 0deg, transparent 0deg, var(--color-marca) 90deg, #ffd37a 150deg, transparent 230deg);
   animation: oc-spin 3.5s linear infinite;
   z-index: 1;
 }
@@ -199,3 +229,18 @@ a[href^="tel:"] {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
+
+/* ---------------------------------------------------------------------------
+   Texto con formato editado desde el panel (política de privacidad, términos).
+   El HTML viene saneado de src/cms/sanitizar.ts y solo trae estas etiquetas;
+   aquí se les da el aspecto que antes llevaban como clases sueltas en el JSX.
+--------------------------------------------------------------------------- */
+.oc-rico > * + * { margin-top: 1.5rem; }
+.oc-rico h2 { font-size: 1.5rem; line-height: 2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2rem; margin-bottom: 1rem; }
+.oc-rico h3 { font-size: 1.25rem; line-height: 1.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+.oc-rico ul { list-style: disc; padding-left: 1.5rem; }
+.oc-rico ol { list-style: decimal; padding-left: 1.5rem; }
+.oc-rico li + li { margin-top: 0.5rem; }
+.oc-rico a { color: var(--color-marca); }
+.oc-rico a:hover { text-decoration: underline; }
+.oc-rico blockquote { border-left: 4px solid var(--color-marca); padding-left: 1rem; font-style: italic; }

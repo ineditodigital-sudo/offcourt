@@ -1,0 +1,17 @@
+# Archivos subidos desde el panel. Son públicos, pero aquí no se ejecuta nada:
+# aunque alguien consiguiera subir un .php, el servidor lo trataría como texto.
+<IfModule mod_php.c>
+  php_flag engine off
+</IfModule>
+RemoveHandler .php .phtml .php3 .php5 .php7 .phar .pl .py .cgi
+<FilesMatch "\.(php|phtml|php3|php5|php7|phar|pl|py|cgi)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+</FilesMatch>
+Options -ExecCGI -Indexes
+
+<IfModule mod_headers.c>
+  Header set Cache-Control "public, max-age=2592000"
+  Header set X-Content-Type-Options nosniff
+</IfModule>

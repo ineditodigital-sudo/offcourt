@@ -2,11 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { cargarGsap } from '../../../lib/gsapLazy';
 import { Download, Play, X } from 'lucide-react';
 import { PdfLink } from './PdfLink';
-import { scrollToSection } from '../../../lib/smoothScroll';
+import { useContenido } from '../../../cms/ContenidoContext';
+import { Tx, Im, Btn, marcar } from '../../../cms/Editable';
+
+const K = 'paginas.inicio.alianza';
 
 export const ManifestoV3: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [videoOpen, setVideoOpen] = useState(false);
+  const alianza = useContenido().paginas.inicio.alianza;
 
   useEffect(() => {
     let ctx: { revert: () => void } | undefined;
@@ -39,92 +43,84 @@ export const ManifestoV3: React.FC = () => {
   }, []);
 
   return (
-    <section 
+    <section
       id="alianza"
       ref={containerRef}
-      className="relative py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-[#e4e4e4] dark:bg-[#1b1b1b] flex items-center justify-center transition-colors duration-300"
+      className="relative py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-gris-claro dark:bg-negro flex items-center justify-center transition-colors duration-300"
     >
-      <div className="max-w-7xl w-full mx-auto relative z-20 flex flex-col md:flex-row items-stretch gap-12 bg-white dark:bg-[#2e2f30] rounded-[48px] overflow-hidden shadow-2xl border border-black/5 dark:border-white/5">
-        
+      <div className="max-w-7xl w-full mx-auto relative z-20 flex flex-col md:flex-row items-stretch gap-12 bg-white dark:bg-gris-oscuro rounded-[48px] overflow-hidden shadow-2xl border border-black/5 dark:border-white/5">
+
         {/* Left Side Content */}
         <div className="v3-manifesto-content w-full md:w-1/2 p-8 md:p-16 flex flex-col items-start space-y-8">
-          
-          <span className="text-[#fda211] uppercase tracking-[0.3em] text-xs font-sarabun font-extrabold inline-block px-4 py-1 border border-[#fda211]/30 rounded-full bg-[#fda211]/10">
-            GLOBAL PARTNERSHIP
-          </span>
-          
+
+          <Tx k={`${K}.etiqueta`} as="span" className="text-marca uppercase tracking-[0.3em] text-xs font-sarabun font-extrabold inline-block px-4 py-1 border border-marca/30 rounded-full bg-marca/10" />
+
           <div className="w-64 md:w-80 h-auto py-2">
-            <img 
-              src="/rafa-nadal-logo.png" 
-              alt="Rafa Nadal Academy Logo" 
+            <Im
+              k={`${K}.logo`}
               loading="lazy" decoding="async" width="320" height="90"
-              
               className="w-full h-auto object-contain drop-shadow-lg invert dark:invert-0"
             />
           </div>
-          
-          <h2 className="font-outfit italic text-3xl sm:text-4xl md:text-5xl uppercase font-extrabold leading-tight text-[#1b1b1b] dark:text-white">
-            ALIANZA ESTRATÉGICA INTERNACIONAL
-          </h2>
-          
-          <p className="font-sarabun text-sm md:text-base text-[#2e2f30] dark:text-[#e4e4e4] font-medium leading-relaxed max-w-lg">
-            Nuestra solidez institucional nos permite ser aliados estratégicos y promotores oficiales. Operamos como el puente directo hacia las clínicas élite y campamentos de alto rendimiento en las sedes de Mallorca y Kuwait, garantizando acceso y gestión premium.
-          </p>
+
+          <Tx k={`${K}.titulo`} as="h2" className="font-outfit italic text-3xl sm:text-4xl md:text-5xl uppercase font-extrabold leading-tight text-negro dark:text-white" />
+
+          <Tx k={`${K}.texto`} as="p" className="font-sarabun text-sm md:text-base text-gris-oscuro dark:text-gris-claro font-medium leading-relaxed max-w-lg" />
 
           <div className="pt-6 w-full space-y-5">
-            <button 
-              onClick={() => scrollToSection('contacto')}
-              className="bg-[#fda211] hover:bg-[#e5920f] text-[#1b1b1b] font-sarabun font-bold uppercase tracking-wider text-sm px-8 py-4 rounded-[20px] inline-flex items-center justify-center gap-3 transition-colors duration-300 shadow-lg cursor-pointer"
-            >
-              Contacto
-            </button>
+            <Btn
+              k={`${K}.botonContacto`}
+              className="bg-marca hover:bg-marca-oscuro text-negro font-sarabun font-bold uppercase tracking-wider text-sm px-8 py-4 rounded-[20px] inline-flex items-center justify-center gap-3 transition-colors duration-300 shadow-lg cursor-pointer"
+            />
 
-            <div>
-              <p className="text-xs uppercase tracking-[0.2em] font-extrabold text-neutral-500 mb-3 font-sarabun">Presentaciones comerciales</p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <PdfLink
-                  href="/brochures/RNA_Tennis_Camp_Junior_2026.pdf"
-                  className="border-2 border-[#fda211] text-[#fda211] hover:bg-[#fda211] hover:text-[#1b1b1b] font-sarabun font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-[16px] inline-flex items-center justify-center gap-2 transition-all duration-300 shadow-md cursor-pointer"
-                >
-                  <Download size={16} /> Tennis Camp Junior
-                </PdfLink>
-                <PdfLink
-                  href="/brochures/RNA_Padel_Camp_Adult_2026.pdf"
-                  className="border-2 border-[#fda211] text-[#fda211] hover:bg-[#fda211] hover:text-[#1b1b1b] font-sarabun font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-[16px] inline-flex items-center justify-center gap-2 transition-all duration-300 shadow-md cursor-pointer"
-                >
-                  <Download size={16} /> Pádel Camp Adult
-                </PdfLink>
+            {alianza.presentaciones.length > 0 && (
+              <div>
+                <Tx k={`${K}.tituloPresentaciones`} as="p" className="text-xs uppercase tracking-[0.2em] font-extrabold text-neutral-500 mb-3 font-sarabun" />
+                <div className="flex flex-col sm:flex-row gap-3">
+                  {alianza.presentaciones.map((p, i) => (
+                    <PdfLink
+                      key={i}
+                      href={p.archivo.src}
+                      {...marcar(`${K}.presentaciones.${i}`)}
+                      className="border-2 border-marca text-marca hover:bg-marca hover:text-negro font-sarabun font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-[16px] inline-flex items-center justify-center gap-2 transition-all duration-300 shadow-md cursor-pointer"
+                    >
+                      <Download size={16} /> <Tx k={`${K}.presentaciones.${i}.texto`} sel={`${K}.presentaciones.${i}`} as="span" />
+                    </PdfLink>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
         </div>
 
         {/* Right Side Image */}
         <div className="w-full md:w-1/2 min-h-[400px] md:min-h-[600px] relative group overflow-hidden">
-          <div 
+          <div
+            {...marcar(`${K}.imagen`)}
             className="absolute inset-0 bg-cover bg-center transition-transform duration-[10s] group-hover:scale-105"
-            style={{ backgroundImage: 'url(/rafa-nadal.webp)' }}
+            style={{ backgroundImage: `url(${alianza.imagen.src})` }}
           ></div>
-          <div className="absolute inset-0 bg-black/25"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-transparent dark:from-[#2e2f30] md:w-32 hidden md:block z-10"></div>
+          <div className="absolute inset-0 bg-black/25 pointer-events-none"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-transparent dark:from-gris-oscuro md:w-32 hidden md:block z-10 pointer-events-none"></div>
 
           {/* Botón reproducir video */}
-          <button
-            onClick={() => setVideoOpen(true)}
-            aria-label="Reproducir video"
-            className="absolute inset-0 z-20 flex flex-col items-center justify-center cursor-pointer"
-          >
-            <span className="relative flex items-center justify-center">
-              <span className="absolute w-20 h-20 rounded-full bg-[#fda211]/40 animate-ping"></span>
-              <span className="relative w-20 h-20 rounded-full bg-[#fda211] flex items-center justify-center shadow-2xl hover:scale-110 transition-transform duration-300">
-                <Play className="text-[#1b1b1b] ml-1" size={32} fill="currentColor" />
+          {alianza.video.src && (
+            <button
+              onClick={() => setVideoOpen(true)}
+              aria-label="Reproducir video"
+              {...marcar(`${K}.video`)}
+              className="absolute inset-0 z-20 flex flex-col items-center justify-center cursor-pointer"
+            >
+              <span className="relative flex items-center justify-center">
+                <span className="absolute w-20 h-20 rounded-full bg-marca/40 animate-ping"></span>
+                <span className="relative w-20 h-20 rounded-full bg-marca flex items-center justify-center shadow-2xl hover:scale-110 transition-transform duration-300">
+                  <Play className="text-negro ml-1" size={32} fill="currentColor" />
+                </span>
               </span>
-            </span>
-            <span className="mt-5 font-sarabun text-white text-xs font-bold uppercase tracking-widest bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">
-              Ver video
-            </span>
-          </button>
+              <Tx k={`${K}.textoVideo`} as="span" className="mt-5 font-sarabun text-white text-xs font-bold uppercase tracking-widest bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm" />
+            </button>
+          )}
         </div>
 
       </div>
@@ -138,8 +134,8 @@ export const ManifestoV3: React.FC = () => {
               <X size={28} />
             </button>
             <video
-              src="/rna-camps-2024.mp4"
-              poster="/rafa-nadal.webp"
+              src={alianza.video.src}
+              poster={alianza.imagen.src}
               controls
               autoPlay
               playsInline

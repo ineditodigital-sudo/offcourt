@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { HeroV3 } from '../features/v3/components/HeroV3';
-import { servicesData } from '../features/v3/data/servicios';
+import { CONTENIDO_BASE } from '../cms/definicion';
 import { META, tituloServicio } from '../lib/metaRutas';
 
 /**
@@ -14,6 +14,10 @@ import { META, tituloServicio } from '../lib/metaRutas';
  * puede desviarse del real por mucho que cambie el diseño: si alguien edita
  * HeroV3, esto cambia con él. Cuando React monta, sustituye este HTML por su
  * propia versión, que es idéntica, de modo que el relevo no se ve.
+ *
+ * Los textos salen con los valores por defecto de definicion.ts. En producción,
+ * index.php los sustituye por los publicados desde el panel al servir la
+ * página, apoyándose en los atributos data-oc-t que deja este render.
  *
  * Los efectos (useEffect) no se ejecutan en este render, así que aquí no hay
  * vídeo ni animaciones de scroll: solo el póster y el texto, que es justo lo que
@@ -39,15 +43,15 @@ export interface PaginaEstatica {
  *
  * La portada no está aquí: es dist/index.html, que ya se genera con su hero
  * incrustado y sus metadatos. Las demás salen de esta lista, y sus textos vienen
- * de metaRutas.ts y de servicesData, o sea de las mismas constantes que usa la
- * aplicación en el navegador. No pueden desincronizarse.
+ * de metaRutas.ts y del contenido por defecto, o sea de las mismas constantes
+ * que usa la aplicación en el navegador. No pueden desincronizarse.
  */
 export function paginas(): PaginaEstatica[] {
-  const servicios = Object.entries(servicesData).map(([id, s]) => ({
-    ruta: `/servicios/${id}`,
-    archivo: `servicios/${id}.html`,
-    title: tituloServicio(s.title),
-    description: s.description,
+  const servicios = CONTENIDO_BASE.paginas.servicios.items.map((s) => ({
+    ruta: `/servicios/${s.id}`,
+    archivo: `servicios/${s.id}.html`,
+    title: tituloServicio(s.titulo),
+    description: s.descripcion,
   }));
 
   return [
