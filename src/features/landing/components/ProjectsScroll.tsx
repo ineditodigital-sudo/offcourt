@@ -151,14 +151,14 @@ export const ProjectsScroll: React.FC = () => {
                       {project.deliverables}
                     </p>
 
-                    <div className="grid grid-rows-[1fr] md:grid-rows-[0fr] group-hover:grid-rows-[1fr] opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out">
+                    <div className="grid grid-rows-[1fr] md:grid-rows-[0fr] group-hover:grid-rows-[1fr] opacity-100 md:opacity-0 group-hover:opacity-100 transition-[grid-template-rows,opacity] duration-700 ease-out">
                       <p className="text-sm font-medium text-white leading-relaxed overflow-hidden">
                         {project.description}
                       </p>
                     </div>
 
                     <div className="mt-6 flex items-center gap-2 text-white font-bold text-xs uppercase tracking-widest">
-                      <span className="opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-0 md:translate-x-[-10px] group-hover:translate-x-0">
+                      <span className="opacity-100 md:opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-500 transform translate-x-0 md:translate-x-[-10px] group-hover:translate-x-0">
                         Explorar Caso
                       </span>
                       <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:border-gold group-hover:text-gold transition-colors duration-300">

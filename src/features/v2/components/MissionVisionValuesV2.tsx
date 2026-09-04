@@ -37,7 +37,7 @@ export const MissionVisionValuesV2: React.FC = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
         
         {/* Mission */}
-        <div className="mvv-card-v2 group rounded-[24px] p-8 md:p-10 border border-white/5 bg-[#1A1A1A] hover:border-[#B79657]/30 hover:-translate-y-2 transition-all duration-500 hover:shadow-[0_0_40px_rgba(183,150,87,0.15)] relative overflow-hidden">
+        <div className="mvv-card-v2 group rounded-[24px] p-8 md:p-10 border border-white/5 bg-[#1A1A1A] hover:border-[#B79657]/30 hover:-translate-y-2 transition-[transform,border-color,box-shadow] duration-500 hover:shadow-[0_0_40px_rgba(183,150,87,0.15)] relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-[#B79657]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
           <div className="relative z-10">
             <div className="w-14 h-14 bg-white group-hover:bg-black group-hover:border group-hover:border-[#B79657] rounded-xl flex items-center justify-center mb-8 transition-colors duration-500">
@@ -53,7 +53,7 @@ export const MissionVisionValuesV2: React.FC = () => {
         </div>
 
         {/* Vision */}
-        <div className="mvv-card-v2 group rounded-[24px] p-8 md:p-10 border border-white/5 bg-[#1A1A1A] hover:border-[#B79657]/30 hover:-translate-y-2 transition-all duration-500 hover:shadow-[0_0_40px_rgba(183,150,87,0.15)] relative overflow-hidden">
+        <div className="mvv-card-v2 group rounded-[24px] p-8 md:p-10 border border-white/5 bg-[#1A1A1A] hover:border-[#B79657]/30 hover:-translate-y-2 transition-[transform,border-color,box-shadow] duration-500 hover:shadow-[0_0_40px_rgba(183,150,87,0.15)] relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-[#B79657]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
           <div className="relative z-10">
             <div className="w-14 h-14 bg-white group-hover:bg-black group-hover:border group-hover:border-[#B79657] rounded-xl flex items-center justify-center mb-8 transition-colors duration-500">
@@ -69,7 +69,7 @@ export const MissionVisionValuesV2: React.FC = () => {
         </div>
 
         {/* Values */}
-        <div className="mvv-card-v2 group rounded-[24px] p-8 md:p-10 border border-white/5 bg-[#1A1A1A] hover:border-[#B79657]/30 hover:-translate-y-2 transition-all duration-500 hover:shadow-[0_0_40px_rgba(183,150,87,0.15)] relative overflow-hidden">
+        <div className="mvv-card-v2 group rounded-[24px] p-8 md:p-10 border border-white/5 bg-[#1A1A1A] hover:border-[#B79657]/30 hover:-translate-y-2 transition-[transform,border-color,box-shadow] duration-500 hover:shadow-[0_0_40px_rgba(183,150,87,0.15)] relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-[#B79657]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
           <div className="relative z-10">
             <div className="w-14 h-14 bg-white group-hover:bg-black group-hover:border group-hover:border-[#B79657] rounded-xl flex items-center justify-center mb-8 transition-colors duration-500">

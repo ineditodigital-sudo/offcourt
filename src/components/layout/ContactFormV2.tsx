@@ -96,7 +96,7 @@ export const ContactFormV2: React.FC = () => {
           {/* Form Side */}
           <div className="lg:w-7/12 p-6 md:p-16 contact-item-v2">
             {submitted ? (
-              <div className="h-full flex flex-col items-center justify-center text-center space-y-6 animate-fade-in-up">
+              <div className="h-full flex flex-col items-center justify-center text-center space-y-6 oc-sube">
                 <div className="w-20 h-20 rounded-full bg-gold/10 text-gold flex items-center justify-center">
                   <CheckCircle size={40} />
                 </div>

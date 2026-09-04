@@ -309,6 +309,8 @@ html:not(.dark) ::selection { color: var(--color-negro); }
 .oc-caja-sitio { animation: oc-entra-caja .24s var(--salida) both; }
 /* La tarjeta del agente entra desde la esquina en la que vive su botón. */
 .oc-caja-esquina { animation: oc-entra-abajo .24s var(--salida) both; }
+/* Un bloque que sustituye a otro subiendo: el acuse de envío del formulario. */
+.oc-sube { animation: oc-entra-abajo .32s var(--salida) both; }
 
 /* El desplegable de «Soluciones» crece desde arriba, que es donde está el
    enlace que lo abre, en vez de desde su centro. */
@@ -329,7 +331,7 @@ html:not(.dark) ::selection { color: var(--color-negro); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .oc-menu-movil, .oc-caja-sitio, .oc-caja-esquina {
+  .oc-menu-movil, .oc-caja-sitio, .oc-caja-esquina, .oc-sube {
     animation-name: oc-entra-velo;
     animation-duration: .15s;
   }

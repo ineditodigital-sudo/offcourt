@@ -41,15 +41,15 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
   };
 
   return (
-    <nav className="fixed top-4 left-4 right-4 z-50 transition-all duration-300">
-      <div className={`max-w-7xl mx-auto rounded-none border-b border-x border-black/5 dark:border-white/10 bg-white/75 dark:bg-black/45 backdrop-blur-md px-6 py-4 flex items-center justify-between transition-all duration-300 ${scrolled ? 'shadow-xl' : ''}`}>
+    <nav className="fixed top-4 left-4 right-4 z-50">
+      <div className={`max-w-7xl mx-auto rounded-none border-b border-x border-black/5 dark:border-white/10 bg-white/75 dark:bg-black/45 backdrop-blur-md px-6 py-4 flex items-center justify-between transition-shadow duration-300 ${scrolled ? 'shadow-xl' : ''}`}>
         
         {/* Logo */}
         <a href="#" className="flex items-center gap-2">
           <img 
             src={theme === 'dark' ? '/logo_blanco.svg' : '/logo_negro.svg'} 
             alt="Offcourt Sports Group Logo" 
-            className="h-8 md:h-9 w-auto transition-all duration-300"
+            className="h-8 md:h-9 w-auto"
           />
         </a>
 
@@ -102,7 +102,7 @@ export const Navbar: React.FC<NavbarProps> = ({ theme, toggleTheme }) => {
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className="md:hidden absolute top-20 left-0 right-0 border border-black/5 dark:border-white/10 bg-white/95 dark:bg-black/95 backdrop-blur-xl rounded-none p-6 shadow-2xl mx-1 flex flex-col gap-6 font-bold tracking-widest text-center uppercase animate-fade-in text-black dark:text-white text-xs">
+        <div className="md:hidden absolute top-20 left-0 right-0 border border-black/5 dark:border-white/10 bg-white/95 dark:bg-black/95 backdrop-blur-xl rounded-none p-6 shadow-2xl mx-1 flex flex-col gap-6 font-bold tracking-widest text-center uppercase oc-menu-movil text-black dark:text-white text-xs">
           <a href="#expertise" onClick={(e) => scrollToSection(e, 'expertise')} className="py-2 hover:text-gold transition-colors">Expertise</a>
           <a href="#proyectos" onClick={(e) => scrollToSection(e, 'proyectos')} className="py-2 hover:text-gold transition-colors">Proyectos</a>
           <a href="#manifiesto" onClick={(e) => scrollToSection(e, 'manifiesto')} className="py-2 hover:text-gold transition-colors">Manifiesto</a>

@@ -145,7 +145,7 @@ export const ServicesGrid: React.FC = () => {
               >
                 {/* Background Image with Dark to Color Hover */}
                 <div 
-                  className="absolute inset-0 bg-cover bg-center transition-all duration-[1200ms] ease-out opacity-100 md:opacity-60 grayscale-0 md:grayscale group-hover:grayscale-0 md:group-hover:scale-110 group-hover:opacity-100 z-0"
+                  className="absolute inset-0 bg-cover bg-center transition-[filter,transform,opacity] duration-[1200ms] ease-out opacity-100 md:opacity-60 grayscale-0 md:grayscale group-hover:grayscale-0 md:group-hover:scale-110 group-hover:opacity-100 z-0"
                   style={{ backgroundImage: `url(${service.image})` }}
                 ></div>
                 
@@ -172,7 +172,7 @@ export const ServicesGrid: React.FC = () => {
                     </h3>
 
                     {/* Hidden Description that reveals on hover (sliding up) */}
-                    <div className="grid grid-rows-[1fr] md:grid-rows-[0fr] group-hover:grid-rows-[1fr] opacity-100 md:opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out">
+                    <div className="grid grid-rows-[1fr] md:grid-rows-[0fr] group-hover:grid-rows-[1fr] opacity-100 md:opacity-0 group-hover:opacity-100 transition-[grid-template-rows,opacity] duration-700 ease-out">
                       <p className="text-sm text-neutral-600 dark:text-neutral-300 font-inter leading-relaxed overflow-hidden">
                         {service.description}
                       </p>

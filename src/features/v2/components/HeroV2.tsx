@@ -62,7 +62,7 @@ export const HeroV2: React.FC = () => {
             loop
             muted
             playsInline
-            className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-all duration-1000 scale-105 pointer-events-none"
+            className="w-full h-full object-cover grayscale contrast-125 hover:grayscale-0 transition-[filter] duration-1000 scale-105 pointer-events-none"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/40 dark:from-[#0A0A0A]/95 dark:via-[#0A0A0A]/40 to-transparent transition-colors duration-300"></div>
           <div className="absolute inset-0 bg-[#B79657]/10 mix-blend-overlay"></div>

@@ -412,7 +412,10 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
                 </div>
 
                 <div className="min-h-0 flex-1 overflow-auto p-2 sm:p-3">
-                  <div className={`mx-auto h-full bg-panel shadow-lg transition-all ${est.dispositivo === 'movil' ? 'w-[390px] max-w-full rounded-[26px] ring-8 ring-negro/85' : 'w-full rounded-lg'}`}>
+                  {/* Al pasar de escritorio a celular cambian el ancho, el redondeo y el
+                      marco. Nombrarlas evita que el navegador vigile además todo lo
+                      demás del contenedor de la vista previa. */}
+                  <div className={`mx-auto h-full bg-panel shadow-lg transition-[width,border-radius,box-shadow] duration-300 ${est.dispositivo === 'movil' ? 'w-[390px] max-w-full rounded-[26px] ring-8 ring-negro/85' : 'w-full rounded-lg'}`}>
                     <iframe
                       ref={iframe}
                       src="/?oc-editor=1"

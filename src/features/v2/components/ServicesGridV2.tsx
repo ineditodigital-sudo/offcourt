@@ -97,7 +97,7 @@ export const ServicesGridV2: React.FC = () => {
                 <img 
                   src={svc.image} 
                   alt={svc.title}
-                  className="w-full h-full object-cover grayscale-0 md:grayscale md:group-hover:grayscale-0 transition-all duration-700 scale-100 md:scale-110 md:group-hover:scale-100"
+                  className="w-full h-full object-cover grayscale-0 md:grayscale md:group-hover:grayscale-0 transition-[filter,transform] duration-700 scale-100 md:scale-110 md:group-hover:scale-100"
                 />
                 <div className="absolute inset-0 bg-transparent md:bg-white/20 dark:md:bg-black/20 md:group-hover:bg-transparent transition-colors duration-500"></div>
               </div>
