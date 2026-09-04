@@ -43,7 +43,7 @@ const Grupo: React.FC<{ def: GrupoDef<Record<string, Def>>; ruta: string; nivel:
       <button
         type="button"
         onClick={() => setAbierto((v) => !v)}
-        className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-black/[0.03]"
+        className="oc-pulsable flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-black/[0.03]"
       >
         <span className="text-[14px] font-bold text-negro">{def.etiqueta}</span>
         {abierto ? <ChevronUp size={16} className="shrink-0 text-neutral-400" /> : <ChevronDown size={16} className="shrink-0 text-neutral-400" />}
@@ -117,23 +117,23 @@ const Lista: React.FC<{ def: ListaDef<Record<string, Def>>; ruta: string; nivel:
                 <button
                   type="button"
                   onClick={() => setAbierto(estaAbierto ? null : i)}
-                  className="min-w-0 flex-1 truncate py-1 text-left text-[13.5px] font-semibold text-negro"
+                  className="oc-pulsable min-w-0 flex-1 truncate py-1 text-left text-[13.5px] font-semibold text-negro"
                   title={titulo}
                 >
                   {titulo}
                 </button>
-                <button type="button" onClick={() => mover(i, -1)} disabled={i === 0} title="Subir" className="rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro disabled:opacity-25">
+                <button type="button" onClick={() => mover(i, -1)} disabled={i === 0} title="Subir" className="oc-pulsable rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro disabled:opacity-25">
                   <ChevronUp size={14} />
                 </button>
-                <button type="button" onClick={() => mover(i, 1)} disabled={i === items.length - 1} title="Bajar" className="rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro disabled:opacity-25">
+                <button type="button" onClick={() => mover(i, 1)} disabled={i === items.length - 1} title="Bajar" className="oc-pulsable rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro disabled:opacity-25">
                   <ChevronDown size={14} />
                 </button>
                 {def.agregar && (
-                  <button type="button" onClick={() => void quitar(i)} title={`Eliminar ${def.nombreItem.toLowerCase()}`} className="rounded p-1 text-neutral-400 hover:bg-red-50 hover:text-red-600">
+                  <button type="button" onClick={() => void quitar(i)} title={`Eliminar ${def.nombreItem.toLowerCase()}`} className="oc-pulsable rounded p-1 text-neutral-400 hover:bg-red-50 hover:text-red-600">
                     <Trash2 size={14} />
                   </button>
                 )}
-                <button type="button" onClick={() => setAbierto(estaAbierto ? null : i)} className="rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro">
+                <button type="button" onClick={() => setAbierto(estaAbierto ? null : i)} className="oc-pulsable rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro">
                   {estaAbierto ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
                 </button>
               </div>
@@ -179,7 +179,7 @@ const Campo: React.FC<{ def: CampoDef<unknown>; ruta: string }> = ({ def, ruta }
           type="button"
           onClick={() => escribir(structuredClone(porDefecto))}
           title="Volver al texto original"
-          className="flex shrink-0 items-center gap-1 text-[11px] font-semibold text-neutral-400 transition-colors hover:text-marca"
+          className="oc-pulsable flex shrink-0 items-center gap-1 text-[11px] font-semibold text-neutral-400 hover:text-marca"
         >
           <RotateCcw size={11} /> Original
         </button>
@@ -286,7 +286,7 @@ const Campo: React.FC<{ def: CampoDef<unknown>; ruta: string }> = ({ def, ruta }
                     type="button"
                     title={o.etiqueta}
                     onClick={() => escribir(o.valor)}
-                    className={`flex aspect-square items-center justify-center rounded-lg transition-colors ${
+                    className={`oc-pulsable flex aspect-square items-center justify-center rounded-lg ${
                       valor === o.valor ? 'bg-marca text-negro' : 'text-neutral-500 hover:bg-black/[0.06] hover:text-negro'
                     }`}
                   >
@@ -353,8 +353,8 @@ const CampoOrden: React.FC<{ def: CampoDef<unknown>; valor: string[]; escribir: 
           <div key={clave} className="flex items-center gap-2 rounded-lg bg-black/[0.03] px-2.5 py-2">
             <span className="w-5 shrink-0 text-center text-[11px] font-bold text-neutral-400 tabular-nums">{i + 1}</span>
             <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-negro">{etiquetas.get(clave) ?? clave}</span>
-            <button type="button" onClick={() => mover(i, -1)} disabled={i === 0} title="Subir" className="rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro disabled:opacity-25"><ChevronUp size={14} /></button>
-            <button type="button" onClick={() => mover(i, 1)} disabled={i === lista.length - 1} title="Bajar" className="rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro disabled:opacity-25"><ChevronDown size={14} /></button>
+            <button type="button" onClick={() => mover(i, -1)} disabled={i === 0} title="Subir" className="oc-pulsable rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro disabled:opacity-25"><ChevronUp size={14} /></button>
+            <button type="button" onClick={() => mover(i, 1)} disabled={i === lista.length - 1} title="Bajar" className="oc-pulsable rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro disabled:opacity-25"><ChevronDown size={14} /></button>
           </div>
         ))}
       </div>
@@ -375,7 +375,7 @@ const CampoImagen: React.FC<{
         <button
           type="button"
           onClick={() => setGaleria(true)}
-          className="relative h-20 w-28 shrink-0 overflow-hidden rounded-lg bg-[#f1f1ef] transition-opacity hover:opacity-80"
+          className="oc-pulsable relative h-20 w-28 shrink-0 overflow-hidden rounded-lg bg-[#f1f1ef] hover:opacity-80"
         >
           {valor.src ? (
             <img src={valor.src} alt="" className="h-full w-full object-cover" />

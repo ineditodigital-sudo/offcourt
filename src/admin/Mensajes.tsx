@@ -73,7 +73,7 @@ export const Mensajes: React.FC<{ onContador?: (n: number) => void }> = ({ onCon
           </Boton>
         </div>
         {items.length > 0 && (
-          <a href={api.urlCsv()} className="inline-flex items-center gap-2 rounded-xl border border-black/10 bg-white px-3 py-1.5 text-[13px] font-bold text-negro transition-colors hover:bg-black/[0.04]">
+          <a href={api.urlCsv()} className="oc-pulsable inline-flex items-center gap-2 rounded-xl border border-black/10 bg-white px-3 py-1.5 text-[13px] font-bold text-negro hover:bg-black/[0.04]">
             <Download size={14} /> Descargar en Excel
           </a>
         )}
@@ -103,14 +103,14 @@ export const Mensajes: React.FC<{ onContador?: (n: number) => void }> = ({ onCon
                   <button
                     onClick={() => void marcar(m, !m.leido)}
                     title={m.leido ? 'Marcar como sin leer' : 'Marcar como leído'}
-                    className="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-black/5 hover:text-negro"
+                    className="oc-pulsable rounded-lg p-2 text-neutral-400 hover:bg-black/5 hover:text-negro"
                   >
                     {m.leido ? <Mail size={15} /> : <MailOpen size={15} />}
                   </button>
                   <button
                     onClick={() => void eliminar(m)}
                     title="Eliminar"
-                    className="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                    className="oc-pulsable rounded-lg p-2 text-neutral-400 hover:bg-red-50 hover:text-red-600"
                   >
                     <Trash2 size={15} />
                   </button>

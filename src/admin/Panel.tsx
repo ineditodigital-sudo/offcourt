@@ -271,19 +271,19 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
         <button
           onClick={() => setCajon(true)}
           aria-label="Abrir el menú"
-          className="-ml-1 rounded-lg p-2 text-neutral-500 transition-colors hover:bg-black/5 hover:text-negro lg:hidden"
+          className="oc-pulsable -ml-1 rounded-lg p-2 text-neutral-500 hover:bg-black/5 hover:text-negro lg:hidden"
         >
           <Menu size={19} />
         </button>
 
-        <button onClick={() => setModulo('inicio')} title="Ir al inicio del panel" className="shrink-0">
+        <button onClick={() => setModulo('inicio')} title="Ir al inicio del panel" className="oc-pulsable shrink-0">
           <img src="/logo_negro.svg" alt="Offcourt" className="h-6 w-auto sm:h-7" />
         </button>
 
         <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
           <EstadoGuardado />
 
-          <button onClick={() => setAyuda(true)} title="Cómo funciona el panel" className="hidden rounded-lg p-2 text-neutral-400 transition-colors hover:bg-black/5 hover:text-negro sm:block">
+          <button onClick={() => setAyuda(true)} title="Cómo funciona el panel" className="oc-pulsable hidden rounded-lg p-2 text-neutral-400 hover:bg-black/5 hover:text-negro sm:block">
             <HelpCircle size={16} />
           </button>
 
@@ -297,7 +297,7 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
                 onClick={() => void descartar()}
                 title="Descartar los cambios sin publicar"
                 aria-label="Descartar los cambios sin publicar"
-                className="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-black/5 hover:text-negro sm:hidden"
+                className="oc-pulsable rounded-lg p-2 text-neutral-400 hover:bg-black/5 hover:text-negro sm:hidden"
               >
                 <RotateCcw size={16} />
               </button>
@@ -309,7 +309,7 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
             target="_blank"
             rel="noopener noreferrer"
             title="Abrir el sitio publicado en otra pestaña"
-            className="hidden items-center gap-1.5 rounded-xl border border-black/10 bg-white px-3 py-1.5 text-[13px] font-bold text-negro transition-colors hover:bg-black/[0.04] sm:inline-flex"
+            className="oc-pulsable hidden items-center gap-1.5 rounded-xl border border-black/10 bg-white px-3 py-1.5 text-[13px] font-bold text-negro hover:bg-black/[0.04] sm:inline-flex"
           >
             <ExternalLink size={14} /> <span className="hidden md:inline">Ver sitio</span>
           </a>
@@ -318,7 +318,7 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
             <Rocket size={14} /> Publicar
           </Boton>
 
-          <button onClick={() => void salir()} title="Cerrar sesión" className="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-black/5 hover:text-negro">
+          <button onClick={() => void salir()} title="Cerrar sesión" className="oc-pulsable rounded-lg p-2 text-neutral-400 hover:bg-black/5 hover:text-negro">
             <LogOut size={16} />
           </button>
         </div>
@@ -348,7 +348,7 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
                   <button
                     key={id}
                     onClick={() => setVistaMovil(id)}
-                    className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-[13px] font-bold transition-colors ${
+                    className={`oc-pulsable flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-[13px] font-bold ${
                       vistaMovil === id ? 'bg-marca/15 text-negro' : 'text-neutral-500 hover:bg-black/[0.04]'
                     }`}
                   >
@@ -367,7 +367,7 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
                     <button
                       onClick={() => despachar({ tipo: 'modoEdicion', activo: !est.modoEdicion })}
                       title={est.modoEdicion ? 'Desactivar la selección para navegar el sitio' : 'Activar la selección para editar'}
-                      className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[12px] font-bold transition-colors ${
+                      className={`oc-pulsable flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[12px] font-bold ${
                         est.modoEdicion ? 'bg-marca text-negro' : 'text-neutral-500 hover:bg-black/5'
                       }`}
                     >
@@ -376,20 +376,20 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
                     </button>
                     <span className="mx-1 h-4 w-px bg-black/10" />
                     <button onClick={() => despachar({ tipo: 'dispositivo', dispositivo: 'escritorio' })} title="Ver como en computadora"
-                      className={`rounded-lg p-1.5 transition-colors ${est.dispositivo === 'escritorio' ? 'bg-black/[0.08] text-negro' : 'text-neutral-400 hover:text-negro'}`}>
+                      className={`oc-pulsable rounded-lg p-1.5 ${est.dispositivo === 'escritorio' ? 'bg-black/[0.08] text-negro' : 'text-neutral-400 hover:text-negro'}`}>
                       <Monitor size={14} />
                     </button>
                     <button onClick={() => despachar({ tipo: 'dispositivo', dispositivo: 'movil' })} title="Ver como en celular"
-                      className={`rounded-lg p-1.5 transition-colors ${est.dispositivo === 'movil' ? 'bg-black/[0.08] text-negro' : 'text-neutral-400 hover:text-negro'}`}>
+                      className={`oc-pulsable rounded-lg p-1.5 ${est.dispositivo === 'movil' ? 'bg-black/[0.08] text-negro' : 'text-neutral-400 hover:text-negro'}`}>
                       <Smartphone size={14} />
                     </button>
                     <span className="mx-1 h-4 w-px bg-black/10" />
                     <button onClick={() => despachar({ tipo: 'deshacer' })} disabled={est.pasado.length === 0} title="Deshacer (Ctrl+Z)"
-                      className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:text-negro disabled:opacity-25">
+                      className="oc-pulsable rounded-lg p-1.5 text-neutral-400 hover:text-negro disabled:opacity-25">
                       <Undo2 size={14} />
                     </button>
                     <button onClick={() => despachar({ tipo: 'rehacer' })} disabled={est.futuro.length === 0} title="Rehacer (Ctrl+Shift+Z)"
-                      className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:text-negro disabled:opacity-25">
+                      className="oc-pulsable rounded-lg p-1.5 text-neutral-400 hover:text-negro disabled:opacity-25">
                       <Redo2 size={14} />
                     </button>
                   </div>
@@ -418,7 +418,7 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
                         <button
                           key={t}
                           onClick={() => setLadoDerecho(t)}
-                          className={`flex-1 rounded-md px-2 py-1 text-[12px] font-bold transition-colors ${
+                          className={`oc-pulsable flex-1 rounded-md px-2 py-1 text-[12px] font-bold ${
                             ladoDerecho === t ? 'bg-white text-negro shadow-sm' : 'text-neutral-500 hover:text-negro'
                           }`}
                         >

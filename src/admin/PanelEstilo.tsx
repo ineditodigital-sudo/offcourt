@@ -58,7 +58,7 @@ export const PanelEstilo: React.FC<{ clave: string }> = ({ clave }) => {
           <button
             type="button"
             onClick={restablecer}
-            className="flex items-center gap-1 text-[11.5px] font-semibold text-neutral-400 transition-colors hover:text-marca"
+            className="oc-pulsable flex items-center gap-1 text-[11.5px] font-semibold text-neutral-400 hover:text-marca"
           >
             <RotateCcw size={11} /> Restablecer
           </button>
@@ -74,7 +74,7 @@ export const PanelEstilo: React.FC<{ clave: string }> = ({ clave }) => {
             onClick={() => cambiar({ tamano: Math.max(-2, paso - 1) || undefined })}
             disabled={paso <= -2}
             title="Más pequeño"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-black/10 bg-white text-negro transition-colors hover:bg-black/[0.04] disabled:opacity-30"
+            className="oc-pulsable flex h-9 w-9 items-center justify-center rounded-lg border border-black/10 bg-white text-negro hover:bg-black/[0.04] disabled:opacity-30"
           >
             <Minus size={15} />
           </button>
@@ -86,7 +86,7 @@ export const PanelEstilo: React.FC<{ clave: string }> = ({ clave }) => {
             onClick={() => cambiar({ tamano: Math.min(2, paso + 1) || undefined })}
             disabled={paso >= 2}
             title="Más grande"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-black/10 bg-white text-negro transition-colors hover:bg-black/[0.04] disabled:opacity-30"
+            className="oc-pulsable flex h-9 w-9 items-center justify-center rounded-lg border border-black/10 bg-white text-negro hover:bg-black/[0.04] disabled:opacity-30"
           >
             <Plus size={15} />
           </button>
@@ -141,7 +141,7 @@ export const PanelEstilo: React.FC<{ clave: string }> = ({ clave }) => {
               type="button"
               title={t}
               onClick={() => cambiar({ alineacion: v })}
-              className={`flex h-8 w-9 items-center justify-center rounded-lg border transition-colors ${
+              className={`oc-pulsable flex h-8 w-9 items-center justify-center rounded-lg border ${
                 estilo.alineacion === v ? 'border-marca bg-marca text-negro' : 'border-black/10 bg-white text-neutral-500 hover:bg-black/[0.04]'
               }`}
             >
@@ -168,7 +168,7 @@ const Pastilla: React.FC<{ activo: boolean; onClick: () => void; children: React
   <button
     type="button"
     onClick={onClick}
-    className={`rounded-lg border px-2.5 py-1.5 text-[12px] font-bold transition-colors ${
+    className={`oc-pulsable rounded-lg border px-2.5 py-1.5 text-[12px] font-bold ${
       activo ? 'border-marca bg-marca text-negro' : 'border-black/10 bg-white text-gris-oscuro hover:bg-black/[0.04]'
     }`}
   >
@@ -182,7 +182,7 @@ const Paleta: React.FC<{ valor?: string; onCambio: (c: string | undefined) => vo
       type="button"
       onClick={() => onCambio(undefined)}
       title="Como lo dejó el diseño"
-      className={`rounded-lg border px-2.5 py-1.5 text-[12px] font-bold transition-colors ${
+      className={`oc-pulsable rounded-lg border px-2.5 py-1.5 text-[12px] font-bold ${
         !valor ? 'border-marca bg-marca text-negro' : 'border-black/10 bg-white text-gris-oscuro hover:bg-black/[0.04]'
       }`}
     >

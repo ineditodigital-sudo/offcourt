@@ -14,7 +14,7 @@ export const Boton: React.FC<{
   className?: string;
   children: React.ReactNode;
 }> = ({ onClick, submit, tipo = 'normal', tamano = 'md', disabled, cargando, title, className = '', children }) => {
-  const base = 'inline-flex items-center justify-center gap-2 rounded-xl font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-50';
+  const base = 'oc-pulsable inline-flex items-center justify-center gap-2 rounded-xl font-bold disabled:cursor-not-allowed disabled:opacity-50';
   const medida = tamano === 'sm' ? 'px-3 py-1.5 text-[13px]' : 'px-4 py-2.5 text-sm';
   const estilos = {
     principal: 'bg-marca text-negro hover:bg-marca-oscuro shadow-sm',
@@ -62,14 +62,14 @@ export const Modal: React.FC<{
 
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" role="dialog" aria-modal="true">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={onCerrar} />
-      <div className={`oc-aparece relative flex max-h-[88vh] w-full ${anchos} flex-col overflow-hidden rounded-2xl bg-white shadow-2xl`}>
+      <div className="oc-velo absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={onCerrar} />
+      <div className={`oc-dialogo relative flex max-h-[88vh] w-full ${anchos} flex-col overflow-hidden rounded-2xl bg-white shadow-2xl`}>
         <div className="flex items-start justify-between gap-4 border-b border-black/8 px-5 py-4">
           <div className="min-w-0">
             <h2 className="font-outfit text-lg font-extrabold uppercase tracking-tight text-negro">{titulo}</h2>
             {subtitulo && <p className="mt-0.5 text-[13px] text-neutral-500">{subtitulo}</p>}
           </div>
-          <button onClick={onCerrar} aria-label="Cerrar" className="-mr-1 rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-black/5 hover:text-negro">
+          <button onClick={onCerrar} aria-label="Cerrar" className="oc-pulsable -mr-1 rounded-lg p-1.5 text-neutral-400 hover:bg-black/5 hover:text-negro">
             <X size={18} />
           </button>
         </div>
@@ -131,7 +131,7 @@ export function useNotas() {
       {notas.map((n) => (
         <div
           key={n.id}
-          className={`oc-aparece pointer-events-auto flex max-w-sm items-start gap-2.5 rounded-xl px-4 py-3 text-[13px] font-semibold shadow-lg ${
+          className={`oc-nota pointer-events-auto flex max-w-sm items-start gap-2.5 rounded-xl px-4 py-3 text-[13px] font-semibold shadow-lg ${
             n.tipo === 'error' ? 'bg-red-600 text-white' : n.tipo === 'info' ? 'bg-negro text-white' : 'bg-emerald-600 text-white'
           }`}
         >
@@ -153,9 +153,9 @@ export const Interruptor: React.FC<{ valor: boolean; onCambio: (v: boolean) => v
     aria-checked={valor}
     aria-label={etiqueta}
     onClick={() => onCambio(!valor)}
-    className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${valor ? 'bg-marca' : 'bg-black/15'}`}
+    className={`oc-interruptor relative h-6 w-11 shrink-0 rounded-full ${valor ? 'bg-marca' : 'bg-black/15'}`}
   >
-    <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${valor ? 'left-[22px]' : 'left-0.5'}`} />
+    <span className={`oc-interruptor-pomo absolute top-0.5 h-5 w-5 rounded-full bg-white shadow ${valor ? 'left-[22px]' : 'left-0.5'}`} />
   </button>
 );
 

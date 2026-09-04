@@ -99,11 +99,11 @@ export const Versiones: React.FC<{ onAviso: (t: string, tipo?: 'ok' | 'error' | 
         <div className="flex flex-wrap gap-2">
           <a
             href={api.urlExportar()}
-            className="inline-flex items-center gap-2 rounded-xl bg-marca px-4 py-2.5 text-sm font-bold text-negro transition-colors hover:bg-marca-oscuro"
+            className="oc-pulsable inline-flex items-center gap-2 rounded-xl bg-marca px-4 py-2.5 text-sm font-bold text-negro hover:bg-marca-oscuro"
           >
             <Download size={15} /> Descargar respaldo
           </a>
-          <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-bold text-negro transition-colors hover:bg-black/[0.04]">
+          <label className="oc-pulsable inline-flex cursor-pointer items-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-bold text-negro hover:bg-black/[0.04]">
             <Upload size={15} /> Cargar un respaldo
             <input
               type="file"

@@ -15,6 +15,24 @@
   --font-sarabun: 'Sarabun', sans-serif;
 }
 
+/* ---------------------------------------------------------------------------
+   Curvas de movimiento.
+
+   Las de CSS son demasiado flojas: `ease-out` a 200 ms se percibe más lento
+   que esta salida, porque arranca sin fuerza justo en el instante que la
+   persona está mirando. Estas tres cubren todo el panel:
+
+     --salida    entradas y respuestas: arranca rápido y frena. Nunca `ease-in`
+                 en interfaz, que retrasa el movimiento al principio.
+     --recorrido para lo que se mueve o cambia de tamaño en pantalla.
+     --presion   acuse de pulsación: cortísimo, casi instantáneo.
+--------------------------------------------------------------------------- */
+:root {
+  --salida: cubic-bezier(0.16, 1, 0.3, 1);
+  --recorrido: cubic-bezier(0.65, 0, 0.35, 1);
+  --presion: cubic-bezier(0.2, 0, 0, 1);
+}
+
 @font-face {
   font-family: 'Outfit';
   font-style: normal;
@@ -47,6 +65,39 @@
 html, body, #root { height: 100%; }
 body { font-family: var(--font-sarabun); -webkit-font-smoothing: antialiased; }
 
+/* Lo que dibuja el navegador también es parte del diseño: selección, cursor de
+   texto y anillo de foco vienen con colores que no son de ninguna marca. */
+::selection { background: color-mix(in srgb, var(--color-marca) 32%, transparent); color: var(--color-negro); }
+:root { accent-color: var(--color-marca); caret-color: var(--color-marca-oscuro); }
+
+:where(button, a, [role="button"], summary):focus-visible,
+.oc-campo:focus-visible {
+  outline: 2px solid var(--color-marca-oscuro);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* ---------------------------------------------------------------------------
+   Acuse de pulsación.
+
+   Un botón que no se hunde al pulsarlo deja la duda de si la interfaz escuchó.
+   Se aplica a todo lo pulsable del panel con una clase, en vez de repetir la
+   regla: el color sigue su propia transición y aquí solo va la escala, que se
+   compone en GPU y no obliga a recalcular nada.
+
+   Solo en punteros de verdad: en pantalla táctil el `:hover` se queda pegado
+   después de tocar y el elemento parece encendido sin estarlo.
+--------------------------------------------------------------------------- */
+.oc-pulsable {
+  transition: transform 130ms var(--presion), background-color 150ms ease, color 150ms ease, border-color 150ms ease, opacity 150ms ease;
+}
+.oc-pulsable:active { transform: scale(0.975); }
+.oc-pulsable:disabled:active { transform: none; }
+
+@media (hover: none) {
+  .oc-pulsable:active { transform: scale(0.985); }
+}
+
 .font-outfit { font-family: var(--font-outfit); }
 
 /* Campos de formulario del panel */
@@ -72,8 +123,74 @@ body { font-family: var(--font-sarabun); -webkit-font-smoothing: antialiased; }
 .oc-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
 .oc-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,.3); }
 
+/* ---------------------------------------------------------------------------
+   Entradas.
+
+   Cada superficie entra desde donde está: el cajón desde su borde, el diálogo
+   creciendo desde su propio centro —no está anclado a ningún disparador—, el
+   aviso desde la esquina en la que aparece. Ninguna arranca en `scale(0)`:
+   nada del mundo real aparece de la nada, y a partir de 0,96 la entrada se
+   lee como algo que ya estaba y se acerca.
+
+   La salida siempre es más rápida que la entrada: entrar es una presentación,
+   salir es quitarse de en medio.
+--------------------------------------------------------------------------- */
 @keyframes oc-aparece { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-.oc-aparece { animation: oc-aparece .18s ease-out both; }
+.oc-aparece { animation: oc-aparece .2s var(--salida) both; }
+
+@keyframes oc-dialogo-entra {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+.oc-dialogo { animation: oc-dialogo-entra .22s var(--salida) both; }
+
+@keyframes oc-velo-entra { from { opacity: 0; } to { opacity: 1; } }
+.oc-velo { animation: oc-velo-entra .2s ease both; }
+
+@keyframes oc-cajon-entra {
+  from { transform: translateX(-100%); }
+  to   { transform: none; }
+}
+.oc-cajon { animation: oc-cajon-entra .28s var(--salida) both; }
+
+/* El aviso entra desde el borde por el que aparece, así que empujarlo hacia
+   fuera para descartarlo se sentiría como devolverlo por donde vino. */
+@keyframes oc-nota-entra {
+  from { opacity: 0; transform: translateX(12px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+.oc-nota { animation: oc-nota-entra .24s var(--salida) both; }
+
+/* ---------------------------------------------------------------------------
+   Lista de páginas de la barra lateral.
+
+   Aparece y desaparece sin animar el alto, a propósito por dos razones.
+   
+   La de diseño: este menú se abre y se cierra decenas de veces al día, y a esa
+   frecuencia un acordeón deja de leerse como elegante y empieza a leerse como
+   lentitud. Aquí lo que se quiere es que responda, no que se luzca.
+
+   La técnica: se probó el truco de grid-template-rows 0fr→1fr, que es el
+   habitual para animar una altura desconocida. No funciona en este caso. El
+   hijo lleva `overflow: hidden` —imprescindible para recortar mientras se
+   abre—, y eso anula su tamaño mínimo automático: la pista `1fr` se queda con
+   base 0 y, al no haber espacio libre definido en un contenedor de alto
+   automático, resuelve a 0 px. La lista no crecía nunca y las dos transiciones
+   quedaban colgadas en `running` para siempre.
+
+   Así que solo entra el contenido, con desplazamiento y opacidad: se compone
+   en GPU y no toca el layout. Al cerrar se retira sin animación, que es lo más
+   rápido que puede hacerse.
+--------------------------------------------------------------------------- */
+@keyframes oc-submenu-entra {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+.oc-submenu { animation: oc-submenu-entra .18s var(--salida) both; }
+
+/* Tailwind v4 gira con la propiedad `rotate`, no dentro de `transform`, así
+   que transicionar `transform` no animaba nada: el chevron saltaba. */
+.oc-chevron { transition: rotate .22s var(--salida); }
 
 /* ---------------------------------------------------------------------------
    Banner de bienvenida.
@@ -101,7 +218,10 @@ body { font-family: var(--font-sarabun); -webkit-font-smoothing: antialiased; }
   animation: oc-degradado 24s ease-in-out infinite;
 }
 
-/* Retícula fina, como la del hero del sitio: ata el panel a la marca. */
+/* Retícula fina. No es un fondo cuadriculado genérico: es la misma retícula
+   táctica que dibuja el hero del sitio (.v3-tactical-grid-line-* en
+   src/index.css), traída aquí para que el panel se lea como parte de la misma
+   marca y no como una herramienta ajena pegada al lado. */
 .oc-banner-malla {
   background-image:
     linear-gradient(to right, rgba(255, 255, 255, .05) 1px, transparent 1px),
@@ -114,16 +234,24 @@ body { font-family: var(--font-sarabun); -webkit-font-smoothing: antialiased; }
 }
 
 /* --------------------------------------------------------- barra lateral */
-.oc-lateral { transition: width .22s cubic-bezier(.4, 0, .2, 1); }
 
-/* En el rail estrecho las etiquetas se van sin empujar el icono. */
+/* Aquí sí se anima el ancho, y es a propósito: lo que cambia es el espacio que
+   ocupa la barra, y el contenido de al lado tiene que reclamarlo de verdad.
+   Con un `translateX` la barra se apartaría pero dejaría su hueco vacío.
+   Ocurre una vez por clic, no en bucle, así que el coste de layout es
+   asumible. */
+.oc-lateral { transition: width .24s var(--recorrido); }
+
+/* En el rail estrecho las etiquetas se desvanecen. Antes se les animaba
+   también el max-width, pero era innecesario: el propio rail se estrecha y las
+   recorta, así que bastaba con la opacidad y sobraba un trabajo de layout. */
 .oc-etiqueta-lateral {
-  transition: opacity .14s ease, max-width .22s cubic-bezier(.4, 0, .2, 1);
+  transition: opacity .14s ease;
   white-space: nowrap;
   overflow: hidden;
 }
-.oc-lateral[data-plegada="true"] .oc-etiqueta-lateral { opacity: 0; max-width: 0; }
-.oc-lateral[data-plegada="false"] .oc-etiqueta-lateral { opacity: 1; max-width: 12rem; }
+.oc-lateral[data-plegada="true"] .oc-etiqueta-lateral { opacity: 0; }
+.oc-lateral[data-plegada="false"] .oc-etiqueta-lateral { opacity: 1; }
 
 /* Globo con el nombre del módulo cuando la barra está plegada. */
 .oc-globo {
@@ -142,6 +270,34 @@ body { font-family: var(--font-sarabun); -webkit-font-smoothing: antialiased; }
   opacity: 1; transform: translateY(-50%) scale(1);
 }
 
+/* Menos movimiento no es ningún movimiento: se conservan opacidad y color,
+   que son los que dicen qué ha cambiado, y se retira el desplazamiento. El
+   acuse de pulsación también se queda: sin él no se sabe si el clic entró. */
 @media (prefers-reduced-motion: reduce) {
   .oc-lateral, .oc-etiqueta-lateral, .oc-globo { transition: none; }
+  .oc-submenu { animation-name: oc-velo-entra; }
+  .oc-chevron { transition: none; }
+  .oc-aparece, .oc-dialogo, .oc-cajon, .oc-nota {
+    animation-name: oc-velo-entra;
+    animation-duration: .15s;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Interruptor.
+
+   El pomo se desplaza con `left`, no con `transform`, porque los dos extremos
+   están anclados a los bordes de una pista muy corta y así no hay que calcular
+   la distancia. Son 20 px: a esta escala no compensa complicarlo.
+
+   Al mantenerlo pulsado el pomo se ensancha un poco, como un botón físico que
+   cede. Es el detalle que hace que un interruptor se sienta accionado y no
+   simplemente cambiado.
+--------------------------------------------------------------------------- */
+.oc-interruptor { transition: background-color 200ms ease; }
+.oc-interruptor-pomo { transition: left 220ms var(--salida), transform 130ms var(--presion); }
+.oc-interruptor:active .oc-interruptor-pomo { transform: scale(0.88); }
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-interruptor-pomo { transition: left 120ms linear, transform 130ms var(--presion); }
 }

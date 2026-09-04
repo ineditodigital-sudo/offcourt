@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   LayoutDashboard, MousePointerClick, Images, Inbox, History as IconoHistorial,
   Settings, PanelLeftClose, PanelLeftOpen, ChevronDown, X,
@@ -17,8 +17,7 @@ import { PAGINAS, type Entrada } from './navegacion';
  *                        con fondo oscurecido; se cierra al elegir algo.
  *
  * «Contenido» es el único módulo que se despliega: dentro están las páginas del
- * sitio y sus secciones. Se abre solo cuando ese módulo está activo, para que
- * la lista larga no compita con el resto cuando no toca.
+ * sitio y sus secciones.
  */
 
 export type Modulo = 'inicio' | 'contenido' | 'medios' | 'mensajes' | 'historial' | 'ajustes';
@@ -48,12 +47,23 @@ interface Props {
 export const BarraLateral: React.FC<Props> = ({
   modulo, onModulo, entrada, onEntrada, plegada, onPlegar, cajonAbierto, onCerrarCajon, sinLeer,
 }) => {
-  const contenidoAbierto = modulo === 'contenido' && !plegada;
+  /**
+   * Que la lista de páginas esté desplegada es un estado propio, no algo
+   * deducido del módulo activo. Antes se calculaba como `modulo === 'contenido'`
+   * y volver a pulsar el módulo no lo plegaba: el chevron prometía algo que
+   * nunca ocurría.
+   */
+  const [desplegado, setDesplegado] = useState(true);
+  const contenidoAbierto = modulo === 'contenido' && !plegada && desplegado;
 
   const elegirModulo = (m: Modulo) => {
-    // Pulsar «Contenido» con la barra plegada la abre: si no, no habría forma
-    // de llegar a las páginas.
-    if (m === 'contenido' && plegada) onPlegar(false);
+    if (m === 'contenido') {
+      // Con la barra plegada no hay sitio para la lista: primero se abre.
+      if (plegada) { onPlegar(false); setDesplegado(true); }
+      // Ya estando dentro, el módulo hace de interruptor de su propia lista.
+      else if (modulo === 'contenido') setDesplegado((v) => !v);
+      else setDesplegado(true);
+    }
     onModulo(m);
     onCerrarCajon();
   };
@@ -68,7 +78,8 @@ export const BarraLateral: React.FC<Props> = ({
               <button
                 onClick={() => elegirModulo(id)}
                 aria-current={activo ? 'page' : undefined}
-                className={`oc-item relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13.5px] font-bold transition-colors ${
+                aria-expanded={id === 'contenido' && !plegada ? contenidoAbierto : undefined}
+                className={`oc-item oc-pulsable relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13.5px] font-bold ${
                   activo ? 'bg-marca/15 text-negro' : 'text-gris-oscuro hover:bg-black/[0.05]'
                 }`}
               >
@@ -82,14 +93,15 @@ export const BarraLateral: React.FC<Props> = ({
                 </span>
                 <span className="oc-etiqueta-lateral flex-1">{etiqueta}</span>
                 {id === 'contenido' && !plegada && (
-                  <ChevronDown size={14} className={`shrink-0 text-neutral-400 transition-transform ${contenidoAbierto ? '' : '-rotate-90'}`} />
+                  <ChevronDown size={14} className={`oc-chevron shrink-0 text-neutral-400 ${contenidoAbierto ? '' : '-rotate-90'}`} />
                 )}
                 <span className="oc-globo" aria-hidden="true">{etiqueta}</span>
               </button>
 
-              {/* Páginas del sitio, dentro de «Contenido» */}
+              {/* Páginas del sitio, dentro de «Contenido». Ver la nota de
+                  .oc-submenu en admin.css sobre por qué no se anima el alto. */}
               {id === 'contenido' && contenidoAbierto && (
-                <div className="mb-1 mt-0.5 border-l border-black/10 pl-2 ml-5">
+                <div className="oc-submenu mb-1 ml-5 mt-0.5 border-l border-black/10 pl-2">
                   {PAGINAS.map((p) => (
                     <div key={p.id} className="mb-2">
                       <p className="px-2 pb-0.5 pt-1 text-[10.5px] font-black uppercase tracking-wider text-neutral-400">{p.etiqueta}</p>
@@ -97,7 +109,7 @@ export const BarraLateral: React.FC<Props> = ({
                         <button
                           key={e.ruta}
                           onClick={() => { onEntrada(e); onCerrarCajon(); }}
-                          className={`block w-full truncate rounded-lg px-2 py-1.5 text-left text-[12.5px] font-semibold transition-colors ${
+                          className={`oc-pulsable block w-full truncate rounded-lg px-2 py-1.5 text-left text-[12.5px] font-semibold ${
                             entrada.ruta === e.ruta ? 'bg-marca/20 text-negro' : 'text-gris-oscuro/85 hover:bg-black/[0.04]'
                           }`}
                         >
@@ -117,7 +129,7 @@ export const BarraLateral: React.FC<Props> = ({
       <button
         onClick={() => onPlegar(!plegada)}
         title={plegada ? 'Ampliar el menú' : 'Reducir el menú'}
-        className="oc-item relative hidden items-center gap-3 border-t border-black/8 px-4 py-3 text-[12.5px] font-bold text-neutral-500 transition-colors hover:bg-black/[0.04] hover:text-negro lg:flex"
+        className="oc-item oc-pulsable relative hidden items-center gap-3 border-t border-black/8 px-4 py-3 text-[12.5px] font-bold text-neutral-500 hover:bg-black/[0.04] hover:text-negro lg:flex"
       >
         {plegada ? <PanelLeftOpen size={17} className="shrink-0" /> : <PanelLeftClose size={17} className="shrink-0" />}
         <span className="oc-etiqueta-lateral">Reducir menú</span>
@@ -139,14 +151,14 @@ export const BarraLateral: React.FC<Props> = ({
       {/* Móvil: cajón */}
       {cajonAbierto && (
         <div className="fixed inset-0 z-[150] lg:hidden">
-          <div className="absolute inset-0 bg-black/40" onClick={onCerrarCajon} />
+          <div className="oc-velo absolute inset-0 bg-black/40" onClick={onCerrarCajon} />
           <aside
             data-plegada="false"
-            className="oc-aparece absolute inset-y-0 left-0 flex w-[17rem] max-w-[85vw] flex-col bg-white shadow-2xl"
+            className="oc-cajon absolute inset-y-0 left-0 flex w-[17rem] max-w-[85vw] flex-col bg-white shadow-2xl"
           >
             <div className="flex items-center justify-between border-b border-black/8 px-4 py-3">
               <img src="/logo_negro.svg" alt="Offcourt" className="h-6 w-auto" />
-              <button onClick={onCerrarCajon} aria-label="Cerrar menú" className="rounded-lg p-1.5 text-neutral-400 hover:bg-black/5 hover:text-negro">
+              <button onClick={onCerrarCajon} aria-label="Cerrar menú" className="oc-pulsable rounded-lg p-1.5 text-neutral-400 hover:bg-black/5 hover:text-negro">
                 <X size={18} />
               </button>
             </div>

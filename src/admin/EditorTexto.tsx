@@ -109,7 +109,7 @@ export const EditorTexto: React.FC<Props> = ({ valor, onCambio }) => {
             aria-label={titulo}
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => ejecutar(comando, v)}
-            className="rounded-lg p-1.5 text-gris-oscuro transition-colors hover:bg-black/[0.07]"
+            className="oc-pulsable rounded-lg p-1.5 text-gris-oscuro hover:bg-black/[0.07]"
           >
             <Icono size={16} />
           </button>
@@ -120,7 +120,7 @@ export const EditorTexto: React.FC<Props> = ({ valor, onCambio }) => {
           aria-label="Enlace"
           onMouseDown={(e) => e.preventDefault()}
           onClick={abrirEnlace}
-          className="rounded-lg p-1.5 text-gris-oscuro transition-colors hover:bg-black/[0.07]"
+          className="oc-pulsable rounded-lg p-1.5 text-gris-oscuro hover:bg-black/[0.07]"
         >
           <Link2 size={16} />
         </button>
@@ -131,7 +131,7 @@ export const EditorTexto: React.FC<Props> = ({ valor, onCambio }) => {
           aria-label="Quitar formato"
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => ejecutar('removeFormat')}
-          className="rounded-lg p-1.5 text-gris-oscuro transition-colors hover:bg-black/[0.07]"
+          className="oc-pulsable rounded-lg p-1.5 text-gris-oscuro hover:bg-black/[0.07]"
         >
           <Undo2 size={16} />
         </button>
@@ -159,10 +159,10 @@ export const EditorTexto: React.FC<Props> = ({ valor, onCambio }) => {
               placeholder="https://ejemplo.com  ·  correo@dominio.com  ·  /nosotros"
               className="oc-campo"
             />
-            <button type="button" onClick={aplicarEnlace} className="shrink-0 rounded-xl bg-marca px-4 text-sm font-bold text-negro hover:bg-marca-oscuro">
+            <button type="button" onClick={aplicarEnlace} className="oc-pulsable shrink-0 rounded-xl bg-marca px-4 text-sm font-bold text-negro hover:bg-marca-oscuro">
               Poner
             </button>
-            <button type="button" onClick={() => setEnlaceAbierto(false)} className="shrink-0 rounded-xl px-3 text-sm font-semibold text-neutral-500 hover:bg-black/5">
+            <button type="button" onClick={() => setEnlaceAbierto(false)} className="oc-pulsable shrink-0 rounded-xl px-3 text-sm font-semibold text-neutral-500 hover:bg-black/5">
               Cancelar
             </button>
           </div>

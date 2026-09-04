@@ -292,15 +292,15 @@ const Ficha: React.FC<{
         {/* Acciones */}
         <div className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 bg-gradient-to-t from-black/70 to-transparent p-2 opacity-0 transition-opacity group-hover:opacity-100">
           {modoSelector && (
-            <button onClick={onUsar} className="rounded-lg bg-marca px-2.5 py-1 text-[12px] font-bold text-negro hover:bg-marca-oscuro">
+            <button onClick={onUsar} className="oc-pulsable rounded-lg bg-marca px-2.5 py-1 text-[12px] font-bold text-negro hover:bg-marca-oscuro">
               <Check size={12} className="mr-1 inline" />Usar esta
             </button>
           )}
           {propio && (
             <>
-              <button onClick={onEditar} title="Cambiar nombre y descripción" className="rounded-lg bg-white/90 p-1.5 text-negro hover:bg-white"><Pencil size={13} /></button>
-              <button onClick={onReemplazar} title="Sustituir el archivo" className="rounded-lg bg-white/90 p-1.5 text-negro hover:bg-white"><RefreshCw size={13} /></button>
-              <button onClick={onEliminar} title="Eliminar" className="rounded-lg bg-white/90 p-1.5 text-red-600 hover:bg-white"><Trash2 size={13} /></button>
+              <button onClick={onEditar} title="Cambiar nombre y descripción" className="oc-pulsable rounded-lg bg-white/90 p-1.5 text-negro hover:bg-white"><Pencil size={13} /></button>
+              <button onClick={onReemplazar} title="Sustituir el archivo" className="oc-pulsable rounded-lg bg-white/90 p-1.5 text-negro hover:bg-white"><RefreshCw size={13} /></button>
+              <button onClick={onEliminar} title="Eliminar" className="oc-pulsable rounded-lg bg-white/90 p-1.5 text-red-600 hover:bg-white"><Trash2 size={13} /></button>
             </>
           )}
         </div>

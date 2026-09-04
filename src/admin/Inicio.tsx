@@ -131,7 +131,7 @@ export const Inicio: React.FC<Props> = ({ onModulo, onEntrada, onAyuda, sinLeer 
           <div className="mt-4 flex flex-wrap gap-2">
             <button
               onClick={() => onModulo('contenido')}
-              className="inline-flex items-center gap-2 rounded-lg bg-white px-3.5 py-2 text-[13px] font-bold text-negro transition-colors hover:bg-white/90"
+              className="oc-pulsable inline-flex items-center gap-2 rounded-lg bg-white px-3.5 py-2 text-[13px] font-bold text-negro hover:bg-white/90"
             >
               <MousePointerClick size={14} /> Editar mi sitio
             </button>
@@ -139,13 +139,13 @@ export const Inicio: React.FC<Props> = ({ onModulo, onEntrada, onAyuda, sinLeer 
               href="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/25 px-3.5 py-2 text-[13px] font-bold text-white transition-colors hover:border-white/50 hover:bg-white/10"
+              className="oc-pulsable inline-flex items-center gap-2 rounded-lg border border-white/25 px-3.5 py-2 text-[13px] font-bold text-white hover:border-white/50 hover:bg-white/10"
             >
               <ExternalLink size={14} /> Ver mi sitio
             </a>
             <button
               onClick={onAyuda}
-              className="inline-flex items-center gap-2 rounded-lg border border-white/25 px-3.5 py-2 text-[13px] font-bold text-white transition-colors hover:border-white/50 hover:bg-white/10"
+              className="oc-pulsable inline-flex items-center gap-2 rounded-lg border border-white/25 px-3.5 py-2 text-[13px] font-bold text-white hover:border-white/50 hover:bg-white/10"
             >
               <HelpCircle size={14} /> Recorrido rápido
             </button>
@@ -162,7 +162,7 @@ export const Inicio: React.FC<Props> = ({ onModulo, onEntrada, onAyuda, sinLeer 
               <li key={texto}>
                 <button
                   onClick={ir}
-                  className="group flex w-full items-center gap-3 rounded-lg px-1 py-2 text-left transition-colors hover:bg-marca/[0.06]"
+                  className="oc-pulsable group flex w-full items-center gap-3 rounded-lg px-1 py-2 text-left hover:bg-marca/[0.06]"
                 >
                   <Icono size={15} className="shrink-0 text-marca-oscuro" />
                   <span className="min-w-0 flex-1 text-[13px] leading-snug text-gris-oscuro">{texto}</span>
@@ -184,9 +184,9 @@ export const Inicio: React.FC<Props> = ({ onModulo, onEntrada, onAyuda, sinLeer 
             <button
               key={titulo}
               onClick={ir}
-              className="group flex items-center gap-3.5 rounded-xl border border-black/10 bg-white px-4 py-3 text-left transition-colors hover:border-marca/60 hover:bg-marca/[0.04]"
+              className="oc-pulsable group flex items-center gap-3.5 rounded-xl border border-black/10 bg-white px-4 py-3 text-left hover:border-marca/60 hover:bg-marca/[0.04]"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-marca/12 text-marca-oscuro transition-colors group-hover:bg-marca group-hover:text-negro">
+              <span className="oc-pulsable flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-marca/12 text-marca-oscuro transition-colors group-hover:bg-marca group-hover:text-negro">
                 <Icono size={17} />
               </span>
               <span className="min-w-0 flex-1">
@@ -225,7 +225,7 @@ const Cifra: React.FC<{
 }> = ({ Icono, valor, etiqueta, destacada, onClick }) => (
   <button
     onClick={onClick}
-    className={`flex items-center gap-3 rounded-xl border px-3.5 py-3 text-left transition-colors ${
+    className={`oc-pulsable flex items-center gap-3 rounded-xl border px-3.5 py-3 text-left ${
       destacada ? 'border-marca/50 bg-marca/[0.07] hover:bg-marca/[0.11]' : 'border-black/10 bg-white hover:border-marca/50 hover:bg-marca/[0.04]'
     }`}
   >
