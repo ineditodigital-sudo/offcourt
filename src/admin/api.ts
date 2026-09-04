@@ -134,6 +134,23 @@ export function formatoPeso(bytes: number): string {
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }
 
+/** «hace 12 min», «hace 3 h», «ayer», «hace 5 días». Para la línea de estado. */
+export function tiempoRelativo(iso: string | null | undefined): string {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  const seg = Math.max(0, Math.round((Date.now() - d.getTime()) / 1000));
+  if (seg < 60) return 'hace un momento';
+  const min = Math.round(seg / 60);
+  if (min < 60) return `hace ${min} min`;
+  const hor = Math.round(min / 60);
+  if (hor < 24) return `hace ${hor} h`;
+  const dias = Math.round(hor / 24);
+  if (dias === 1) return 'ayer';
+  if (dias < 30) return `hace ${dias} días`;
+  return 'el ' + d.toLocaleDateString('es-MX', { day: 'numeric', month: 'long' });
+}
+
 export function formatoFecha(iso: string | null | undefined): string {
   if (!iso) return '—';
   const d = new Date(iso);

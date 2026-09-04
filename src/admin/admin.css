@@ -94,11 +94,11 @@ body { font-family: var(--font-sarabun); -webkit-font-smoothing: antialiased; }
 
 .oc-banner {
   background-image:
-    radial-gradient(120% 140% at 12% 20%, rgba(253, 162, 17, .55) 0%, transparent 55%),
-    radial-gradient(100% 120% at 88% 80%, rgba(253, 162, 17, .28) 0%, transparent 50%),
-    linear-gradient(115deg, #141311 0%, #26221a 28%, #3a2f16 52%, #241f18 74%, #141311 100%);
-  background-size: 220% 220%, 220% 220%, 220% 220%;
-  animation: oc-degradado 22s ease-in-out infinite;
+    radial-gradient(90% 160% at 8% 30%, rgba(253, 162, 17, .5) 0%, transparent 58%),
+    radial-gradient(80% 140% at 92% 70%, rgba(253, 162, 17, .22) 0%, transparent 52%),
+    linear-gradient(112deg, #16150f 0%, #2a2418 30%, #3d3117 54%, #26211a 76%, #16150f 100%);
+  background-size: 200% 200%, 200% 200%, 200% 200%;
+  animation: oc-degradado 24s ease-in-out infinite;
 }
 
 /* Retícula fina, como la del hero del sitio: ata el panel a la marca. */

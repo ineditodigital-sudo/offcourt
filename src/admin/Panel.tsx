@@ -454,7 +454,7 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
           ) : (
             <div className="oc-scroll min-h-0 flex-1 overflow-y-auto">
               <div className="mx-auto max-w-5xl px-4 py-5 sm:px-6 sm:py-7">
-                {modulo === 'inicio' && <Inicio onModulo={setModulo} onEntrada={irA} sinLeer={sinLeer} />}
+                {modulo === 'inicio' && <Inicio onModulo={setModulo} onEntrada={irA} onAyuda={() => setAyuda(true)} sinLeer={sinLeer} />}
                 {modulo === 'medios' && <Cabecera titulo="Fotos y archivos" texto="Todo lo que se usa en el sitio, en un solo lugar."><Medios /></Cabecera>}
                 {modulo === 'mensajes' && <Cabecera titulo="Mensajes" texto="Copia de lo que llega por el formulario de contacto."><Mensajes onContador={setSinLeer} /></Cabecera>}
                 {modulo === 'historial' && <Cabecera titulo="Historial y respaldos" texto="Vuelve a cualquier versión anterior del sitio."><Versiones onAviso={avisar} /></Cabecera>}
