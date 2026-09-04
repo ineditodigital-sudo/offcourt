@@ -1,0 +1,74 @@
+# ---------------------------------------------------------------------------
+# Dependencias y artefactos de compilación
+# ---------------------------------------------------------------------------
+node_modules
+dist
+dist-ssr
+.prerender
+*.local
+
+# ---------------------------------------------------------------------------
+# SECRETOS — nunca deben salir de esta máquina.
+# .env lleva las credenciales FTP del hosting (deploy.cjs las lee de ahí).
+# El repositorio es público: si alguna vez se sube este archivo, hay que
+# rotar la contraseña del FTP, no basta con borrarlo del historial.
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+.deploy-backup
+
+# ---------------------------------------------------------------------------
+# Material fuente pesado (~350 MB): PDFs de brochures, videos sin comprimir,
+# ZIPs de fotos, ejecutables e imágenes descartadas. No hacen falta para
+# compilar el sitio; lo que sí se publica ya vive optimizado en public/.
+# ---------------------------------------------------------------------------
+_assets-sin-uso/
+FOTOS offcourt/
+LOGO OFICIAL/
+*.zip
+*.exe
+*.pdf
+!public/brochures/*.pdf
+*.mp4
+!public/*.mp4
+
+# Sobrantes en la raíz que ya tienen su versión buena dentro de public/
+/foto-pao.jpg
+/rafa-nadal.jpg
+/rafa-nadal-logo.png
+/imagen-destacada-offcourt.png
+/LOGO OFFCOURT*.png
+/LOGO OFFCOURT*.svg
+
+# ---------------------------------------------------------------------------
+# Skills de Claude Code que quedaron sueltas dentro del proyecto
+# ---------------------------------------------------------------------------
+3d-web-experience/
+frontend-expert/
+uiux-designer/
+
+# ---------------------------------------------------------------------------
+# Registros y basura del sistema / editores
+# ---------------------------------------------------------------------------
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Ajustes locales de Claude Code (permisos por máquina)
+.claude/settings.local.json

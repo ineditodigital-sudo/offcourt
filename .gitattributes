@@ -1,0 +1,17 @@
+# Normalizar finales de línea: en el repositorio siempre LF, en el disco lo que
+# use cada sistema. Sin esto, Windows convierte a CRLF al clonar y cada archivo
+# aparece como "modificado por completo" en el primer diff.
+* text=auto eol=lf
+
+# Binarios: que Git no intente convertirlos ni diferenciarlos línea a línea.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.gif   binary
+*.ico   binary
+*.mp4   binary
+*.webm  binary
+*.pdf   binary
+*.woff  binary
+*.woff2 binary

@@ -1,0 +1,201 @@
+/* Ojo: las tipografías de /v1 y /v2 (Inter, Teko, Plus Jakarta Sans) viven en
+   src/styles/legacy-fonts.css y solo se descargan en esas rutas. Un @import aquí
+   bloquea el render: el navegador tiene que bajar y parsear este CSS antes de
+   siquiera enterarse de que existen las fuentes. */
+
+@import "tailwindcss";
+
+/* Enable class-based dark mode for Tailwind v4 */
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --color-gold: #B79657;
+    --font-inter: 'Inter', sans-serif;
+    --font-oswald: 'Teko', sans-serif;
+    --font-plus: 'Plus Jakarta Sans', sans-serif;
+    
+    /* V3 Colors and Fonts */
+    --font-sarabun: 'Sarabun', sans-serif;
+    --color-v3-black: #1b1b1b;
+    --color-v3-dark-gray: #2e2f30;
+    --color-v3-orange: #fda211;
+    --color-v3-light-gray: #e4e4e4;
+    --color-v3-white: #ffffff;
+    --font-outfit: 'Outfit', sans-serif;
+  }
+}
+
+/* Sin `scroll-behavior: smooth`: Lenis ya hace el scroll suave por JS y tener
+   los dos activos hace que peleen entre sí (scroll con goma, saltos y anclas
+   que se quedan a medio camino). Es un requisito de la propia librería. */
+
+body {
+  font-family: var(--font-sarabun);
+  overflow-x: hidden;
+  background-color: #050505;
+  transition: background-color 0.3s ease;
+}
+
+/* Base Light Mode override since Tailwind dark: logic relies on .dark class not body bg */
+html:not(.dark) body {
+  background-color: #ffffff;
+}
+
+/* Se retiraron .grid-line-vertical/.grid-line-horizontal: ningún componente
+   las usaba (las líneas del hero son .tactical-grid-line-*), y sus variantes
+   colgaban de un selector `.light` que este proyecto nunca aplica — el tema
+   claro es la ausencia de la clase `dark`, no una clase propia. */
+
+/* Custom utility classes */
+.font-oswald {
+  font-family: var(--font-oswald);
+  transform: skewX(-10deg);
+  display: inline-block;
+}
+
+.font-inter {
+  font-family: var(--font-inter);
+}
+
+.font-plus {
+  font-family: var(--font-plus);
+}
+
+.font-sarabun {
+  font-family: var(--font-sarabun);
+}
+
+.font-outfit {
+  font-family: var(--font-outfit);
+}
+
+/* V2 Premium Utilities */
+.btn-pill {
+  border-radius: 9999px !important;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.text-gold {
+  color: var(--color-gold);
+}
+
+.bg-gold {
+  background-color: var(--color-gold);
+}
+
+.border-gold {
+  border-color: var(--color-gold);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: #1f1f1f;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold);
+}
+
+/* ---------------------------------------------------------------------------
+   Animaciones que antes hacía GSAP.
+   Se pasaron a CSS solo las que ocurren al abrir la página (intro y entrada del
+   hero), porque obligaban a cargar la librería —44 kB, el 31% del bundle— antes
+   de poder pintar nada. Las animaciones de scroll siguen en GSAP, sin tocar.
+   Las curvas son el equivalente exacto, no una aproximación:
+     power3.out = easeOutCubic  = cubic-bezier(0.215, 0.61, 0.355, 1)
+     power2.in  = easeInQuad    = cubic-bezier(0.55, 0.085, 0.68, 0.53)
+     sine.out   = easeOutSine   = cubic-bezier(0.39, 0.575, 0.565, 1)
+--------------------------------------------------------------------------- */
+
+/* --- Intro: ahora vive en index.html, con el logo incrustado --- */
+
+/* --- Entrada del hero --- */
+@keyframes oc-hero-up {
+  from { opacity: 0; transform: translateY(var(--oc-y, 40px)); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes oc-hero-zoom {
+  from { transform: scale(1.1); }
+  to   { transform: scale(1); }
+}
+@keyframes oc-hero-veil {
+  from { opacity: 0.7; }
+  to   { opacity: 0.5; }
+}
+@keyframes oc-hero-linea-v {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+@keyframes oc-hero-linea-h {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* El estado FINAL va como estilo base, no confiado al `both` de la animación.
+   Así, cuando la animación se desactiva (intro ya reproducida, o el usuario pide
+   menos movimiento), el hero queda exactamente donde debe quedar. */
+.oc-hero-up   { opacity: 1; transform: translateY(0); animation: oc-hero-up 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) both; }
+.oc-hero-zoom { transform: scale(1); animation: oc-hero-zoom 3.5s cubic-bezier(0.39, 0.575, 0.565, 1) both; }
+.oc-hero-veil { opacity: 0.5; animation: oc-hero-veil 3.5s cubic-bezier(0.39, 0.575, 0.565, 1) both; }
+.v3-tactical-grid-line-v {
+  transform-origin: top center; transform: scaleY(1);
+  animation: oc-hero-linea-v 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+.v3-tactical-grid-line-h {
+  transform-origin: left center; transform: scaleX(1);
+  animation: oc-hero-linea-h 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+/* La intro ya se reprodujo sobre el hero estático de index.html. Cuando React
+   recrea esos nodos no debe repetirla: aparecen ya en su sitio. */
+html.oc-intro-hecha .oc-hero-up,
+html.oc-intro-hecha .oc-hero-zoom,
+html.oc-intro-hecha .oc-hero-veil,
+html.oc-intro-hecha .v3-tactical-grid-line-v,
+html.oc-intro-hecha .v3-tactical-grid-line-h {
+  animation: none;
+}
+
+/* Quien pide menos movimiento ve el contenido directamente, sin esperas. */
+@media (prefers-reduced-motion: reduce) {
+  .oc-hero-up, .oc-hero-zoom, .oc-hero-veil,
+  .v3-tactical-grid-line-v, .v3-tactical-grid-line-h {
+    animation: none !important;
+  }
+}
+
+/* Botón flotante Agente IA - contorno animado */
+@keyframes oc-spin {
+  to { transform: rotate(360deg); }
+}
+.oc-ai-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  background: conic-gradient(from 0deg, transparent 0deg, #fda211 90deg, #ffd37a 150deg, transparent 230deg);
+  animation: oc-spin 3.5s linear infinite;
+  z-index: 1;
+}
+
+/* Anti-desbordamiento horizontal en móvil */
+html {
+  overflow-x: hidden;
+}
+/* Correos y enlaces largos siempre se ajustan */
+a[href^="mailto:"],
+a[href^="tel:"] {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}

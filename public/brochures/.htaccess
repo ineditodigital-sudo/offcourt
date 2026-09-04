@@ -1,0 +1,8 @@
+AddType application/pdf .pdf
+<IfModule mod_headers.c>
+  <FilesMatch "\.pdf$">
+    Header set Content-Disposition inline
+    Header set Cache-Control "public, max-age=604800"
+    Header set X-Content-Type-Options nosniff
+  </FilesMatch>
+</IfModule>

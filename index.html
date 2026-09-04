@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Tipografías alojadas en el propio dominio.
+         Con Google Fonts la cadena crítica era de tres saltos a dos orígenes
+         ajenos (documento -> fonts.googleapis.com -> fonts.gstatic.com), unos
+         850 ms antes de poder pintar texto. Aquí van sobre la conexión que el
+         navegador ya tiene abierta. Se descartaron los subconjuntos thai y
+         vietnamita que Sarabun arrastra y que este sitio nunca usa.
+
+         Precargamos solo las dos que necesita la portada: Outfit para el
+         titular (que es el elemento LCP) y Sarabun 400 para el cuerpo. -->
+    <link rel="preload" href="/fonts/outfit-400-900-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/sarabun-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <style>
+      @font-face {
+        font-family: 'Outfit';
+        font-style: normal;
+        font-weight: 400 900;
+        font-display: swap;
+        src: url('/fonts/outfit-400-900-latin-ext.woff2') format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      @font-face {
+        font-family: 'Outfit';
+        font-style: normal;
+        font-weight: 400 900;
+        font-display: swap;
+        src: url('/fonts/outfit-400-900-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Sarabun';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url('/fonts/sarabun-400-latin-ext.woff2') format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      @font-face {
+        font-family: 'Sarabun';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url('/fonts/sarabun-400-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Sarabun';
+        font-style: normal;
+        font-weight: 500;
+        font-display: swap;
+        src: url('/fonts/sarabun-500-latin-ext.woff2') format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      @font-face {
+        font-family: 'Sarabun';
+        font-style: normal;
+        font-weight: 500;
+        font-display: swap;
+        src: url('/fonts/sarabun-500-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Sarabun';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url('/fonts/sarabun-600-latin-ext.woff2') format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      @font-face {
+        font-family: 'Sarabun';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url('/fonts/sarabun-600-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Sarabun';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url('/fonts/sarabun-700-latin-ext.woff2') format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      @font-face {
+        font-family: 'Sarabun';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url('/fonts/sarabun-700-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Sarabun';
+        font-style: normal;
+        font-weight: 800;
+        font-display: swap;
+        src: url('/fonts/sarabun-800-latin-ext.woff2') format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+      @font-face {
+        font-family: 'Sarabun';
+        font-style: normal;
+        font-weight: 800;
+        font-display: swap;
+        src: url('/fonts/sarabun-800-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- SEO:INICIO — este bloque lo reescribe scripts/generar-paginas.mjs para
+         CADA ruta del sitio, con el título, la descripción y la canónica que le
+         corresponden. Lo que hay aquí abajo es el de la portada, y es también lo
+         que se ve en el servidor de desarrollo.
+
+         El motivo del generador: useSeo.ts pone estas etiquetas con JavaScript
+         al montar el componente, y WhatsApp, LinkedIn y Facebook no ejecutan
+         JavaScript. Antes, compartir /nosotros o /servicios/athletes mostraba
+         siempre la ficha de la portada. No tocar los marcadores. -->
+    <title>Offcourt Sports Group | Agencia Premium de Sports Marketing &amp; Pádel</title>
+    <meta name="description" content="Primera agencia premium de pádel en México. Conectamos atletas, marcas e instituciones con estrategias, experiencias y alianzas de alto valor. El verdadero valor sucede fuera de la cancha." />
+    <meta property="og:title" content="Offcourt Sports Group | Agencia Premium de Sports Marketing &amp; Pádel" />
+    <meta property="og:description" content="Primera agencia premium de pádel en México. Conectamos atletas, marcas e instituciones con estrategias, experiencias y alianzas de alto valor. El verdadero valor sucede fuera de la cancha." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Offcourt Sports Group" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:image" content="https://offcourtsports.com.mx/og-image.png" />
+    <meta property="og:url" content="https://offcourtsports.com.mx" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Offcourt Sports Group | Agencia Premium de Sports Marketing &amp; Pádel" />
+    <meta name="twitter:description" content="Primera agencia premium de pádel en México. Conectamos atletas, marcas e instituciones con estrategias, experiencias y alianzas de alto valor. El verdadero valor sucede fuera de la cancha." />
+    <meta name="twitter:image" content="https://offcourtsports.com.mx/og-image.png" />
+    <link rel="canonical" href="https://offcourtsports.com.mx" />
+    <!-- SEO:FIN -->
+
+    <!-- Datos estructurados. No los puntúa Lighthouse, pero es lo que permite a
+         Google mostrar la ficha de la empresa con sus contactos en resultados y
+         en el panel de conocimiento. Solo se declara información que ya está
+         publicada en la propia web. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Offcourt Sports Group",
+      "alternateName": "OFF COURT",
+      "url": "https://offcourtsports.com.mx",
+      "logo": "https://offcourtsports.com.mx/oc-icon.png",
+      "image": "https://offcourtsports.com.mx/og-image.png",
+      "description": "Primera agencia premium de pádel en México. Sports marketing, representación de atletas, experiencias y alianzas de alto valor.",
+      "email": "contacto@offcourtsports.com.mx",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "MX"
+      },
+      "areaServed": "MX",
+      "knowsAbout": [
+        "Sports Marketing",
+        "Representación de atletas",
+        "Pádel",
+        "Patrocinios deportivos",
+        "Organización de eventos deportivos"
+      ],
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "contactType": "sales",
+          "name": "Gustavo Moreda",
+          "telephone": "+52-33-1482-5847",
+          "email": "gmoreda@offcourtsports.com.mx",
+          "availableLanguage": ["es", "en"]
+        },
+        {
+          "@type": "ContactPoint",
+          "contactType": "sales",
+          "name": "Jorge Valdéz",
+          "telephone": "+52-449-105-9207",
+          "email": "jvaldez@offcourtsports.com.mx",
+          "availableLanguage": ["es", "en"]
+        }
+      ]
+    }
+    </script>
+
+    <!-- Pantalla de arranque estática.
+         Al ser una SPA, nada se pintaba hasta descargar y ejecutar el JS: en 4G
+         lenta eso dejaba la pantalla en blanco ~3,7 s (el FCP que marcaba
+         PageSpeed). Esto pinta en cuanto llega el HTML. React lo retira al
+         terminar de montar. Va con estilos en línea a propósito: no debe
+         depender de ninguna hoja externa. -->
+    <style>
+      #boot {
+        position: fixed; inset: 0; z-index: 9998;
+        display: flex; align-items: center; justify-content: center;
+        background: #1b1b1b; color: #ffffff; pointer-events: none;
+      }
+      #boot.light { background: #ffffff; color: #1b1b1b; }
+      .oc-boot-logo { width: 12rem; max-width: 60vw; height: auto; display: block; }
+
+      /* Entrada: idéntica a la que hacía el Loader de React, pero ahora corre
+         mientras se descarga el JavaScript en vez de esperar a que termine.
+         cubic-bezier(0.215,0.61,0.355,1) es el equivalente exacto de power3.out. */
+      @keyframes oc-boot-entra {
+        from { opacity: 0; transform: scale(0.8); filter: blur(10px); }
+        to   { opacity: 1; transform: scale(1);   filter: blur(0); }
+      }
+
+      /* Salida: en cadena por CSS, con tiempos fijos. NO espera a React.
+         Ese es el punto: detrás de esta cortina ya está el hero pre-renderizado,
+         así que retenerla hasta que monte React (unos 2,2 s en 4G lenta) sería
+         esconder contenido que existe desde el primer momento.
+
+         Entrada: 0,1 s de espera + 0,6 s.  Salida: arranca en 0,9 s.
+         El fondo se va en 1,15 s y a los 1,5 s la cortina ya no está.
+
+         cubic-bezier(0.55,0.085,0.68,0.53) = power2.in
+
+         Sin `filter: blur()` en la salida a propósito: el desenfoque no se
+         compone en GPU y obliga a repintar cada fotograma. En la entrada sí se
+         conserva, porque corre mientras se descarga el JS y no compite. */
+      @keyframes oc-boot-sale-logo {
+        from { opacity: 1; transform: scale(1);   }
+        to   { opacity: 0; transform: scale(1.5); }
+      }
+      @keyframes oc-boot-sale-fondo {
+        from { opacity: 1; visibility: visible; }
+        99%  { visibility: visible; }
+        to   { opacity: 0; visibility: hidden; }
+      }
+      .oc-boot-logo {
+        animation:
+          oc-boot-entra 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) 0.1s both,
+          oc-boot-sale-logo 0.45s cubic-bezier(0.55, 0.085, 0.68, 0.53) 0.9s both;
+      }
+      #boot {
+        animation: oc-boot-sale-fondo 0.35s cubic-bezier(0.455, 0.03, 0.515, 0.955) 1.15s both;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .oc-boot-logo, #boot {
+          animation-duration: 0.01ms !important; animation-delay: 0ms !important;
+        }
+      }
+
+      /* Salida: la dispara React al montar, añadiendo la clase al contenedor.
+         cubic-bezier(0.55,0.085,0.68,0.53) = power2.in
+
+         Sin `filter: blur()` aquí a propósito. El desenfoque no se compone en
+         GPU: obliga a repintar en cada fotograma, y esta animación cae justo
+         cuando React está montando y el hilo principal es lo más ocupado que
+         va a estar. `opacity` y `transform` sí se componen, así que el zoom de
+         salida sale fluido. El desenfoque se conserva en la ENTRADA, que corre
+         mientras se descarga el JavaScript y no compite con nada. */
+      @keyframes oc-boot-sale-logo {
+        from { opacity: 1; transform: scale(1);   }
+        to   { opacity: 0; transform: scale(1.5); }
+      }
+      @keyframes oc-boot-sale-fondo {
+        from { opacity: 1; } to { opacity: 0; }
+      }
+      #boot.saliendo .oc-boot-logo {
+        animation: oc-boot-sale-logo 0.45s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+      }
+      #boot.saliendo {
+        animation: oc-boot-sale-fondo 0.35s cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.25s both;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .oc-boot-logo, #boot.saliendo, #boot.saliendo .oc-boot-logo {
+          animation-duration: 0.01ms !important; animation-delay: 0ms !important;
+        }
+      }
+    </style>
+    <script>
+      // Además evita el parpadeo de tema: hasta ahora la clase `dark` la ponía
+      // React tras montar, así que el primer fotograma podía salir con el tema
+      // equivocado.
+      (function () {
+        try {
+          var g = localStorage.getItem('theme');
+          var claro = g === 'light' || (!g && window.matchMedia('(prefers-color-scheme: light)').matches);
+          if (!claro) document.documentElement.classList.add('dark');
+          window.__temaClaro = claro;
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- El logo va incrustado, no como <img src>. Siendo una petición aparte
+         quedaba encolado detrás del CSS, el JS y las fuentes, y la pantalla se
+         quedaba en negro 2,2 s: eso era el First Contentful Paint de 2,4 s que
+         marcaba PageSpeed, porque un color de fondo no cuenta como contenido.
+         Así aparece con el propio documento. -->
+    <div id="boot">
+      <svg class="oc-boot-logo" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 738.44 404.14"><defs><style>.oc-bl{fill:currentColor;}</style></defs><g id="Capa_2" data-name="Capa 2"><g id="Capa_1-2" data-name="Capa 1"><path class="oc-bl" d="M49.17,372.34a5.55,5.55,0,0,0-1.91,4.42,5.79,5.79,0,0,0,.54,2.61,6,6,0,0,0,1.52,1.91,10.45,10.45,0,0,0,2.36,1.48c.92.42,1.93.85,3,1.28,1.34.52,2.62,1.06,3.83,1.62a14.84,14.84,0,0,1,3.25,2,8.77,8.77,0,0,1,2.26,2.86,9,9,0,0,1,.84,4.08,9.85,9.85,0,0,1-.82,4.13,8.22,8.22,0,0,1-2.26,3,9.84,9.84,0,0,1-3.44,1.82,14.71,14.71,0,0,1-4.35.61,19.36,19.36,0,0,1-5.7-.83,14.53,14.53,0,0,1-4.87-2.51L45,398.49a12.73,12.73,0,0,0,4.06,2.31,15.2,15.2,0,0,0,5.23.89,9.08,9.08,0,0,0,5.88-1.77,6.42,6.42,0,0,0,2.19-5.31,6.71,6.71,0,0,0-.64-3A7,7,0,0,0,60,389.4a10.78,10.78,0,0,0-2.63-1.63c-1-.46-2.11-.9-3.29-1.32s-2.38-.95-3.49-1.45a13.27,13.27,0,0,1-3-1.85,8.42,8.42,0,0,1-2.09-2.63,8.26,8.26,0,0,1-.78-3.76,8.44,8.44,0,0,1,.71-3.49,7.8,7.8,0,0,1,2-2.68,9.17,9.17,0,0,1,3-1.72,11.52,11.52,0,0,1,3.85-.61,12.3,12.3,0,0,1,6.42,1.47,9.67,9.67,0,0,1,3.66,3.83L62.25,375a8.3,8.3,0,0,0-8-4.33A7.42,7.42,0,0,0,49.17,372.34Z"/><path class="oc-bl" d="M98.54,368.75h8.8c3.84,0,6.74.92,8.73,2.77s3,4.45,3,7.8a11.63,11.63,0,0,1-.76,4.2A10.26,10.26,0,0,1,116,387a10.85,10.85,0,0,1-3.66,2.43,13,13,0,0,1-5,.91h-6.29v13.27H98.54Zm8.8,19.17a11,11,0,0,0,3.52-.56,8.33,8.33,0,0,0,2.87-1.68,7.82,7.82,0,0,0,1.94-2.7,8.85,8.85,0,0,0,.72-3.66,9.14,9.14,0,0,0-.72-3.86,6.53,6.53,0,0,0-1.94-2.51,7.39,7.39,0,0,0-2.87-1.35,15.24,15.24,0,0,0-3.52-.4h-6.29v16.72Z"/><path class="oc-bl" d="M151.1,379.07a17.5,17.5,0,0,1,3.79-5.7,17.14,17.14,0,0,1,5.73-3.76,19.88,19.88,0,0,1,14.4,0,17,17,0,0,1,5.73,3.76,17.5,17.5,0,0,1,3.79,5.7,19.24,19.24,0,0,1,0,14.26,17.5,17.5,0,0,1-3.79,5.7,17,17,0,0,1-5.73,3.76,19.88,19.88,0,0,1-14.4,0,17.14,17.14,0,0,1-5.73-3.76,17.5,17.5,0,0,1-3.79-5.7,19.24,19.24,0,0,1,0-14.26Zm2.39,13.25a14.51,14.51,0,0,0,3.22,4.89,14.92,14.92,0,0,0,4.92,3.25,16.13,16.13,0,0,0,6.19,1.18,16,16,0,0,0,6.17-1.18,14.86,14.86,0,0,0,8.14-8.14,16.46,16.46,0,0,0,0-12.24,14.86,14.86,0,0,0-8.14-8.14,16,16,0,0,0-6.17-1.18,16.13,16.13,0,0,0-6.19,1.18,14.92,14.92,0,0,0-4.92,3.25,14.51,14.51,0,0,0-3.22,4.89,16.72,16.72,0,0,0,0,12.24Z"/><path class="oc-bl" d="M228.69,368.75a11.49,11.49,0,0,1,7.87,2.6,9.19,9.19,0,0,1,2.95,7.28,10.39,10.39,0,0,1-.59,3.51,9.52,9.52,0,0,1-1.67,2.95,9.37,9.37,0,0,1-2.66,2.19,11,11,0,0,1-3.49,1.23l5.81,7.77a17.87,17.87,0,0,0,3.51,3.59,6.38,6.38,0,0,0,3.86,1.47h.2l-.74,2.46h-.25a7.36,7.36,0,0,1-4.5-1.62,23.67,23.67,0,0,1-4.54-4.92l-6.25-8.55H222v14.94H219.5v-34.9ZM222,386.35h6.39a11.84,11.84,0,0,0,3.12-.42,7.77,7.77,0,0,0,2.75-1.35,7.05,7.05,0,0,0,1.95-2.39,7.79,7.79,0,0,0,.73-3.56,7.67,7.67,0,0,0-.71-3.49,6.28,6.28,0,0,0-1.89-2.29,7.93,7.93,0,0,0-2.71-1.25,12.35,12.35,0,0,0-3.09-.4H222Z"/><path class="oc-bl" d="M292.17,368.75v2.45H281.8v32.45h-2.51V371.2H268.62v-2.45Z"/><path class="oc-bl" d="M325.17,372.34a5.56,5.56,0,0,0-1.92,4.42,5.79,5.79,0,0,0,.54,2.61,5.93,5.93,0,0,0,1.53,1.91,10.23,10.23,0,0,0,2.36,1.48c.91.42,1.93.85,3,1.28q2,.78,3.84,1.62a15,15,0,0,1,3.24,2,8.8,8.8,0,0,1,2.27,2.86,9.13,9.13,0,0,1,.83,4.08,9.85,9.85,0,0,1-.81,4.13,8.22,8.22,0,0,1-2.26,3,10,10,0,0,1-3.44,1.82,14.71,14.71,0,0,1-4.35.61,19.48,19.48,0,0,1-5.71-.83,14.57,14.57,0,0,1-4.86-2.51l1.57-2.31a12.57,12.57,0,0,0,4,2.31,15.25,15.25,0,0,0,5.24.89,9.08,9.08,0,0,0,5.88-1.77,6.42,6.42,0,0,0,2.18-5.31,6.58,6.58,0,0,0-.64-3A6.88,6.88,0,0,0,336,389.4a11,11,0,0,0-2.63-1.63c-1-.46-2.11-.9-3.3-1.32s-2.37-.95-3.49-1.45a13.43,13.43,0,0,1-3-1.85,8.62,8.62,0,0,1-2.16-9.88,7.67,7.67,0,0,1,2-2.68,9.22,9.22,0,0,1,3-1.72,11.58,11.58,0,0,1,3.86-.61,12.3,12.3,0,0,1,6.42,1.47,9.67,9.67,0,0,1,3.66,3.83L338.25,375a8.3,8.3,0,0,0-8-4.33A7.39,7.39,0,0,0,325.17,372.34Z"/><path class="oc-bl" d="M438.82,402.2a21.52,21.52,0,0,1-2.85,1,23.86,23.86,0,0,1-3.41.69,33.08,33.08,0,0,1-4.18.24,17.89,17.89,0,0,1-7.11-1.37,16.71,16.71,0,0,1-9.17-9.49,19.59,19.59,0,0,1-1.27-7.13,19.35,19.35,0,0,1,1.27-7.1,17.29,17.29,0,0,1,3.57-5.68,16.28,16.28,0,0,1,5.38-3.76,16.59,16.59,0,0,1,6.69-1.35,16.38,16.38,0,0,1,4.47.56,17.06,17.06,0,0,1,3.67,1.48,14.35,14.35,0,0,1,2.92,2.11,19,19,0,0,1,2.26,2.53L439,376.56a29.46,29.46,0,0,0-2-2.18,12,12,0,0,0-2.46-1.85,13.26,13.26,0,0,0-3.05-1.25A14.76,14.76,0,0,0,422,372a13.63,13.63,0,0,0-4.53,3.22,14.39,14.39,0,0,0-3,4.89,17.18,17.18,0,0,0-1.06,6.12,16.82,16.82,0,0,0,1.08,6.1,14.58,14.58,0,0,0,3.05,4.86,14.16,14.16,0,0,0,4.72,3.25,15.47,15.47,0,0,0,6.1,1.18,32.73,32.73,0,0,0,3.49-.17,24.69,24.69,0,0,0,2.78-.47,16.3,16.3,0,0,0,2.26-.71,20.74,20.74,0,0,0,1.89-.91v-9.79h-7.92v-2.41h10.38V401A26.39,26.39,0,0,1,438.82,402.2Z"/><path class="oc-bl" d="M485.56,368.75a11.49,11.49,0,0,1,7.87,2.6,9.19,9.19,0,0,1,2.95,7.28,10.39,10.39,0,0,1-.59,3.51,9.52,9.52,0,0,1-1.67,2.95,9.37,9.37,0,0,1-2.66,2.19,11,11,0,0,1-3.49,1.23l5.8,7.77a17.91,17.91,0,0,0,3.52,3.59,6.38,6.38,0,0,0,3.86,1.47h.19l-.73,2.46h-.25a7.36,7.36,0,0,1-4.5-1.62,23.67,23.67,0,0,1-4.54-4.92l-6.25-8.55h-6.19v14.94h-2.51v-34.9Zm-6.68,17.6h6.39a11.84,11.84,0,0,0,3.12-.42,7.77,7.77,0,0,0,2.75-1.35,7.05,7.05,0,0,0,1.95-2.39,7.79,7.79,0,0,0,.73-3.56,7.67,7.67,0,0,0-.71-3.49,6.38,6.38,0,0,0-1.89-2.29,7.93,7.93,0,0,0-2.71-1.25,12.41,12.41,0,0,0-3.09-.4h-6.54Z"/><path class="oc-bl" d="M530.31,379.07a17.5,17.5,0,0,1,3.79-5.7,17,17,0,0,1,5.72-3.76,19.9,19.9,0,0,1,14.41,0,17.14,17.14,0,0,1,5.73,3.76,17.63,17.63,0,0,1,3.78,5.7,19.11,19.11,0,0,1,0,14.26A17.63,17.63,0,0,1,560,399a17.14,17.14,0,0,1-5.73,3.76,19.9,19.9,0,0,1-14.41,0A17,17,0,0,1,534.1,399a17.5,17.5,0,0,1-3.79-5.7,19.11,19.11,0,0,1,0-14.26Zm2.39,13.25a14.36,14.36,0,0,0,3.22,4.89,14.88,14.88,0,0,0,4.91,3.25,16.8,16.8,0,0,0,12.37,0,15.1,15.1,0,0,0,4.89-3.25,14.87,14.87,0,0,0,3.24-4.89,16.46,16.46,0,0,0,0-12.24,14.87,14.87,0,0,0-3.24-4.89,15.1,15.1,0,0,0-4.89-3.25,16.8,16.8,0,0,0-12.37,0,14.88,14.88,0,0,0-4.91,3.25,14.36,14.36,0,0,0-3.22,4.89,16.72,16.72,0,0,0,0,12.24Z"/><path class="oc-bl" d="M600.92,368.75v21.63a13.83,13.83,0,0,0,.81,5,9.93,9.93,0,0,0,2.21,3.52,8.93,8.93,0,0,0,3.37,2.09,13.37,13.37,0,0,0,8.48,0,8.93,8.93,0,0,0,3.35-2.09,9.93,9.93,0,0,0,2.21-3.52,13.83,13.83,0,0,0,.81-5V368.75h2.51V391a15.48,15.48,0,0,1-.89,5.33,11.61,11.61,0,0,1-2.56,4.18,11.26,11.26,0,0,1-4.1,2.71,16.86,16.86,0,0,1-11.16,0,11.39,11.39,0,0,1-4.11-2.71,11.73,11.73,0,0,1-2.55-4.18,15.48,15.48,0,0,1-.89-5.33V368.75Z"/><path class="oc-bl" d="M659.78,368.75h8.8q5.74,0,8.72,2.77c2,1.86,3,4.45,3,7.8a11.84,11.84,0,0,1-.76,4.2,10.41,10.41,0,0,1-2.24,3.52,10.85,10.85,0,0,1-3.66,2.43,13,13,0,0,1-5,.91h-6.3v13.27h-2.5Zm8.8,19.17a10.89,10.89,0,0,0,3.51-.56,8.28,8.28,0,0,0,2.88-1.68,7.82,7.82,0,0,0,1.94-2.7,8.85,8.85,0,0,0,.71-3.66,9.15,9.15,0,0,0-.71-3.86A6.53,6.53,0,0,0,675,373a7.37,7.37,0,0,0-2.88-1.35,15.15,15.15,0,0,0-3.51-.4h-6.3v16.72Z"/><path class="oc-bl" d="M87.37,309.82a49.26,49.26,0,0,1-9.83,11.94,47.92,47.92,0,0,1-13.2,8.32,38.64,38.64,0,0,1-15.24,3.1H34.18A72.45,72.45,0,0,1,20.59,332a30.46,30.46,0,0,1-10.82-4.15A20.63,20.63,0,0,1,2.57,320Q0,315.11,0,307.58c0-1.15,0-2.27.13-3.37s.22-2.26.4-3.5a36.88,36.88,0,0,1,4.82-13.86,50.44,50.44,0,0,1,22.1-20.39,32.35,32.35,0,0,1,13.86-3.23h19A61.51,61.51,0,0,1,74,264.62,28,28,0,0,1,84.34,269a20.6,20.6,0,0,1,6.53,7.72,25.62,25.62,0,0,1,2.31,11.41c0,1.24-.05,2.47-.13,3.7a32,32,0,0,1-.53,3.83A40.22,40.22,0,0,1,87.37,309.82Zm-59.85-9.11a6.14,6.14,0,0,0-.07.79,11.52,11.52,0,0,0,.86,4.36,13.06,13.06,0,0,0,2.24,3.7,11.13,11.13,0,0,0,3.11,2.5,7.36,7.36,0,0,0,3.56.93H47.78a10.85,10.85,0,0,0,5.74-2,27.64,27.64,0,0,0,5.74-4.95,29.06,29.06,0,0,0,4.36-6.47,15.17,15.17,0,0,0,1.71-6.66,18.22,18.22,0,0,0-.33-3.44,7.87,7.87,0,0,0-1.25-3,7,7,0,0,0-2.64-2.18,9.78,9.78,0,0,0-4.36-.86H44.35a10.85,10.85,0,0,0-5.15,1.52A23.81,23.81,0,0,0,34,288.83a26.15,26.15,0,0,0-4.16,5.22,14.77,14.77,0,0,0-2.11,5.48C27.63,300,27.56,300.36,27.52,300.71Z"/><path class="oc-bl" d="M185.83,263.23a49.29,49.29,0,0,1-3.56,5.41q-2.52,3.44-5.28,6.73a62.61,62.61,0,0,1-5.35,5.68q-2.56,2.37-3.89,2.37H129.47L125,295.7l7.78-7.26H167l-21.78,20.19H120.24l-9,24.55H83.41l25.87-69.95Z"/><path class="oc-bl" d="M268.32,263.23a50.83,50.83,0,0,1-3.56,5.41q-2.52,3.44-5.28,6.73a62.61,62.61,0,0,1-5.35,5.68q-2.56,2.37-3.89,2.37H212l-4.48,12.28,7.78-7.26h34.19l-21.78,20.19H202.72l-9,24.55H165.9l25.87-69.95Z"/><path class="oc-bl" d="M298.41,301v-.27a33,33,0,0,1,2.84-13,45.71,45.71,0,0,1,7.59-12.14,39.41,39.41,0,0,1,11.08-8.91,27.6,27.6,0,0,1,13.33-3.43h55.83q-4.62,5.94-9,11a76.17,76.17,0,0,1-9.44,9.17H337.08a7,7,0,0,0-4,1.45,17.79,17.79,0,0,0-3.77,3.7,21,21,0,0,0-2.83,5.08,15.14,15.14,0,0,0-1.13,5.61v.27q0,6.33,2.91,9.89t8.84,3.57H370.6q-3.56,5.14-7.91,10.56a57.48,57.48,0,0,1-9.9,9.63H342.23a87.88,87.88,0,0,1-16-1.45,42.44,42.44,0,0,1-14-5.08,28.6,28.6,0,0,1-10-9.9Q298.4,310.48,298.41,301Z"/><path class="oc-bl" d="M462.86,309.82A49.26,49.26,0,0,1,453,321.76a47.92,47.92,0,0,1-13.2,8.32,38.72,38.72,0,0,1-15.25,3.1H409.67A72.45,72.45,0,0,1,396.08,332a30.51,30.51,0,0,1-10.83-4.15,20.61,20.61,0,0,1-7.19-7.86q-2.58-4.87-2.57-12.4c0-1.15,0-2.27.13-3.37s.22-2.26.39-3.5a37.23,37.23,0,0,1,4.82-13.86,50.77,50.77,0,0,1,9.57-11.94,50,50,0,0,1,12.54-8.45,32.28,32.28,0,0,1,13.86-3.23h19a61.6,61.6,0,0,1,13.73,1.39A28,28,0,0,1,459.82,269a20.54,20.54,0,0,1,6.54,7.72,25.75,25.75,0,0,1,2.31,11.41c0,1.24-.05,2.47-.14,3.7a30,30,0,0,1-.52,3.83A40.41,40.41,0,0,1,462.86,309.82ZM403,300.71c0,.36-.06.62-.06.79a11.34,11.34,0,0,0,.86,4.36,13.06,13.06,0,0,0,2.24,3.7,11.09,11.09,0,0,0,3.1,2.5,7.37,7.37,0,0,0,3.57.93h10.55a10.82,10.82,0,0,0,5.74-2,27.44,27.44,0,0,0,5.75-4.95,28.68,28.68,0,0,0,4.35-6.47,15.19,15.19,0,0,0,1.72-6.66,18.22,18.22,0,0,0-.33-3.44,7.74,7.74,0,0,0-1.26-3,6.8,6.8,0,0,0-2.64-2.18,9.71,9.71,0,0,0-4.35-.86H419.83a10.81,10.81,0,0,0-5.14,1.52,24.11,24.11,0,0,0-5.22,3.89,26.51,26.51,0,0,0-4.16,5.22,15.12,15.12,0,0,0-2.11,5.48C403.11,300,403.05,300.36,403,300.71Z"/><path class="oc-bl" d="M474.21,292.27l10.42-29h27.59q-4.75,13.45-7.33,20.92t-3.82,11.22a49,49,0,0,0-1.45,4.81,8.69,8.69,0,0,0-.2,1.46,21.74,21.74,0,0,0-.53,3.56A8.67,8.67,0,0,0,500.6,311a5.66,5.66,0,0,0,4.49,2h6.21a11.09,11.09,0,0,0,5-1.19,18.26,18.26,0,0,0,4.29-3,23.47,23.47,0,0,0,3.3-3.76,29.42,29.42,0,0,0,2.18-3.57v.27l14.25-38.54h27.59l-12.28,33.26a133.93,133.93,0,0,1-6.6,15.77,49.61,49.61,0,0,1-7.78,11.48,28.4,28.4,0,0,1-10.17,7.06,36,36,0,0,1-13.72,2.38H502.45a91.88,91.88,0,0,1-15.7-1.12,28.27,28.27,0,0,1-10.1-3.5,13.23,13.23,0,0,1-5.35-6.2,24.67,24.67,0,0,1-1.58-9.37,22.83,22.83,0,0,1,.2-3c.13-1,.28-2.07.46-3.3.35-1.4.73-2.88,1.12-4.42s.86-3.32,1.39-5.34V297c.17-.71.37-1.45.59-2.25S473.94,293.15,474.21,292.27Z"/><path class="oc-bl" d="M549,333.18l25.74-69.95h58.34a15,15,0,0,1,8.31,2,13.66,13.66,0,0,1,4.82,5.21,22.57,22.57,0,0,1,2.24,6.8,41.67,41.67,0,0,1,.59,6.79,19.52,19.52,0,0,1-2.83,10.76,24.25,24.25,0,0,1-7.33,7.32,35.43,35.43,0,0,1-10,4.43,57.06,57.06,0,0,1-10.95,1.91l25.34,24.68H611.21L585.6,310,577,333.18Zm71.27-49.63H595.24l-4.62,12,8.18-6.74h21c.09,0,.35-.46.8-1.38s.7-1.52.79-1.78l-.13.26.13-.79v.26a4,4,0,0,0-.2-1.25A.82.82,0,0,0,620.31,283.55Z"/><path class="oc-bl" d="M679,283.42H655.68v-1.84a15,15,0,0,1,2-3q1.85-2.44,4.36-5.48t5.21-5.87a26.71,26.71,0,0,1,4.55-4h66.66a57,57,0,0,1-3.5,5.41q-2.45,3.44-5.22,6.73a62.6,62.6,0,0,1-5.34,5.68q-2.58,2.37-3.76,2.37h-14l-18.08,49.76H660.83Z"/><path class="oc-bl" d="M546.44,183.12l-21.26,0-.16.26,0,.1-24.19-.1-13.2-.06-1.41,0c-.2,0-.4,0-.6,0a56,56,0,0,1-10.17-1.31l-.24,0a69.46,69.46,0,0,1-49.61-40.74.88.88,0,0,0-.05-.15,94.43,94.43,0,0,1-4.23-10.72l-26.81,42.3c14.54,22.85,36.2,41.39,62.21,49.85a2.52,2.52,0,0,0,.39.12,100.6,100.6,0,0,0,28,4.82h58.8c1.3,0,2.63,0,3.92-.09H548l31.46,0c1.35-.09,3.38-3.08,4.45-4.36l2.65-4.06h0l23.36-35.74Z"/><path class="oc-bl" d="M554.28.06h-.08c-.56,0-1.14,0-1.71,0l-2,0h-2.31c-1,0-2,0-3,0H490.83a111.7,111.7,0,0,0-13.39.8,91.16,91.16,0,0,0-29.72,7.87.05.05,0,0,0,0,0,111.73,111.73,0,0,0-57.31,54.72L337.21,146.8a69.27,69.27,0,0,1-5.88,9.25l0,0a69.21,69.21,0,0,1-55.39,27.64H224.69a69.34,69.34,0,0,1-69.33-69.34v-.66c0-.42,0-.85,0-1.27,0-.27,0-.52,0-.78a69.32,69.32,0,0,1,69.32-68.55h51.23a69.34,69.34,0,0,1,68.44,58.2L373,55.55l.08.05L371,52.17A113.53,113.53,0,0,0,345.65,23,104.72,104.72,0,0,0,308.17,3.47a82.15,82.15,0,0,0-23-3.43l-3.74,0c-1.18,0-2.36-.07-3.55-.07H223.51a111.74,111.74,0,0,0-13.4.8A91.1,91.1,0,0,0,180.4,8.67a.05.05,0,0,0,0,0,111.24,111.24,0,0,0-68.09,102.55v4.91a111.29,111.29,0,0,0,73,104.48l.11,0a93.5,93.5,0,0,0,17.12,4.73h.09a111.85,111.85,0,0,0,20.93,2h54.36q3.86,0,7.63-.27c14.93-.34,31.1-5.23,45.38-13.14l.06,0c.47-.26.95-.52,1.41-.79.2-.13.42-.25.62-.36.8-.47,1.6-.94,2.38-1.43a111.82,111.82,0,0,0,27.49-23.45c1.89-2.23,3.69-4.52,5.39-6.9.07-.09.12-.17.18-.26l.41-.58,5.05-8.6,4.34-7.38,7.38-11.93,12.46-20.16,22.74-35.35,9.83-16.51L431.94,78c1.1-1.87,2.2-3.67,3.34-5.4,11.87-18.38,25.54-29.53,50.22-29.86h51.91L565.8,3l1.14-1.59,1-1.35Z"/></g></g></svg>
+    </div>
+    <script>
+      if (window.__temaClaro) document.getElementById('boot').className = 'light';
+      // Marca de tiempo para que la intro no se corte de golpe en conexiones
+      // rápidas: React consulta esto antes de retirar la pantalla.
+      window.__bootT0 = Date.now();
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+/**
+ * Tipografías que solo usan las versiones antiguas del sitio (/v1 y /v2).
+ * Viven aquí —y no en index.css— para que Vite las meta en el chunk diferido:
+ * el visitante de la web real (V3) nunca las descarga.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Teko:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');

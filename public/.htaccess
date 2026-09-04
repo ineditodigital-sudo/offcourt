@@ -1,0 +1,66 @@
+DirectoryIndex index.html
+
+# BEGIN cPanel-generated php ini directives, do not edit
+<IfModule php8_module>
+   php_value error_log "/home/offcourt/logs/php.error.log"
+   php_flag log_errors On
+</IfModule>
+<IfModule lsapi_module>
+   php_value error_log "/home/offcourt/logs/php.error.log"
+   php_flag log_errors On
+</IfModule>
+# END cPanel-generated php ini directives, do not edit
+
+<IfModule mod_headers.c>
+  # El HTML nunca se cachea: es quien apunta a los bundles nuevos tras cada deploy.
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # Los bundles llevan hash en el nombre (index-BIG8yVuV.js): si cambia el
+  # contenido cambia la URL, así que se pueden cachear para siempre.
+  # Antes heredaban el max-age=14400 (4h) por defecto del servidor.
+  <FilesMatch "-[A-Za-z0-9_-]{8,}\.(js|css)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Imágenes, vídeo, fuentes y PDFs: un mes.
+  <FilesMatch "\.(png|jpe?g|webp|gif|svg|ico|mp4|webm|woff2?|pdf)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  RewriteRule ^\.well-known/ - [L]
+
+  # Forzar HTTPS (Cloudflare)
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [L,R=301]
+
+  # Cada ruta tiene su propio HTML, generado en el build con su <title>, su
+  # descripción y sus Open Graph ya escritos (scripts/generar-paginas.mjs).
+  # Sin esto, todas las rutas recibían el index.html de la portada y cualquier
+  # enlace compartido en WhatsApp o LinkedIn mostraba la ficha de la portada,
+  # porque esos rastreadores no ejecutan el JavaScript que las corregía.
+  #
+  #   /nosotros            -> nosotros.html
+  #   /servicios/athletes  -> servicios/athletes.html
+  #
+  # Las dos reglas solo actúan si el archivo existe de verdad: si un despliegue
+  # no los subiera, no casan y todo cae en el index.html de siempre.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^([^./]+)/?$ /$1.html [L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{DOCUMENT_ROOT}/$1/$2.html -f
+  RewriteRule ^([^./]+)/([^./]+)/?$ /$1/$2.html [L]
+
+  # Servir index.html para la raíz y rutas del SPA (todo lo que NO sea archivo real)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^ index.html [L]
+</IfModule>

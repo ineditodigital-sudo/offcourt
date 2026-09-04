@@ -1,0 +1,9 @@
+# Sin este archivo, el .htaccess reescribía /robots.txt a index.html y Google
+# recibía el HTML del sitio como si fueran directivas. Lighthouse lo marcaba
+# como "robots.txt no válido". Cloudflare añade sus reglas de bots de IA por
+# debajo de esto, desde su propio panel.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://offcourtsports.com.mx/sitemap.xml
