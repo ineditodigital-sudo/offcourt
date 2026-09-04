@@ -74,3 +74,74 @@ body { font-family: var(--font-sarabun); -webkit-font-smoothing: antialiased; }
 
 @keyframes oc-aparece { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 .oc-aparece { animation: oc-aparece .18s ease-out both; }
+
+/* ---------------------------------------------------------------------------
+   Banner de bienvenida.
+
+   El degradado se mueve desplazando `background-position` sobre una trama más
+   ancha que el propio banner: es una sola propiedad animada, se compone en GPU
+   y no obliga a repintar nada. Se probó con blobs desenfocados y salía mucho
+   más caro para un adorno que está siempre en pantalla.
+
+   Los colores son los de la marca; el naranja aparece en dos posiciones para
+   que el barrido tenga un vaivén y no un desfile de izquierda a derecha.
+--------------------------------------------------------------------------- */
+@keyframes oc-degradado {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.oc-banner {
+  background-image:
+    radial-gradient(120% 140% at 12% 20%, rgba(253, 162, 17, .55) 0%, transparent 55%),
+    radial-gradient(100% 120% at 88% 80%, rgba(253, 162, 17, .28) 0%, transparent 50%),
+    linear-gradient(115deg, #141311 0%, #26221a 28%, #3a2f16 52%, #241f18 74%, #141311 100%);
+  background-size: 220% 220%, 220% 220%, 220% 220%;
+  animation: oc-degradado 22s ease-in-out infinite;
+}
+
+/* Retícula fina, como la del hero del sitio: ata el panel a la marca. */
+.oc-banner-malla {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, .05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, .05) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-banner { animation: none; background-position: 30% 50%; }
+}
+
+/* --------------------------------------------------------- barra lateral */
+.oc-lateral { transition: width .22s cubic-bezier(.4, 0, .2, 1); }
+
+/* En el rail estrecho las etiquetas se van sin empujar el icono. */
+.oc-etiqueta-lateral {
+  transition: opacity .14s ease, max-width .22s cubic-bezier(.4, 0, .2, 1);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.oc-lateral[data-plegada="true"] .oc-etiqueta-lateral { opacity: 0; max-width: 0; }
+.oc-lateral[data-plegada="false"] .oc-etiqueta-lateral { opacity: 1; max-width: 12rem; }
+
+/* Globo con el nombre del módulo cuando la barra está plegada. */
+.oc-globo {
+  position: absolute; left: calc(100% + .5rem); top: 50%;
+  transform: translateY(-50%) scale(.96);
+  transform-origin: left center;
+  background: var(--color-negro); color: #fff;
+  font-size: .78rem; font-weight: 700; white-space: nowrap;
+  padding: .3rem .6rem; border-radius: 8px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .12s ease, transform .12s ease;
+  z-index: 40;
+}
+.oc-lateral[data-plegada="true"] .oc-item:hover .oc-globo,
+.oc-lateral[data-plegada="true"] .oc-item:focus-visible .oc-globo {
+  opacity: 1; transform: translateY(-50%) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-lateral, .oc-etiqueta-lateral, .oc-globo { transition: none; }
+}

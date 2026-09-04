@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  Eye, Rocket, Undo2, Redo2, Monitor, Smartphone, MousePointerClick, Images, Inbox,
-  History as IconoHistorial, Settings, LogOut, Check, Loader2, CircleAlert, ExternalLink, HelpCircle,
+  Eye, Rocket, Undo2, Redo2, Monitor, Smartphone, MousePointerClick,
+  LogOut, Check, Loader2, CircleAlert, ExternalLink, HelpCircle, Menu, SlidersHorizontal, RotateCcw,
 } from 'lucide-react';
 import { api, ErrorApi, fijarCsrf } from './api';
 import { ProveedorEstado, useDespachar, useEstado } from './estado';
@@ -11,12 +11,14 @@ import { Medios } from './Medios';
 import { Mensajes } from './Mensajes';
 import { Versiones } from './Versiones';
 import { PanelEstilo } from './PanelEstilo';
+import { Inicio } from './Inicio';
+import { BarraLateral, type Modulo } from './BarraLateral';
 import { Aviso, Boton, Cargando, Modal, useConfirmacion, useNotas } from './ui';
 import { PAGINAS, defDe, entradaDe, paginaDe, SUELTOS, type Entrada } from './navegacion';
 import { migas } from '../cms/dsl';
 import { definicion } from '../cms/definicion';
 
-/** Raíz del panel: decide entre la pantalla de acceso y el editor. */
+/** Raíz del panel: decide entre la pantalla de acceso y el escritorio. */
 export const Panel: React.FC = () => {
   const [estado, setEstado] = useState<'cargando' | 'acceso' | 'dentro'>('cargando');
   const [instalado, setInstalado] = useState(true);
@@ -49,30 +51,39 @@ export const Panel: React.FC = () => {
 
   return (
     <ProveedorEstado>
-      <Editor onSalir={() => setEstado('acceso')} />
+      <Escritorio onSalir={() => setEstado('acceso')} />
     </ProveedorEstado>
   );
 };
 
 // ---------------------------------------------------------------------------
 
-type Pestana = 'contenido' | 'medios' | 'mensajes' | 'historial' | 'ajustes';
-
-const Editor: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
+const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
   const est = useEstado();
   const despachar = useDespachar();
   const { avisar, vista: notas } = useNotas();
   const { confirmar, dialogo } = useConfirmacion();
 
-  const [pestana, setPestana] = useState<Pestana>('contenido');
+  const [modulo, setModulo] = useState<Modulo>('inicio');
   const [entrada, setEntrada] = useState<Entrada>(PAGINAS[0].entradas[0]);
   const [ladoDerecho, setLadoDerecho] = useState<'contenido' | 'aspecto'>('contenido');
   const [publicando, setPublicando] = useState(false);
   const [errorCarga, setErrorCarga] = useState('');
   const [sinLeer, setSinLeer] = useState(0);
   const [ayuda, setAyuda] = useState(false);
+  const [cajon, setCajon] = useState(false);
+  // La preferencia de menú plegado se recuerda: es de esas cosas que molesta
+  // tener que volver a ajustar en cada visita.
+  const [plegada, setPlegada] = useState(() => localStorage.getItem('oc-menu-plegado') === '1');
+  // En móvil no caben la vista previa y el formulario a la vez.
+  const [vistaMovil, setVistaMovil] = useState<'previa' | 'editar'>('editar');
   const iframe = useRef<HTMLIFrameElement>(null);
   const listoIframe = useRef(false);
+
+  const plegar = (v: boolean) => {
+    setPlegada(v);
+    localStorage.setItem('oc-menu-plegado', v ? '1' : '0');
+  };
 
   // ------------------------------------------------------------- carga inicial
   useEffect(() => {
@@ -89,6 +100,11 @@ const Editor: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
     })();
     // Solo al montar.
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Contador de mensajes sin leer, para la insignia del menú.
+  useEffect(() => {
+    api.mensajes().then((r) => setSinLeer(r.noLeidos)).catch(() => {});
   }, []);
 
   // ------------------------------------------------------------- autoguardado
@@ -127,6 +143,8 @@ const Editor: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
           const ent = entradaDe(m.clave);
           if (ent) setEntrada(ent);
           setLadoDerecho('contenido');
+          // En móvil, tocar un elemento lleva directo a su formulario.
+          setVistaMovil('editar');
         }
       } else if (m.tipo === 'ruta' && m.ruta) {
         despachar({ tipo: 'ruta', ruta: m.ruta });
@@ -153,15 +171,12 @@ const Editor: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
   const irA = useCallback((ent: Entrada) => {
     setEntrada(ent);
     setLadoDerecho('contenido');
+    setModulo('contenido');
+    setVistaMovil('editar');
     despachar({ tipo: 'seleccionar', clave: null });
     if (!listoIframe.current) return;
-    const destino = ent.web + (ent.ancla ? '#' + ent.ancla : '');
-    if (est.ruta.split('#')[0] !== ent.web) {
-      enviar({ tipo: 'navegar', ruta: destino });
-    } else if (ent.ancla) {
-      enviar({ tipo: 'navegar', ruta: destino });
-    }
-  }, [enviar, est.ruta, despachar]);
+    enviar({ tipo: 'navegar', ruta: ent.web + (ent.ancla ? '#' + ent.ancla : '') });
+  }, [enviar, despachar]);
 
   // ---------------------------------------------------------------- atajos
   useEffect(() => {
@@ -178,11 +193,8 @@ const Editor: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Aviso al cerrar con cambios sin publicar.
   useEffect(() => {
-    const alSalir = (e: BeforeUnloadEvent) => {
-      if (est.hayCambiosSinPublicar) e.preventDefault();
-    };
+    const alSalir = (e: BeforeUnloadEvent) => { if (est.hayCambiosSinPublicar) e.preventDefault(); };
     window.addEventListener('beforeunload', alSalir);
     return () => window.removeEventListener('beforeunload', alSalir);
   }, [est.hayCambiosSinPublicar]);
@@ -253,42 +265,43 @@ const Editor: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
 
   return (
     <div className="flex h-full flex-col bg-lienzo">
+
       {/* ---------------------------------------------------------- barra superior */}
-      <header className="z-30 flex shrink-0 flex-wrap items-center gap-3 border-b border-black/8 bg-white px-4 py-2.5 shadow-sm">
-        <img src="/logo_negro.svg" alt="Offcourt" className="h-7 w-auto shrink-0" />
+      <header className="z-30 flex shrink-0 items-center gap-2 border-b border-black/8 bg-white px-3 py-2.5 shadow-sm sm:gap-3 sm:px-4">
+        <button
+          onClick={() => setCajon(true)}
+          aria-label="Abrir el menú"
+          className="-ml-1 rounded-lg p-2 text-neutral-500 transition-colors hover:bg-black/5 hover:text-negro lg:hidden"
+        >
+          <Menu size={19} />
+        </button>
 
-        <nav className="flex items-center gap-0.5 rounded-xl bg-black/[0.04] p-0.5">
-          {([
-            ['contenido', 'Contenido', MousePointerClick],
-            ['medios', 'Fotos y archivos', Images],
-            ['mensajes', 'Mensajes', Inbox],
-            ['historial', 'Historial', IconoHistorial],
-            ['ajustes', 'Ajustes', Settings],
-          ] as const).map(([id, etiqueta, Ico]) => (
-            <button
-              key={id}
-              onClick={() => setPestana(id)}
-              className={`relative flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[12.5px] font-bold transition-colors ${
-                pestana === id ? 'bg-white text-negro shadow-sm' : 'text-neutral-500 hover:text-negro'
-              }`}
-            >
-              <Ico size={14} /> <span className="hidden sm:inline">{etiqueta}</span>
-              {id === 'mensajes' && sinLeer > 0 && (
-                <span className="ml-0.5 rounded-full bg-marca px-1.5 text-[10px] font-black text-negro">{sinLeer}</span>
-              )}
-            </button>
-          ))}
-        </nav>
+        <button onClick={() => setModulo('inicio')} title="Ir al inicio del panel" className="shrink-0">
+          <img src="/logo_negro.svg" alt="Offcourt" className="h-6 w-auto sm:h-7" />
+        </button>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
           <EstadoGuardado />
 
-          <button onClick={() => setAyuda(true)} title="Cómo funciona el panel" className="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-black/5 hover:text-negro">
+          <button onClick={() => setAyuda(true)} title="Cómo funciona el panel" className="hidden rounded-lg p-2 text-neutral-400 transition-colors hover:bg-black/5 hover:text-negro sm:block">
             <HelpCircle size={16} />
           </button>
 
           {est.hayCambiosSinPublicar && (
-            <Boton tamano="sm" tipo="suave" onClick={() => void descartar()}>Descartar</Boton>
+            <>
+              <Boton tamano="sm" tipo="suave" onClick={() => void descartar()} className="hidden sm:inline-flex">Descartar</Boton>
+              {/* En móvil no hay teclado para Ctrl+Z ni sitio para la palabra:
+                  el mismo botón, en icono, para no dejar sin salida a quien
+                  edita desde el celular. */}
+              <button
+                onClick={() => void descartar()}
+                title="Descartar los cambios sin publicar"
+                aria-label="Descartar los cambios sin publicar"
+                className="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-black/5 hover:text-negro sm:hidden"
+              >
+                <RotateCcw size={16} />
+              </button>
+            </>
           )}
 
           <a
@@ -296,7 +309,7 @@ const Editor: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
             target="_blank"
             rel="noopener noreferrer"
             title="Abrir el sitio publicado en otra pestaña"
-            className="inline-flex items-center gap-1.5 rounded-xl border border-black/10 bg-white px-3 py-1.5 text-[13px] font-bold text-negro transition-colors hover:bg-black/[0.04]"
+            className="hidden items-center gap-1.5 rounded-xl border border-black/10 bg-white px-3 py-1.5 text-[13px] font-bold text-negro transition-colors hover:bg-black/[0.04] sm:inline-flex"
           >
             <ExternalLink size={14} /> <span className="hidden md:inline">Ver sitio</span>
           </a>
@@ -311,136 +324,146 @@ const Editor: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
         </div>
       </header>
 
-      {/* ------------------------------------------------------------ cuerpo */}
-      {pestana === 'contenido' ? (
-        <div className="flex min-h-0 flex-1">
-          {/* Menú de páginas y secciones */}
-          <aside className="oc-scroll hidden w-56 shrink-0 overflow-y-auto border-r border-black/8 bg-white px-2.5 py-3 lg:block">
-            {PAGINAS.map((p) => (
-              <div key={p.id} className="mb-3">
-                <p className="px-2 pb-1 text-[11px] font-black uppercase tracking-wider text-neutral-400">{p.etiqueta}</p>
-                {p.entradas.map((e) => (
+      {/* ------------------------------------------------------------- cuerpo */}
+      <div className="flex min-h-0 flex-1">
+        <BarraLateral
+          modulo={modulo}
+          onModulo={setModulo}
+          entrada={entrada}
+          onEntrada={irA}
+          plegada={plegada}
+          onPlegar={plegar}
+          cajonAbierto={cajon}
+          onCerrarCajon={() => setCajon(false)}
+          sinLeer={sinLeer}
+        />
+
+        <main className="flex min-w-0 flex-1 flex-col">
+          {modulo === 'contenido' ? (
+            <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
+
+              {/* Selector de vista, solo en pantallas estrechas */}
+              <div className="flex shrink-0 items-center gap-1 border-b border-black/8 bg-white p-1.5 lg:hidden">
+                {([['previa', 'Vista previa', Eye], ['editar', 'Editar', SlidersHorizontal]] as const).map(([id, etiqueta, Ico]) => (
                   <button
-                    key={e.ruta}
-                    onClick={() => irA(e)}
-                    className={`block w-full truncate rounded-lg px-2 py-1.5 text-left text-[13px] font-semibold transition-colors ${
-                      entrada.ruta === e.ruta ? 'bg-marca/15 text-negro' : 'text-gris-oscuro hover:bg-black/[0.04]'
+                    key={id}
+                    onClick={() => setVistaMovil(id)}
+                    className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-[13px] font-bold transition-colors ${
+                      vistaMovil === id ? 'bg-marca/15 text-negro' : 'text-neutral-500 hover:bg-black/[0.04]'
                     }`}
                   >
-                    {e.etiqueta}
+                    <Ico size={14} /> {etiqueta}
                   </button>
                 ))}
               </div>
-            ))}
-          </aside>
 
-          {/* Vista previa */}
-          <main className="relative flex min-w-0 flex-1 flex-col bg-[#e9e9e6]">
-            <div className="flex shrink-0 items-center gap-2 border-b border-black/8 bg-white/70 px-3 py-1.5">
-              <span className="truncate text-[12px] font-semibold text-neutral-500">
-                offcourtsports.com.mx<span className="text-neutral-400">{est.ruta}</span>
-              </span>
-              <div className="ml-auto flex items-center gap-1">
-                <button
-                  onClick={() => despachar({ tipo: 'modoEdicion', activo: !est.modoEdicion })}
-                  title={est.modoEdicion ? 'Desactivar la selección para navegar el sitio' : 'Activar la selección para editar'}
-                  className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[12px] font-bold transition-colors ${
-                    est.modoEdicion ? 'bg-marca text-negro' : 'text-neutral-500 hover:bg-black/5'
-                  }`}
-                >
-                  {est.modoEdicion ? <MousePointerClick size={13} /> : <Eye size={13} />}
-                  {est.modoEdicion ? 'Editando' : 'Navegando'}
-                </button>
-                <span className="mx-1 h-4 w-px bg-black/10" />
-                <button onClick={() => despachar({ tipo: 'dispositivo', dispositivo: 'escritorio' })} title="Ver como en computadora"
-                  className={`rounded-lg p-1.5 transition-colors ${est.dispositivo === 'escritorio' ? 'bg-black/[0.08] text-negro' : 'text-neutral-400 hover:text-negro'}`}>
-                  <Monitor size={14} />
-                </button>
-                <button onClick={() => despachar({ tipo: 'dispositivo', dispositivo: 'movil' })} title="Ver como en celular"
-                  className={`rounded-lg p-1.5 transition-colors ${est.dispositivo === 'movil' ? 'bg-black/[0.08] text-negro' : 'text-neutral-400 hover:text-negro'}`}>
-                  <Smartphone size={14} />
-                </button>
-                <span className="mx-1 h-4 w-px bg-black/10" />
-                <button onClick={() => despachar({ tipo: 'deshacer' })} disabled={est.pasado.length === 0} title="Deshacer (Ctrl+Z)"
-                  className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:text-negro disabled:opacity-25">
-                  <Undo2 size={14} />
-                </button>
-                <button onClick={() => despachar({ tipo: 'rehacer' })} disabled={est.futuro.length === 0} title="Rehacer (Ctrl+Shift+Z)"
-                  className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:text-negro disabled:opacity-25">
-                  <Redo2 size={14} />
-                </button>
-              </div>
-            </div>
-
-            <div className="min-h-0 flex-1 overflow-auto p-3">
-              <div
-                className={`mx-auto h-full bg-white shadow-lg transition-all ${est.dispositivo === 'movil' ? 'w-[390px] max-w-full rounded-[26px] ring-8 ring-negro/85' : 'w-full rounded-lg'}`}
-                style={{ minHeight: '100%' }}
-              >
-                <iframe
-                  ref={iframe}
-                  src="/?oc-editor=1"
-                  title="Vista previa del sitio"
-                  className={`h-full w-full border-0 ${est.dispositivo === 'movil' ? 'rounded-[18px]' : 'rounded-lg'}`}
-                />
-              </div>
-            </div>
-          </main>
-
-          {/* Formulario del elemento / sección */}
-          <aside className="oc-scroll w-[22rem] shrink-0 overflow-y-auto border-l border-black/8 bg-lienzo">
-            <div className="sticky top-0 z-10 border-b border-black/8 bg-white/95 px-4 py-3 backdrop-blur">
-              <p className="text-[11px] font-black uppercase tracking-wider text-neutral-400">{pagina?.etiqueta}</p>
-              <h2 className="font-outfit text-[17px] font-extrabold uppercase leading-tight tracking-tight text-negro">{entrada.etiqueta}</h2>
-              {est.seleccion && (
-                <div className="mt-2 flex items-center gap-1 rounded-lg bg-black/[0.04] p-0.5">
-                  {(['contenido', 'aspecto'] as const).map((t) => (
+              {/* Vista previa */}
+              <section className={`relative min-h-0 flex-col bg-[#e9e9e6] lg:flex lg:flex-1 ${vistaMovil === 'previa' ? 'flex flex-1' : 'hidden'}`}>
+                <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-black/8 bg-white/70 px-3 py-1.5">
+                  <span className="hidden truncate text-[12px] font-semibold text-neutral-500 sm:inline">
+                    offcourtsports.com.mx<span className="text-neutral-400">{est.ruta}</span>
+                  </span>
+                  <div className="ml-auto flex items-center gap-1">
                     <button
-                      key={t}
-                      onClick={() => setLadoDerecho(t)}
-                      className={`flex-1 rounded-md px-2 py-1 text-[12px] font-bold capitalize transition-colors ${
-                        ladoDerecho === t ? 'bg-white text-negro shadow-sm' : 'text-neutral-500 hover:text-negro'
+                      onClick={() => despachar({ tipo: 'modoEdicion', activo: !est.modoEdicion })}
+                      title={est.modoEdicion ? 'Desactivar la selección para navegar el sitio' : 'Activar la selección para editar'}
+                      className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[12px] font-bold transition-colors ${
+                        est.modoEdicion ? 'bg-marca text-negro' : 'text-neutral-500 hover:bg-black/5'
                       }`}
                     >
-                      {t === 'contenido' ? 'Contenido' : 'Aspecto'}
+                      {est.modoEdicion ? <MousePointerClick size={13} /> : <Eye size={13} />}
+                      {est.modoEdicion ? 'Editando' : 'Navegando'}
                     </button>
-                  ))}
+                    <span className="mx-1 h-4 w-px bg-black/10" />
+                    <button onClick={() => despachar({ tipo: 'dispositivo', dispositivo: 'escritorio' })} title="Ver como en computadora"
+                      className={`rounded-lg p-1.5 transition-colors ${est.dispositivo === 'escritorio' ? 'bg-black/[0.08] text-negro' : 'text-neutral-400 hover:text-negro'}`}>
+                      <Monitor size={14} />
+                    </button>
+                    <button onClick={() => despachar({ tipo: 'dispositivo', dispositivo: 'movil' })} title="Ver como en celular"
+                      className={`rounded-lg p-1.5 transition-colors ${est.dispositivo === 'movil' ? 'bg-black/[0.08] text-negro' : 'text-neutral-400 hover:text-negro'}`}>
+                      <Smartphone size={14} />
+                    </button>
+                    <span className="mx-1 h-4 w-px bg-black/10" />
+                    <button onClick={() => despachar({ tipo: 'deshacer' })} disabled={est.pasado.length === 0} title="Deshacer (Ctrl+Z)"
+                      className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:text-negro disabled:opacity-25">
+                      <Undo2 size={14} />
+                    </button>
+                    <button onClick={() => despachar({ tipo: 'rehacer' })} disabled={est.futuro.length === 0} title="Rehacer (Ctrl+Shift+Z)"
+                      className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:text-negro disabled:opacity-25">
+                      <Redo2 size={14} />
+                    </button>
+                  </div>
                 </div>
-              )}
-            </div>
 
-            <div className="px-4 py-4">
-              {errorCarga && <div className="mb-4"><Aviso tipo="error">{errorCarga}</Aviso></div>}
-
-              {ladoDerecho === 'aspecto' && est.seleccion ? (
-                <>
-                  <p className="mb-3 rounded-lg bg-white px-3 py-2 text-[12px] leading-snug text-neutral-500">
-                    Estás cambiando el aspecto de: <strong className="text-negro">{migas(definicion, est.seleccion).slice(-2).join(' › ')}</strong>
-                  </p>
-                  <PanelEstilo clave={est.seleccion} />
-                </>
-              ) : sueltos ? (
-                <div className="flex flex-col gap-4">
-                  {sueltos.map((r) => { const d = defDe(r); return d ? <Nodo key={r} def={d} ruta={r} /> : null; })}
+                <div className="min-h-0 flex-1 overflow-auto p-2 sm:p-3">
+                  <div className={`mx-auto h-full bg-white shadow-lg transition-all ${est.dispositivo === 'movil' ? 'w-[390px] max-w-full rounded-[26px] ring-8 ring-negro/85' : 'w-full rounded-lg'}`}>
+                    <iframe
+                      ref={iframe}
+                      src="/?oc-editor=1"
+                      title="Vista previa del sitio"
+                      className={`h-full min-h-[28rem] w-full border-0 ${est.dispositivo === 'movil' ? 'rounded-[18px]' : 'rounded-lg'}`}
+                    />
+                  </div>
                 </div>
-              ) : def ? (
-                <Nodo def={def} ruta={entrada.ruta} />
-              ) : (
-                <Aviso tipo="error">No se encontró esta sección.</Aviso>
-              )}
+              </section>
+
+              {/* Formulario */}
+              <aside className={`oc-scroll min-h-0 shrink-0 overflow-y-auto border-black/8 bg-lienzo lg:block lg:w-[22rem] lg:border-l ${vistaMovil === 'editar' ? 'block flex-1' : 'hidden'}`}>
+                <div className="sticky top-0 z-10 border-b border-black/8 bg-white/95 px-4 py-3 backdrop-blur">
+                  <p className="text-[11px] font-black uppercase tracking-wider text-neutral-400">{pagina?.etiqueta}</p>
+                  <h2 className="font-outfit text-[17px] font-extrabold uppercase leading-tight tracking-tight text-negro">{entrada.etiqueta}</h2>
+                  {est.seleccion && (
+                    <div className="mt-2 flex items-center gap-1 rounded-lg bg-black/[0.04] p-0.5">
+                      {(['contenido', 'aspecto'] as const).map((t) => (
+                        <button
+                          key={t}
+                          onClick={() => setLadoDerecho(t)}
+                          className={`flex-1 rounded-md px-2 py-1 text-[12px] font-bold transition-colors ${
+                            ladoDerecho === t ? 'bg-white text-negro shadow-sm' : 'text-neutral-500 hover:text-negro'
+                          }`}
+                        >
+                          {t === 'contenido' ? 'Contenido' : 'Aspecto'}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="px-4 py-4">
+                  {errorCarga && <div className="mb-4"><Aviso tipo="error">{errorCarga}</Aviso></div>}
+
+                  {ladoDerecho === 'aspecto' && est.seleccion ? (
+                    <>
+                      <p className="mb-3 rounded-lg bg-white px-3 py-2 text-[12px] leading-snug text-neutral-500">
+                        Estás cambiando el aspecto de: <strong className="text-negro">{migas(definicion, est.seleccion).slice(-2).join(' › ')}</strong>
+                      </p>
+                      <PanelEstilo clave={est.seleccion} />
+                    </>
+                  ) : sueltos ? (
+                    <div className="flex flex-col gap-4">
+                      {sueltos.map((r) => { const d = defDe(r); return d ? <Nodo key={r} def={d} ruta={r} /> : null; })}
+                    </div>
+                  ) : def ? (
+                    <Nodo def={def} ruta={entrada.ruta} />
+                  ) : (
+                    <Aviso tipo="error">No se encontró esta sección.</Aviso>
+                  )}
+                </div>
+              </aside>
             </div>
-          </aside>
-        </div>
-      ) : (
-        <div className="oc-scroll min-h-0 flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-5xl px-5 py-6">
-            {pestana === 'medios' && <Medios />}
-            {pestana === 'mensajes' && <Mensajes onContador={setSinLeer} />}
-            {pestana === 'historial' && <Versiones onAviso={avisar} />}
-            {pestana === 'ajustes' && <Ajustes onAviso={avisar} />}
-          </div>
-        </div>
-      )}
+          ) : (
+            <div className="oc-scroll min-h-0 flex-1 overflow-y-auto">
+              <div className="mx-auto max-w-5xl px-4 py-5 sm:px-6 sm:py-7">
+                {modulo === 'inicio' && <Inicio onModulo={setModulo} onEntrada={irA} sinLeer={sinLeer} />}
+                {modulo === 'medios' && <Cabecera titulo="Fotos y archivos" texto="Todo lo que se usa en el sitio, en un solo lugar."><Medios /></Cabecera>}
+                {modulo === 'mensajes' && <Cabecera titulo="Mensajes" texto="Copia de lo que llega por el formulario de contacto."><Mensajes onContador={setSinLeer} /></Cabecera>}
+                {modulo === 'historial' && <Cabecera titulo="Historial y respaldos" texto="Vuelve a cualquier versión anterior del sitio."><Versiones onAviso={avisar} /></Cabecera>}
+                {modulo === 'ajustes' && <Cabecera titulo="Ajustes" texto="Tu contraseña y qué hacer si algo se tuerce."><Ajustes onAviso={avisar} /></Cabecera>}
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
 
       {ayuda && <Recorrido onCerrar={() => { setAyuda(false); localStorage.setItem('oc-visto-recorrido', '1'); }} />}
       {dialogo}
@@ -448,6 +471,16 @@ const Editor: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
     </div>
   );
 };
+
+const Cabecera: React.FC<{ titulo: string; texto: string; children: React.ReactNode }> = ({ titulo, texto, children }) => (
+  <>
+    <div className="mb-5">
+      <h1 className="font-outfit text-[1.45rem] font-extrabold uppercase leading-tight tracking-tight text-negro">{titulo}</h1>
+      <p className="mt-0.5 text-[13.5px] text-neutral-500">{texto}</p>
+    </div>
+    {children}
+  </>
+);
 
 // -------------------------------------------------------------- estado guardado
 
@@ -461,7 +494,7 @@ const EstadoGuardado: React.FC = () => {
 };
 
 const Etiqueta: React.FC<{ icono: React.ReactNode; texto: string; color?: string }> = ({ icono, texto, color = 'text-neutral-500' }) => (
-  <span className={`hidden items-center gap-1.5 text-[12px] font-semibold sm:flex ${color}`}>{icono}{texto}</span>
+  <span className={`hidden items-center gap-1.5 text-[12px] font-semibold md:flex ${color}`}>{icono}{texto}</span>
 );
 
 // -------------------------------------------------------------------- ajustes
@@ -489,7 +522,7 @@ const Ajustes: React.FC<{ onAviso: (t: string, tipo?: 'ok' | 'error' | 'info') =
   return (
     <div className="flex max-w-lg flex-col gap-5">
       <section className="rounded-xl border border-black/10 bg-white p-5">
-        <h3 className="mb-1 text-[15px] font-bold text-negro">Cambiar la contraseña</h3>
+        <h2 className="mb-1 text-[15px] font-bold text-negro">Cambiar la contraseña</h2>
         <p className="mb-4 text-[13px] leading-snug text-neutral-500">
           Si crees que alguien más la conoce, cámbiala aquí. Necesitas saber la actual.
         </p>
@@ -514,7 +547,7 @@ const Ajustes: React.FC<{ onAviso: (t: string, tipo?: 'ok' | 'error' | 'info') =
       </section>
 
       <section className="rounded-xl border border-black/10 bg-white p-5">
-        <h3 className="mb-1 text-[15px] font-bold text-negro">Si algo se rompe</h3>
+        <h2 className="mb-1 text-[15px] font-bold text-negro">Si algo se rompe</h2>
         <p className="text-[13px] leading-relaxed text-neutral-500">
           Nada de lo que hagas aquí puede romper el sitio: solo cambias textos, fotos y colores dentro de los
           límites del diseño. Si aun así algo no se ve bien, ve a <strong className="text-negro">Historial</strong> y
@@ -535,7 +568,7 @@ const PASOS = [
   },
   {
     titulo: 'Haz clic en lo que quieras cambiar',
-    texto: 'En la vista previa del centro, pasa el ratón por encima del sitio: lo que se puede editar se marca con un borde naranja. Haz clic y sus opciones aparecen a la derecha.',
+    texto: 'Entra en Contenido y verás tu sitio en el centro. Pasa el ratón por encima: lo que se puede editar se marca con un borde naranja. Haz clic y sus opciones aparecen al lado.',
   },
   {
     titulo: 'Lo que ves es lo que queda',
