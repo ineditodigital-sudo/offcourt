@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Eye, Rocket, Undo2, Redo2, Monitor, Smartphone, MousePointerClick,
-  LogOut, Check, Loader2, CircleAlert, ExternalLink, HelpCircle, Menu, SlidersHorizontal, RotateCcw,
+  LogOut, Check, Loader2, CircleAlert, ExternalLink, HelpCircle, Menu, SlidersHorizontal, RotateCcw, Sun, Moon,
 } from 'lucide-react';
 import { api, ErrorApi, fijarCsrf } from './api';
 import { ProveedorEstado, useDespachar, useEstado } from './estado';
@@ -13,8 +13,9 @@ import { Versiones } from './Versiones';
 import { PanelEstilo } from './PanelEstilo';
 import { Inicio } from './Inicio';
 import { BarraLateral, type Modulo } from './BarraLateral';
-import { Aviso, Boton, Cargando, Modal, useConfirmacion, useNotas } from './ui';
+import { Aviso, Boton, Cargando, Logo, Modal, useConfirmacion, useNotas } from './ui';
 import { PAGINAS, defDe, entradaDe, paginaDe, SUELTOS, type Entrada } from './navegacion';
+import { useTema } from './tema';
 import { migas } from '../cms/dsl';
 import { definicion } from '../cms/definicion';
 
@@ -63,6 +64,7 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
   const despachar = useDespachar();
   const { avisar, vista: notas } = useNotas();
   const { confirmar, dialogo } = useConfirmacion();
+  const { tema, alternar } = useTema();
 
   const [modulo, setModulo] = useState<Modulo>('inicio');
   const [entrada, setEntrada] = useState<Entrada>(PAGINAS[0].entradas[0]);
@@ -207,7 +209,7 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
       texto: (
         <>
           <p className="mb-3">Todo lo que has editado pasará a verse en <strong>offcourtsports.com.mx</strong> ahora mismo.</p>
-          <p className="text-[13px] text-neutral-500">
+          <p className="text-[13px] text-tinta-suave">
             La versión que hay publicada se guarda en el historial, así que siempre puedes volver atrás.
           </p>
         </>
@@ -267,23 +269,37 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
     <div className="flex h-full flex-col bg-lienzo">
 
       {/* ---------------------------------------------------------- barra superior */}
-      <header className="z-30 flex shrink-0 items-center gap-2 border-b border-black/8 bg-white px-3 py-2.5 shadow-sm sm:gap-3 sm:px-4">
+      <header className="z-30 flex shrink-0 items-center gap-2 border-b border-borde bg-panel px-3 py-2.5 shadow-sm sm:gap-3 sm:px-4">
         <button
           onClick={() => setCajon(true)}
           aria-label="Abrir el menú"
-          className="oc-pulsable -ml-1 rounded-lg p-2 text-neutral-500 hover:bg-black/5 hover:text-negro lg:hidden"
+          className="oc-pulsable -ml-1 rounded-lg p-2 text-tinta-suave hover:bg-tinta/5 hover:text-tinta lg:hidden"
         >
           <Menu size={19} />
         </button>
 
-        <button onClick={() => setModulo('inicio')} title="Ir al inicio del panel" className="oc-pulsable shrink-0">
-          <img src="/logo_negro.svg" alt="Offcourt" className="h-6 w-auto sm:h-7" />
+        {/* En escritorio el logotipo está en la barra lateral; aquí solo hace
+            falta cuando esa barra es un cajón oculto. */}
+        <button onClick={() => setModulo('inicio')} title="Ir al inicio del panel" className="oc-pulsable shrink-0 lg:hidden">
+          <Logo className="h-6 w-auto sm:h-7" />
         </button>
 
         <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
           <EstadoGuardado />
 
-          <button onClick={() => setAyuda(true)} title="Cómo funciona el panel" className="oc-pulsable hidden rounded-lg p-2 text-neutral-400 hover:bg-black/5 hover:text-negro sm:block">
+          {/* El icono muestra a DÓNDE se va, no dónde se está: con el panel
+              claro se ofrece la luna. Al revés confunde, porque parece un
+              indicador de estado en vez de una acción. */}
+          <button
+            onClick={alternar}
+            title={tema === 'oscuro' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+            aria-label={tema === 'oscuro' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+            className="oc-pulsable rounded-lg p-2 text-tinta-tenue hover:bg-tinta/5 hover:text-tinta"
+          >
+            {tema === 'oscuro' ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+
+          <button onClick={() => setAyuda(true)} title="Cómo funciona el panel" className="oc-pulsable hidden rounded-lg p-2 text-tinta-tenue hover:bg-tinta/5 hover:text-tinta sm:block">
             <HelpCircle size={16} />
           </button>
 
@@ -297,7 +313,7 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
                 onClick={() => void descartar()}
                 title="Descartar los cambios sin publicar"
                 aria-label="Descartar los cambios sin publicar"
-                className="oc-pulsable rounded-lg p-2 text-neutral-400 hover:bg-black/5 hover:text-negro sm:hidden"
+                className="oc-pulsable rounded-lg p-2 text-tinta-tenue hover:bg-tinta/5 hover:text-tinta sm:hidden"
               >
                 <RotateCcw size={16} />
               </button>
@@ -309,7 +325,7 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
             target="_blank"
             rel="noopener noreferrer"
             title="Abrir el sitio publicado en otra pestaña"
-            className="oc-pulsable hidden items-center gap-1.5 rounded-xl border border-black/10 bg-white px-3 py-1.5 text-[13px] font-bold text-negro hover:bg-black/[0.04] sm:inline-flex"
+            className="oc-pulsable hidden items-center gap-1.5 rounded-xl border border-borde bg-panel px-3 py-1.5 text-[13px] font-bold text-tinta hover:bg-tinta/[0.04] sm:inline-flex"
           >
             <ExternalLink size={14} /> <span className="hidden md:inline">Ver sitio</span>
           </a>
@@ -318,7 +334,7 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
             <Rocket size={14} /> Publicar
           </Boton>
 
-          <button onClick={() => void salir()} title="Cerrar sesión" className="oc-pulsable rounded-lg p-2 text-neutral-400 hover:bg-black/5 hover:text-negro">
+          <button onClick={() => void salir()} title="Cerrar sesión" className="oc-pulsable rounded-lg p-2 text-tinta-tenue hover:bg-tinta/5 hover:text-tinta">
             <LogOut size={16} />
           </button>
         </div>
@@ -343,13 +359,13 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
             <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
 
               {/* Selector de vista, solo en pantallas estrechas */}
-              <div className="flex shrink-0 items-center gap-1 border-b border-black/8 bg-white p-1.5 lg:hidden">
+              <div className="flex shrink-0 items-center gap-1 border-b border-borde bg-panel p-1.5 lg:hidden">
                 {([['previa', 'Vista previa', Eye], ['editar', 'Editar', SlidersHorizontal]] as const).map(([id, etiqueta, Ico]) => (
                   <button
                     key={id}
                     onClick={() => setVistaMovil(id)}
                     className={`oc-pulsable flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-[13px] font-bold ${
-                      vistaMovil === id ? 'bg-marca/15 text-negro' : 'text-neutral-500 hover:bg-black/[0.04]'
+                      vistaMovil === id ? 'bg-marca/15 text-tinta' : 'text-tinta-suave hover:bg-tinta/[0.04]'
                     }`}
                   >
                     <Ico size={14} /> {etiqueta}
@@ -358,45 +374,45 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
               </div>
 
               {/* Vista previa */}
-              <section className={`relative min-h-0 flex-col bg-[#e9e9e6] lg:flex lg:flex-1 ${vistaMovil === 'previa' ? 'flex flex-1' : 'hidden'}`}>
-                <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-black/8 bg-white/70 px-3 py-1.5">
-                  <span className="hidden truncate text-[12px] font-semibold text-neutral-500 sm:inline">
-                    offcourtsports.com.mx<span className="text-neutral-400">{est.ruta}</span>
+              <section className={`relative min-h-0 flex-col bg-lienzo lg:flex lg:flex-1 ${vistaMovil === 'previa' ? 'flex flex-1' : 'hidden'}`}>
+                <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-borde bg-panel/70 px-3 py-1.5">
+                  <span className="hidden truncate text-[12px] font-semibold text-tinta-suave sm:inline">
+                    offcourtsports.com.mx<span className="text-tinta-tenue">{est.ruta}</span>
                   </span>
                   <div className="ml-auto flex items-center gap-1">
                     <button
                       onClick={() => despachar({ tipo: 'modoEdicion', activo: !est.modoEdicion })}
                       title={est.modoEdicion ? 'Desactivar la selección para navegar el sitio' : 'Activar la selección para editar'}
                       className={`oc-pulsable flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[12px] font-bold ${
-                        est.modoEdicion ? 'bg-marca text-negro' : 'text-neutral-500 hover:bg-black/5'
+                        est.modoEdicion ? 'bg-marca text-tinta' : 'text-tinta-suave hover:bg-tinta/5'
                       }`}
                     >
                       {est.modoEdicion ? <MousePointerClick size={13} /> : <Eye size={13} />}
                       {est.modoEdicion ? 'Editando' : 'Navegando'}
                     </button>
-                    <span className="mx-1 h-4 w-px bg-black/10" />
+                    <span className="mx-1 h-4 w-px bg-borde" />
                     <button onClick={() => despachar({ tipo: 'dispositivo', dispositivo: 'escritorio' })} title="Ver como en computadora"
-                      className={`oc-pulsable rounded-lg p-1.5 ${est.dispositivo === 'escritorio' ? 'bg-black/[0.08] text-negro' : 'text-neutral-400 hover:text-negro'}`}>
+                      className={`oc-pulsable rounded-lg p-1.5 ${est.dispositivo === 'escritorio' ? 'bg-tinta/[0.08] text-tinta' : 'text-tinta-tenue hover:text-tinta'}`}>
                       <Monitor size={14} />
                     </button>
                     <button onClick={() => despachar({ tipo: 'dispositivo', dispositivo: 'movil' })} title="Ver como en celular"
-                      className={`oc-pulsable rounded-lg p-1.5 ${est.dispositivo === 'movil' ? 'bg-black/[0.08] text-negro' : 'text-neutral-400 hover:text-negro'}`}>
+                      className={`oc-pulsable rounded-lg p-1.5 ${est.dispositivo === 'movil' ? 'bg-tinta/[0.08] text-tinta' : 'text-tinta-tenue hover:text-tinta'}`}>
                       <Smartphone size={14} />
                     </button>
-                    <span className="mx-1 h-4 w-px bg-black/10" />
+                    <span className="mx-1 h-4 w-px bg-borde" />
                     <button onClick={() => despachar({ tipo: 'deshacer' })} disabled={est.pasado.length === 0} title="Deshacer (Ctrl+Z)"
-                      className="oc-pulsable rounded-lg p-1.5 text-neutral-400 hover:text-negro disabled:opacity-25">
+                      className="oc-pulsable rounded-lg p-1.5 text-tinta-tenue hover:text-tinta disabled:opacity-25">
                       <Undo2 size={14} />
                     </button>
                     <button onClick={() => despachar({ tipo: 'rehacer' })} disabled={est.futuro.length === 0} title="Rehacer (Ctrl+Shift+Z)"
-                      className="oc-pulsable rounded-lg p-1.5 text-neutral-400 hover:text-negro disabled:opacity-25">
+                      className="oc-pulsable rounded-lg p-1.5 text-tinta-tenue hover:text-tinta disabled:opacity-25">
                       <Redo2 size={14} />
                     </button>
                   </div>
                 </div>
 
                 <div className="min-h-0 flex-1 overflow-auto p-2 sm:p-3">
-                  <div className={`mx-auto h-full bg-white shadow-lg transition-all ${est.dispositivo === 'movil' ? 'w-[390px] max-w-full rounded-[26px] ring-8 ring-negro/85' : 'w-full rounded-lg'}`}>
+                  <div className={`mx-auto h-full bg-panel shadow-lg transition-all ${est.dispositivo === 'movil' ? 'w-[390px] max-w-full rounded-[26px] ring-8 ring-negro/85' : 'w-full rounded-lg'}`}>
                     <iframe
                       ref={iframe}
                       src="/?oc-editor=1"
@@ -408,18 +424,18 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
               </section>
 
               {/* Formulario */}
-              <aside className={`oc-scroll min-h-0 shrink-0 overflow-y-auto border-black/8 bg-lienzo lg:block lg:w-[22rem] lg:border-l ${vistaMovil === 'editar' ? 'block flex-1' : 'hidden'}`}>
-                <div className="sticky top-0 z-10 border-b border-black/8 bg-white/95 px-4 py-3 backdrop-blur">
-                  <p className="text-[11px] font-black uppercase tracking-wider text-neutral-400">{pagina?.etiqueta}</p>
-                  <h2 className="font-outfit text-[17px] font-extrabold uppercase leading-tight tracking-tight text-negro">{entrada.etiqueta}</h2>
+              <aside className={`oc-scroll min-h-0 shrink-0 overflow-y-auto border-borde bg-lienzo lg:block lg:w-[22rem] lg:border-l ${vistaMovil === 'editar' ? 'block flex-1' : 'hidden'}`}>
+                <div className="sticky top-0 z-10 border-b border-borde bg-panel/95 px-4 py-3 backdrop-blur">
+                  <p className="text-[11px] font-black uppercase tracking-wider text-tinta-tenue">{pagina?.etiqueta}</p>
+                  <h2 className="font-outfit text-[17px] font-extrabold uppercase leading-tight tracking-tight text-tinta">{entrada.etiqueta}</h2>
                   {est.seleccion && (
-                    <div className="mt-2 flex items-center gap-1 rounded-lg bg-black/[0.04] p-0.5">
+                    <div className="mt-2 flex items-center gap-1 rounded-lg bg-tinta/[0.04] p-0.5">
                       {(['contenido', 'aspecto'] as const).map((t) => (
                         <button
                           key={t}
                           onClick={() => setLadoDerecho(t)}
                           className={`oc-pulsable flex-1 rounded-md px-2 py-1 text-[12px] font-bold ${
-                            ladoDerecho === t ? 'bg-white text-negro shadow-sm' : 'text-neutral-500 hover:text-negro'
+                            ladoDerecho === t ? 'bg-panel text-tinta shadow-sm' : 'text-tinta-suave hover:text-tinta'
                           }`}
                         >
                           {t === 'contenido' ? 'Contenido' : 'Aspecto'}
@@ -434,8 +450,8 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
 
                   {ladoDerecho === 'aspecto' && est.seleccion ? (
                     <>
-                      <p className="mb-3 rounded-lg bg-white px-3 py-2 text-[12px] leading-snug text-neutral-500">
-                        Estás cambiando el aspecto de: <strong className="text-negro">{migas(definicion, est.seleccion).slice(-2).join(' › ')}</strong>
+                      <p className="mb-3 rounded-lg bg-panel px-3 py-2 text-[12px] leading-snug text-tinta-suave">
+                        Estás cambiando el aspecto de: <strong className="text-tinta">{migas(definicion, est.seleccion).slice(-2).join(' › ')}</strong>
                       </p>
                       <PanelEstilo clave={est.seleccion} />
                     </>
@@ -475,8 +491,8 @@ const Escritorio: React.FC<{ onSalir: () => void }> = ({ onSalir }) => {
 const Cabecera: React.FC<{ titulo: string; texto: string; children: React.ReactNode }> = ({ titulo, texto, children }) => (
   <>
     <div className="mb-5">
-      <h1 className="font-outfit text-[1.45rem] font-extrabold uppercase leading-tight tracking-tight text-negro">{titulo}</h1>
-      <p className="mt-0.5 text-[13.5px] text-neutral-500">{texto}</p>
+      <h1 className="font-outfit text-[1.45rem] font-extrabold uppercase leading-tight tracking-tight text-tinta">{titulo}</h1>
+      <p className="mt-0.5 text-[13.5px] text-tinta-suave">{texto}</p>
     </div>
     {children}
   </>
@@ -493,7 +509,7 @@ const EstadoGuardado: React.FC = () => {
   return <Etiqueta icono={<Check size={13} />} texto="Todo publicado" color="text-emerald-600" />;
 };
 
-const Etiqueta: React.FC<{ icono: React.ReactNode; texto: string; color?: string }> = ({ icono, texto, color = 'text-neutral-500' }) => (
+const Etiqueta: React.FC<{ icono: React.ReactNode; texto: string; color?: string }> = ({ icono, texto, color = 'text-tinta-suave' }) => (
   <span className={`hidden items-center gap-1.5 text-[12px] font-semibold md:flex ${color}`}>{icono}{texto}</span>
 );
 
@@ -521,9 +537,9 @@ const Ajustes: React.FC<{ onAviso: (t: string, tipo?: 'ok' | 'error' | 'info') =
 
   return (
     <div className="flex max-w-lg flex-col gap-5">
-      <section className="rounded-xl border border-black/10 bg-white p-5">
-        <h2 className="mb-1 text-[15px] font-bold text-negro">Cambiar la contraseña</h2>
-        <p className="mb-4 text-[13px] leading-snug text-neutral-500">
+      <section className="rounded-xl border border-borde bg-panel p-5">
+        <h2 className="mb-1 text-[15px] font-bold text-tinta">Cambiar la contraseña</h2>
+        <p className="mb-4 text-[13px] leading-snug text-tinta-suave">
           Si crees que alguien más la conoce, cámbiala aquí. Necesitas saber la actual.
         </p>
         <div className="flex flex-col gap-3">
@@ -546,11 +562,11 @@ const Ajustes: React.FC<{ onAviso: (t: string, tipo?: 'ok' | 'error' | 'info') =
         </div>
       </section>
 
-      <section className="rounded-xl border border-black/10 bg-white p-5">
-        <h2 className="mb-1 text-[15px] font-bold text-negro">Si algo se rompe</h2>
-        <p className="text-[13px] leading-relaxed text-neutral-500">
+      <section className="rounded-xl border border-borde bg-panel p-5">
+        <h2 className="mb-1 text-[15px] font-bold text-tinta">Si algo se rompe</h2>
+        <p className="text-[13px] leading-relaxed text-tinta-suave">
           Nada de lo que hagas aquí puede romper el sitio: solo cambias textos, fotos y colores dentro de los
-          límites del diseño. Si aun así algo no se ve bien, ve a <strong className="text-negro">Historial</strong> y
+          límites del diseño. Si aun así algo no se ve bien, ve a <strong className="text-tinta">Historial</strong> y
           recupera una versión anterior. Y si te quedas fuera del panel, quien desarrolló el sitio puede volver a
           darte acceso.
         </p>
@@ -590,7 +606,7 @@ const Recorrido: React.FC<{ onCerrar: () => void }> = ({ onCerrar }) => {
       onCerrar={onCerrar}
       pie={
         <>
-          <span className="mr-auto text-[12px] font-semibold text-neutral-400">{paso + 1} de {PASOS.length}</span>
+          <span className="mr-auto text-[12px] font-semibold text-tinta-tenue">{paso + 1} de {PASOS.length}</span>
           {paso > 0 && <Boton onClick={() => setPaso((p) => p - 1)}>Atrás</Boton>}
           <Boton tipo="principal" onClick={() => (ultimo ? onCerrar() : setPaso((p) => p + 1))}>
             {ultimo ? 'Empezar' : 'Siguiente'}
@@ -598,7 +614,7 @@ const Recorrido: React.FC<{ onCerrar: () => void }> = ({ onCerrar }) => {
         </>
       }
     >
-      <p className="text-[14px] leading-relaxed text-gris-oscuro">{PASOS[paso].texto}</p>
+      <p className="text-[14px] leading-relaxed text-tinta">{PASOS[paso].texto}</p>
     </Modal>
   );
 };

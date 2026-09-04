@@ -49,7 +49,7 @@ export const AdnOffcourtV3: React.FC = () => {
         {tarjetas.map((tarjeta, i) => {
           const k = `${K}.tarjetas.${i}`;
           return (
-            <div key={i} className="mvv-card-v3 group rounded-[32px] p-8 md:p-10 border border-black/5 dark:border-white/5 bg-white dark:bg-gris-oscuro hover:border-marca dark:hover:border-marca hover:-translate-y-2 transition-all duration-500 hover:shadow-[0_10px_40px_rgba(253,162,17,0.15)] relative overflow-hidden">
+            <div key={i} className="mvv-card-v3 group rounded-[32px] p-8 md:p-10 border border-black/5 dark:border-white/5 bg-white dark:bg-gris-oscuro hover:border-marca dark:hover:border-marca hover:-translate-y-2 transition-[transform,border-color,box-shadow] duration-500 hover:shadow-[0_10px_40px_rgba(253,162,17,0.15)] relative overflow-hidden">
               <div className="relative z-10">
                 <div data-oc={`${k}.icono`} className="w-14 h-14 bg-gris-claro dark:bg-negro group-hover:bg-marca dark:group-hover:bg-marca rounded-2xl flex items-center justify-center mb-8 transition-colors duration-500">
                   <Icono clave={tarjeta.icono} className="text-negro dark:text-white group-hover:text-negro transition-colors duration-500" size={28} />

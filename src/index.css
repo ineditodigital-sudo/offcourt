@@ -244,3 +244,94 @@ a[href^="tel:"] {
 .oc-rico a { color: var(--color-marca); }
 .oc-rico a:hover { text-decoration: underline; }
 .oc-rico blockquote { border-left: 4px solid var(--color-marca); padding-left: 1rem; font-style: italic; }
+
+/* ---------------------------------------------------------------------------
+   Interacción del sitio.
+
+   Curvas propias: las de CSS arrancan sin fuerza justo en el instante en que
+   se está mirando, y a igual duración se perciben más lentas. Son las mismas
+   tres que usa el panel de administración, para que la herramienta y el sitio
+   se muevan con el mismo pulso.
+--------------------------------------------------------------------------- */
+:root {
+  --salida: cubic-bezier(0.16, 1, 0.3, 1);
+  --recorrido: cubic-bezier(0.65, 0, 0.35, 1);
+  --presion: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Lo que dibuja el navegador también es parte del diseño. */
+::selection { background: color-mix(in srgb, var(--color-marca) 35%, transparent); color: #fff; }
+:root { accent-color: var(--color-marca); caret-color: var(--color-marca); }
+html:not(.dark) ::selection { color: var(--color-negro); }
+
+:where(a, button, [role="button"]):focus-visible {
+  outline: 2px solid var(--color-marca);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Acuse de pulsación. Un botón que no cede al pulsarlo deja la duda de si la
+   interfaz escuchó; es el detalle que más se nota sin que nadie sepa nombrarlo.
+   Solo en punteros de verdad para el hover: en táctil se queda pegado tras
+   tocar y el elemento parece encendido sin estarlo. */
+.oc-pulsable { transition: transform 130ms var(--presion); }
+.oc-pulsable:active { transform: scale(0.975); }
+
+/* ---------------------------------------------------------------------------
+   Entradas.
+
+   Antes se usaban las clases `animate-fade-in` y `animate-fade-in-up`, que
+   vienen del plugin tailwindcss-animate y este proyecto no tiene instalado:
+   no existían en el CSS compilado y el menú de móvil aparecía de golpe. Estas
+   sí existen, y ninguna arranca en scale(0) —nada del mundo real aparece de la
+   nada—.
+--------------------------------------------------------------------------- */
+@keyframes oc-entra-arriba {
+  from { opacity: 0; transform: translateY(-8px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes oc-entra-abajo {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes oc-entra-velo { from { opacity: 0; } to { opacity: 1; } }
+@keyframes oc-entra-caja {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* El menú de móvil cuelga del botón de arriba: baja desde ahí. */
+.oc-menu-movil { animation: oc-entra-arriba .22s var(--salida) both; }
+
+/* Los diálogos crecen desde su propio centro: no cuelgan de ningún disparador,
+   aparecen en medio de la pantalla. */
+.oc-velo-sitio { animation: oc-entra-velo .2s ease both; }
+.oc-caja-sitio { animation: oc-entra-caja .24s var(--salida) both; }
+/* La tarjeta del agente entra desde la esquina en la que vive su botón. */
+.oc-caja-esquina { animation: oc-entra-abajo .24s var(--salida) both; }
+
+/* El desplegable de «Soluciones» crece desde arriba, que es donde está el
+   enlace que lo abre, en vez de desde su centro. */
+.oc-desplegable-nav {
+  transform-origin: top center;
+  transition: opacity .18s var(--salida), transform .18s var(--salida), visibility .18s;
+  transform: translateY(-6px) scale(0.98);
+}
+.group:hover .oc-desplegable-nav,
+.group:focus-within .oc-desplegable-nav {
+  transform: none;
+}
+
+/* El hover que crece solo tiene sentido con un ratón: en táctil se dispara al
+   tocar y se queda encendido. */
+@media (hover: none) {
+  .oc-crece-hover { transform: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-menu-movil, .oc-caja-sitio, .oc-caja-esquina {
+    animation-name: oc-entra-velo;
+    animation-duration: .15s;
+  }
+  .oc-desplegable-nav { transition: opacity .15s ease, visibility .15s; transform: none; }
+}

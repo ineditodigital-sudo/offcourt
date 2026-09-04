@@ -46,11 +46,11 @@ export const NavbarV3: React.FC<NavbarV3Props> = ({ theme, toggleTheme }) => {
   const enlaceCls = 'hover:text-marca transition-colors text-gris-oscuro dark:text-gris-claro';
 
   return (
-    <nav className="fixed top-6 left-0 right-0 z-50 transition-all duration-300 px-4 md:px-8">
+    <nav className="fixed top-6 left-0 right-0 z-50 px-4 md:px-8">
       {/* El cristal esmerilado solo en escritorio: en móvil, un backdrop-blur en
           barra fija obliga a recomponer toda la pantalla en cada fotograma de
           scroll y es de las mayores causas de tirones. Ahí va casi opaco. */}
-      <div className={`max-w-7xl mx-auto rounded-[32px] border border-black/10 dark:border-white/10 bg-white/95 dark:bg-negro/95 md:bg-white/80 md:dark:bg-negro/80 md:backdrop-blur-xl px-6 py-4 flex items-center justify-between transition-all duration-300 ${scrolled ? 'shadow-[0_8px_32px_rgba(0,0,0,0.1)]' : ''}`}>
+      <div className={`max-w-7xl mx-auto rounded-[32px] border border-black/10 dark:border-white/10 bg-white/95 dark:bg-negro/95 md:bg-white/80 md:dark:bg-negro/80 md:backdrop-blur-xl px-6 py-4 flex items-center justify-between transition-shadow duration-300 ${scrolled ? 'shadow-[0_8px_32px_rgba(0,0,0,0.1)]' : ''}`}>
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3">
@@ -74,7 +74,7 @@ export const NavbarV3: React.FC<NavbarV3Props> = ({ theme, toggleTheme }) => {
               <Tx k={`${KN}.soluciones`} />
             </Link>
 
-            <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+            <div className="oc-desplegable-nav absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible">
               <div className="bg-white dark:bg-negro border border-black/10 dark:border-white/10 rounded-2xl shadow-xl overflow-hidden min-w-[280px] py-2 flex flex-col font-sarabun text-sm font-semibold normal-case tracking-normal">
                 {verticales.map(({ item, indice }) => (
                   <Link key={item.id} to={`/servicios/${item.id}`} className="px-6 py-3 hover:bg-black/5 dark:hover:bg-white/5 text-gris-oscuro dark:text-gris-claro transition-colors">
@@ -131,7 +131,7 @@ export const NavbarV3: React.FC<NavbarV3Props> = ({ theme, toggleTheme }) => {
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className="md:hidden absolute top-24 left-4 right-4 border border-black/5 dark:border-white/10 bg-white/95 dark:bg-negro/95 backdrop-blur-xl rounded-[24px] p-3 shadow-2xl flex flex-col font-sarabun animate-fade-in text-negro dark:text-white">
+        <div className="md:hidden absolute top-24 left-4 right-4 border border-black/5 dark:border-white/10 bg-white/95 dark:bg-negro/95 backdrop-blur-xl rounded-[24px] p-3 shadow-2xl flex flex-col font-sarabun oc-menu-movil text-negro dark:text-white">
           <Link to="/" onClick={(e) => handleSectionClick(e, 'hero')} className="px-4 py-3.5 text-sm font-bold uppercase tracking-wider rounded-xl hover:bg-black/5 dark:hover:bg-white/5 hover:text-marca transition-colors">{contenido.global.navegacion.inicio}</Link>
           <Link to="/nosotros" onClick={() => setIsOpen(false)} className="px-4 py-3.5 text-sm font-bold uppercase tracking-wider rounded-xl hover:bg-black/5 dark:hover:bg-white/5 hover:text-marca transition-colors">{contenido.global.navegacion.nosotros}</Link>
 

@@ -179,8 +179,8 @@ export const Recorte: React.FC<Props> = ({ archivo, proporcion, onCancelar, onLi
         </div>
 
         <div className="flex flex-wrap items-center gap-4">
-          <label className="flex flex-1 items-center gap-3 text-[13px] font-bold text-gris-oscuro">
-            <ZoomIn size={16} className="shrink-0 text-neutral-400" />
+          <label className="flex flex-1 items-center gap-3 text-[13px] font-bold text-tinta">
+            <ZoomIn size={16} className="shrink-0 text-tinta-tenue" />
             <input
               type="range"
               min={1}
@@ -188,7 +188,7 @@ export const Recorte: React.FC<Props> = ({ archivo, proporcion, onCancelar, onLi
               step={0.01}
               value={zoom}
               onChange={(e) => setZoom(Number(e.target.value))}
-              className="h-1.5 flex-1 cursor-pointer appearance-none rounded-full bg-black/10 accent-marca"
+              className="h-1.5 flex-1 cursor-pointer appearance-none rounded-full bg-borde accent-marca"
             />
           </label>
           <Boton tamano="sm" onClick={() => { setGiro((g) => (g + 90) % 360); setPos({ x: 0, y: 0 }); }}>
@@ -199,7 +199,7 @@ export const Recorte: React.FC<Props> = ({ archivo, proporcion, onCancelar, onLi
           </Boton>
         </div>
 
-        <p className="text-[12px] leading-snug text-neutral-500">
+        <p className="text-[12px] leading-snug text-tinta-suave">
           {girado ? 'La imagen está girada. ' : ''}
           Se guardará optimizada para que la página cargue rápido, sin que se note en la calidad.
         </p>

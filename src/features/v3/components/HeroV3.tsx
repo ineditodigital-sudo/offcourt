@@ -147,13 +147,13 @@ export const HeroV3: React.FC = () => {
           >
             <Btn
               k={`${K}.botonWhatsapp`}
-              className="bg-negro dark:bg-white hover:bg-marca dark:hover:bg-marca hover:text-negro text-white dark:text-negro font-bold uppercase tracking-widest text-xs px-10 py-5 rounded-[20px] flex items-center justify-center gap-2 transition-colors duration-300 border border-negro dark:border-white cursor-pointer"
+              className="oc-pulsable bg-negro dark:bg-white hover:bg-marca dark:hover:bg-marca hover:text-negro text-white dark:text-negro font-bold uppercase tracking-widest text-xs px-10 py-5 rounded-[20px] flex items-center justify-center gap-2 transition-colors duration-200 border border-negro dark:border-white cursor-pointer"
             >
               <WhatsAppIcon size={18} />
             </Btn>
             <Btn
               k={`${K}.botonServicios`}
-              className="border border-black/20 dark:border-white/30 hover:border-marca dark:hover:border-marca hover:text-marca text-negro dark:text-white font-bold uppercase tracking-widest text-xs px-10 py-5 rounded-[20px] inline-flex items-center justify-center transition-colors duration-300 cursor-pointer bg-white/40 dark:bg-negro/40 backdrop-blur-sm"
+              className="oc-pulsable border border-black/20 dark:border-white/30 hover:border-marca dark:hover:border-marca hover:text-marca text-negro dark:text-white font-bold uppercase tracking-widest text-xs px-10 py-5 rounded-[20px] inline-flex items-center justify-center transition-colors duration-200 cursor-pointer bg-white/40 dark:bg-negro/40 backdrop-blur-sm"
             />
           </div>
         </div>

@@ -99,8 +99,8 @@ export const EditorTexto: React.FC<Props> = ({ valor, onCambio }) => {
   };
 
   return (
-    <div className="rounded-xl border border-black/10 bg-white focus-within:border-marca focus-within:ring-4 focus-within:ring-marca/15">
-      <div className="flex flex-wrap items-center gap-0.5 border-b border-black/8 px-2 py-1.5">
+    <div className="rounded-xl border border-borde bg-panel focus-within:border-marca focus-within:ring-4 focus-within:ring-marca/15">
+      <div className="flex flex-wrap items-center gap-0.5 border-b border-borde px-2 py-1.5">
         {BOTONES.map(({ comando, valor: v, Icono, titulo }) => (
           <button
             key={titulo}
@@ -109,7 +109,7 @@ export const EditorTexto: React.FC<Props> = ({ valor, onCambio }) => {
             aria-label={titulo}
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => ejecutar(comando, v)}
-            className="oc-pulsable rounded-lg p-1.5 text-gris-oscuro hover:bg-black/[0.07]"
+            className="oc-pulsable rounded-lg p-1.5 text-tinta hover:bg-tinta/[0.07]"
           >
             <Icono size={16} />
           </button>
@@ -120,18 +120,18 @@ export const EditorTexto: React.FC<Props> = ({ valor, onCambio }) => {
           aria-label="Enlace"
           onMouseDown={(e) => e.preventDefault()}
           onClick={abrirEnlace}
-          className="oc-pulsable rounded-lg p-1.5 text-gris-oscuro hover:bg-black/[0.07]"
+          className="oc-pulsable rounded-lg p-1.5 text-tinta hover:bg-tinta/[0.07]"
         >
           <Link2 size={16} />
         </button>
-        <span className="mx-1 h-4 w-px bg-black/10" />
+        <span className="mx-1 h-4 w-px bg-borde" />
         <button
           type="button"
           title="Quitar formato"
           aria-label="Quitar formato"
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => ejecutar('removeFormat')}
-          className="oc-pulsable rounded-lg p-1.5 text-gris-oscuro hover:bg-black/[0.07]"
+          className="oc-pulsable rounded-lg p-1.5 text-tinta hover:bg-tinta/[0.07]"
         >
           <Undo2 size={16} />
         </button>
@@ -144,11 +144,11 @@ export const EditorTexto: React.FC<Props> = ({ valor, onCambio }) => {
         onInput={emitir}
         onBlur={emitir}
         onPaste={alPegar}
-        className="oc-editor-html oc-scroll max-h-[26rem] overflow-y-auto px-3.5 py-3 text-[14px] leading-relaxed text-negro"
+        className="oc-editor-html oc-scroll max-h-[26rem] overflow-y-auto px-3.5 py-3 text-[14px] leading-relaxed text-tinta"
       />
 
       {enlaceAbierto && (
-        <div className="border-t border-black/8 bg-[#fafaf9] px-3 py-2.5">
+        <div className="border-t border-borde bg-panel-alto px-3 py-2.5">
           <label className="oc-etiqueta">Dirección del enlace</label>
           <div className="flex gap-2">
             <input
@@ -159,10 +159,10 @@ export const EditorTexto: React.FC<Props> = ({ valor, onCambio }) => {
               placeholder="https://ejemplo.com  ·  correo@dominio.com  ·  /nosotros"
               className="oc-campo"
             />
-            <button type="button" onClick={aplicarEnlace} className="oc-pulsable shrink-0 rounded-xl bg-marca px-4 text-sm font-bold text-negro hover:bg-marca-oscuro">
+            <button type="button" onClick={aplicarEnlace} className="oc-pulsable shrink-0 rounded-xl bg-marca px-4 text-sm font-bold text-tinta hover:bg-marca-oscuro">
               Poner
             </button>
-            <button type="button" onClick={() => setEnlaceAbierto(false)} className="oc-pulsable shrink-0 rounded-xl px-3 text-sm font-semibold text-neutral-500 hover:bg-black/5">
+            <button type="button" onClick={() => setEnlaceAbierto(false)} className="oc-pulsable shrink-0 rounded-xl px-3 text-sm font-semibold text-tinta-suave hover:bg-tinta/5">
               Cancelar
             </button>
           </div>

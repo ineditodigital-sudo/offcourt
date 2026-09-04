@@ -53,12 +53,12 @@ export const PanelEstilo: React.FC<{ clave: string }> = ({ clave }) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-[13px] font-bold text-gris-oscuro">Aspecto de este elemento</p>
+        <p className="text-[13px] font-bold text-tinta">Aspecto de este elemento</p>
         {hayAlgo && (
           <button
             type="button"
             onClick={restablecer}
-            className="oc-pulsable flex items-center gap-1 text-[11.5px] font-semibold text-neutral-400 hover:text-marca"
+            className="oc-pulsable flex items-center gap-1 text-[11.5px] font-semibold text-tinta-tenue hover:text-marca"
           >
             <RotateCcw size={11} /> Restablecer
           </button>
@@ -67,18 +67,18 @@ export const PanelEstilo: React.FC<{ clave: string }> = ({ clave }) => {
 
       {/* Tamaño */}
       <div>
-        <label className="mb-1.5 block text-[11.5px] font-bold uppercase tracking-wide text-neutral-400">Tamaño</label>
+        <label className="mb-1.5 block text-[11.5px] font-bold uppercase tracking-wide text-tinta-tenue">Tamaño</label>
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => cambiar({ tamano: Math.max(-2, paso - 1) || undefined })}
             disabled={paso <= -2}
             title="Más pequeño"
-            className="oc-pulsable flex h-9 w-9 items-center justify-center rounded-lg border border-black/10 bg-white text-negro hover:bg-black/[0.04] disabled:opacity-30"
+            className="oc-pulsable flex h-9 w-9 items-center justify-center rounded-lg border border-borde bg-panel text-tinta hover:bg-tinta/[0.04] disabled:opacity-30"
           >
             <Minus size={15} />
           </button>
-          <span className="min-w-[5.5rem] text-center text-[13px] font-bold text-negro">
+          <span className="min-w-[5.5rem] text-center text-[13px] font-bold text-tinta">
             {paso === 0 ? 'Original' : paso > 0 ? `+${paso} más grande` : `${paso} más chico`}
           </span>
           <button
@@ -86,7 +86,7 @@ export const PanelEstilo: React.FC<{ clave: string }> = ({ clave }) => {
             onClick={() => cambiar({ tamano: Math.min(2, paso + 1) || undefined })}
             disabled={paso >= 2}
             title="Más grande"
-            className="oc-pulsable flex h-9 w-9 items-center justify-center rounded-lg border border-black/10 bg-white text-negro hover:bg-black/[0.04] disabled:opacity-30"
+            className="oc-pulsable flex h-9 w-9 items-center justify-center rounded-lg border border-borde bg-panel text-tinta hover:bg-tinta/[0.04] disabled:opacity-30"
           >
             <Plus size={15} />
           </button>
@@ -96,7 +96,7 @@ export const PanelEstilo: React.FC<{ clave: string }> = ({ clave }) => {
 
       {/* Grosor */}
       <div>
-        <label className="mb-1.5 block text-[11.5px] font-bold uppercase tracking-wide text-neutral-400">Grosor de la letra</label>
+        <label className="mb-1.5 block text-[11.5px] font-bold uppercase tracking-wide text-tinta-tenue">Grosor de la letra</label>
         <div className="flex flex-wrap gap-1.5">
           <Pastilla activo={!estilo.peso} onClick={() => cambiar({ peso: undefined })}>Automático</Pastilla>
           {PESOS.map((p) => (
@@ -107,7 +107,7 @@ export const PanelEstilo: React.FC<{ clave: string }> = ({ clave }) => {
 
       {/* Tipografía y cursiva */}
       <div>
-        <label className="mb-1.5 block text-[11.5px] font-bold uppercase tracking-wide text-neutral-400">Tipografía</label>
+        <label className="mb-1.5 block text-[11.5px] font-bold uppercase tracking-wide text-tinta-tenue">Tipografía</label>
         <div className="flex flex-wrap gap-1.5">
           <Pastilla activo={!estilo.fuente} onClick={() => cambiar({ fuente: undefined })}>Automática</Pastilla>
           <Pastilla activo={estilo.fuente === 'outfit'} onClick={() => cambiar({ fuente: 'outfit' })}>Títulos</Pastilla>
@@ -120,19 +120,19 @@ export const PanelEstilo: React.FC<{ clave: string }> = ({ clave }) => {
 
       {/* Color del texto */}
       <div>
-        <label className="mb-1.5 block text-[11.5px] font-bold uppercase tracking-wide text-neutral-400">Color del texto</label>
+        <label className="mb-1.5 block text-[11.5px] font-bold uppercase tracking-wide text-tinta-tenue">Color del texto</label>
         <Paleta valor={estilo.color} onCambio={(c) => cambiar({ color: c })} />
       </div>
 
       {/* Fondo */}
       <div>
-        <label className="mb-1.5 block text-[11.5px] font-bold uppercase tracking-wide text-neutral-400">Color de fondo</label>
+        <label className="mb-1.5 block text-[11.5px] font-bold uppercase tracking-wide text-tinta-tenue">Color de fondo</label>
         <Paleta valor={estilo.fondo} onCambio={(c) => cambiar({ fondo: c })} />
       </div>
 
       {/* Alineación */}
       <div>
-        <label className="mb-1.5 block text-[11.5px] font-bold uppercase tracking-wide text-neutral-400">Alineación</label>
+        <label className="mb-1.5 block text-[11.5px] font-bold uppercase tracking-wide text-tinta-tenue">Alineación</label>
         <div className="flex gap-1.5">
           <Pastilla activo={!estilo.alineacion} onClick={() => cambiar({ alineacion: undefined })}>Automática</Pastilla>
           {([['left', AlignLeft, 'Izquierda'], ['center', AlignCenter, 'Centrado'], ['right', AlignRight, 'Derecha']] as const).map(([v, Ico, t]) => (
@@ -142,7 +142,7 @@ export const PanelEstilo: React.FC<{ clave: string }> = ({ clave }) => {
               title={t}
               onClick={() => cambiar({ alineacion: v })}
               className={`oc-pulsable flex h-8 w-9 items-center justify-center rounded-lg border ${
-                estilo.alineacion === v ? 'border-marca bg-marca text-negro' : 'border-black/10 bg-white text-neutral-500 hover:bg-black/[0.04]'
+                estilo.alineacion === v ? 'border-marca bg-marca text-tinta' : 'border-borde bg-panel text-tinta-suave hover:bg-tinta/[0.04]'
               }`}
             >
               <Ico size={14} />
@@ -153,7 +153,7 @@ export const PanelEstilo: React.FC<{ clave: string }> = ({ clave }) => {
 
       {/* Espacio inferior */}
       <div>
-        <label className="mb-1.5 block text-[11.5px] font-bold uppercase tracking-wide text-neutral-400">Espacio debajo</label>
+        <label className="mb-1.5 block text-[11.5px] font-bold uppercase tracking-wide text-tinta-tenue">Espacio debajo</label>
         <div className="flex gap-1.5">
           <Pastilla activo={!estilo.espacio} onClick={() => cambiar({ espacio: undefined })}>Automático</Pastilla>
           <Pastilla activo={estilo.espacio === 'menos'} onClick={() => cambiar({ espacio: 'menos' })}>Menos</Pastilla>
@@ -169,7 +169,7 @@ const Pastilla: React.FC<{ activo: boolean; onClick: () => void; children: React
     type="button"
     onClick={onClick}
     className={`oc-pulsable rounded-lg border px-2.5 py-1.5 text-[12px] font-bold ${
-      activo ? 'border-marca bg-marca text-negro' : 'border-black/10 bg-white text-gris-oscuro hover:bg-black/[0.04]'
+      activo ? 'border-marca bg-marca text-tinta' : 'border-borde bg-panel text-tinta hover:bg-tinta/[0.04]'
     }`}
   >
     {children}
@@ -183,7 +183,7 @@ const Paleta: React.FC<{ valor?: string; onCambio: (c: string | undefined) => vo
       onClick={() => onCambio(undefined)}
       title="Como lo dejó el diseño"
       className={`oc-pulsable rounded-lg border px-2.5 py-1.5 text-[12px] font-bold ${
-        !valor ? 'border-marca bg-marca text-negro' : 'border-black/10 bg-white text-gris-oscuro hover:bg-black/[0.04]'
+        !valor ? 'border-marca bg-marca text-tinta' : 'border-borde bg-panel text-tinta hover:bg-tinta/[0.04]'
       }`}
     >
       Automático
@@ -195,12 +195,12 @@ const Paleta: React.FC<{ valor?: string; onCambio: (c: string | undefined) => vo
         title={c.etiqueta}
         onClick={() => onCambio(c.valor)}
         className={`h-8 w-8 rounded-lg border transition-transform hover:scale-110 ${
-          valor?.toLowerCase() === c.valor ? 'border-marca ring-2 ring-marca/40' : 'border-black/15'
+          valor?.toLowerCase() === c.valor ? 'border-marca ring-2 ring-marca/40' : 'border-borde-fuerte'
         }`}
         style={{ background: c.valor }}
       />
     ))}
-    <label className="relative h-8 w-8 shrink-0 cursor-pointer overflow-hidden rounded-lg border border-black/15" title="Otro color">
+    <label className="relative h-8 w-8 shrink-0 cursor-pointer overflow-hidden rounded-lg border border-borde-fuerte" title="Otro color">
       <span className="pointer-events-none absolute inset-0 bg-[conic-gradient(red,yellow,lime,aqua,blue,magenta,red)]" />
       <input
         type="color"

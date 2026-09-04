@@ -67,7 +67,7 @@ export const FilosofiaV3: React.FC = () => {
           {items.map((item, index) => (
             <div
               key={index}
-              className="filosofia-card group relative rounded-[32px] overflow-hidden flex flex-col justify-end p-6 md:p-8 min-h-[400px] lg:min-h-full cursor-pointer hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+              className="filosofia-card group relative rounded-[32px] overflow-hidden flex flex-col justify-end p-6 md:p-8 min-h-[400px] lg:min-h-full cursor-pointer hover:shadow-2xl transition-[transform,box-shadow] duration-500 hover:-translate-y-2"
             >
               {/* Background Image */}
               <div

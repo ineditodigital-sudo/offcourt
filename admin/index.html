@@ -7,11 +7,19 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Panel · Offcourt Sports Group</title>
     <script>
-      // El panel entra siempre en claro: es una herramienta, no el sitio.
-      document.documentElement.classList.remove('dark');
+      // El tema se aplica ANTES de que React monte: si esperara al primer
+      // render, se vería un fogonazo claro antes de pasar a oscuro. Sigue al
+      // sistema mientras no haya una elección guardada (ver src/admin/tema.ts).
+      (function () {
+        try {
+          var g = localStorage.getItem('oc-tema-panel');
+          var oscuro = g === 'oscuro' || (!g && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.classList.toggle('dark', oscuro);
+        } catch (e) {}
+      })();
     </script>
   </head>
-  <body class="bg-[#f4f4f2] text-[#1b1b1b]">
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/admin/main.tsx"></script>
   </body>

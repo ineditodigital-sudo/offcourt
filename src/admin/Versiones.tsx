@@ -43,7 +43,7 @@ export const Versiones: React.FC<{ onAviso: (t: string, tipo?: 'ok' | 'error' | 
       texto: (
         <>
           <p className="mb-3">Se traerá el contenido de <strong>{formatoFecha(fecha)}</strong> para que lo revises.</p>
-          <p className="text-[13px] text-neutral-500">
+          <p className="text-[13px] text-tinta-suave">
             El sitio no cambia todavía: quedará como borrador y solo se verá cuando pulses «Publicar».
             Lo que tengas ahora sin publicar se perderá.
           </p>
@@ -73,7 +73,7 @@ export const Versiones: React.FC<{ onAviso: (t: string, tipo?: 'ok' | 'error' | 
         texto: (
           <>
             <p className="mb-3">Se cargará el contenido del archivo como borrador.</p>
-            <p className="text-[13px] text-neutral-500">El sitio no cambia hasta que publiques. Lo que tengas sin publicar se perderá.</p>
+            <p className="text-[13px] text-tinta-suave">El sitio no cambia hasta que publiques. Lo que tengas sin publicar se perderá.</p>
           </>
         ),
       });
@@ -90,20 +90,20 @@ export const Versiones: React.FC<{ onAviso: (t: string, tipo?: 'ok' | 'error' | 
     <div className="flex flex-col gap-5">
       {error && <Aviso tipo="error">{error}</Aviso>}
 
-      <section className="rounded-xl border border-black/10 bg-white p-4">
-        <h3 className="mb-1 text-[14px] font-bold text-negro">Respaldo completo</h3>
-        <p className="mb-3.5 text-[13px] leading-snug text-neutral-500">
+      <section className="rounded-xl border border-borde bg-panel p-4">
+        <h3 className="mb-1 text-[14px] font-bold text-tinta">Respaldo completo</h3>
+        <p className="mb-3.5 text-[13px] leading-snug text-tinta-suave">
           Descarga un archivo con todos los textos del sitio. Guárdalo donde quieras; si algún día hace falta,
           se puede volver a cargar desde aquí.
         </p>
         <div className="flex flex-wrap gap-2">
           <a
             href={api.urlExportar()}
-            className="oc-pulsable inline-flex items-center gap-2 rounded-xl bg-marca px-4 py-2.5 text-sm font-bold text-negro hover:bg-marca-oscuro"
+            className="oc-pulsable inline-flex items-center gap-2 rounded-xl bg-marca px-4 py-2.5 text-sm font-bold text-tinta hover:bg-marca-oscuro"
           >
             <Download size={15} /> Descargar respaldo
           </a>
-          <label className="oc-pulsable inline-flex cursor-pointer items-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-bold text-negro hover:bg-black/[0.04]">
+          <label className="oc-pulsable inline-flex cursor-pointer items-center gap-2 rounded-xl border border-borde bg-panel px-4 py-2.5 text-sm font-bold text-tinta hover:bg-tinta/[0.04]">
             <Upload size={15} /> Cargar un respaldo
             <input
               type="file"
@@ -116,26 +116,26 @@ export const Versiones: React.FC<{ onAviso: (t: string, tipo?: 'ok' | 'error' | 
       </section>
 
       <section>
-        <h3 className="mb-1 flex items-center gap-2 text-[14px] font-bold text-negro">
-          <History size={15} className="text-neutral-400" /> Versiones anteriores
+        <h3 className="mb-1 flex items-center gap-2 text-[14px] font-bold text-tinta">
+          <History size={15} className="text-tinta-tenue" /> Versiones anteriores
         </h3>
-        <p className="mb-3 text-[13px] leading-snug text-neutral-500">
+        <p className="mb-3 text-[13px] leading-snug text-tinta-suave">
           Cada vez que publicas, la versión anterior se guarda aquí. Se conservan las 30 últimas.
         </p>
 
         {cargando ? (
           <Cargando texto="Cargando el historial…" />
         ) : items.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-black/12 px-4 py-10 text-center text-[13px] text-neutral-500">
+          <div className="rounded-xl border border-dashed border-borde px-4 py-10 text-center text-[13px] text-tinta-suave">
             Todavía no hay versiones anteriores. Aparecerán en cuanto publiques por segunda vez.
           </div>
         ) : (
           <ul className="flex flex-col gap-2">
             {items.map((v) => (
-              <li key={v.id} className="flex items-center justify-between gap-3 rounded-xl border border-black/10 bg-white px-4 py-3">
+              <li key={v.id} className="flex items-center justify-between gap-3 rounded-xl border border-borde bg-panel px-4 py-3">
                 <div className="min-w-0">
-                  <p className="text-[13.5px] font-semibold text-negro">{formatoFecha(v.fecha)}</p>
-                  <p className="text-[12px] text-neutral-400">{(v.tamano / 1024).toFixed(0)} KB</p>
+                  <p className="text-[13.5px] font-semibold text-tinta">{formatoFecha(v.fecha)}</p>
+                  <p className="text-[12px] text-tinta-tenue">{(v.tamano / 1024).toFixed(0)} KB</p>
                 </div>
                 <Boton tamano="sm" onClick={() => void restaurar(v.id, v.fecha)} cargando={trabajando === v.id}>
                   <RotateCcw size={13} /> Recuperar

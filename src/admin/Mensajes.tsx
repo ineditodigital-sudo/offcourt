@@ -73,14 +73,14 @@ export const Mensajes: React.FC<{ onContador?: (n: number) => void }> = ({ onCon
           </Boton>
         </div>
         {items.length > 0 && (
-          <a href={api.urlCsv()} className="oc-pulsable inline-flex items-center gap-2 rounded-xl border border-black/10 bg-white px-3 py-1.5 text-[13px] font-bold text-negro hover:bg-black/[0.04]">
+          <a href={api.urlCsv()} className="oc-pulsable inline-flex items-center gap-2 rounded-xl border border-borde bg-panel px-3 py-1.5 text-[13px] font-bold text-tinta hover:bg-tinta/[0.04]">
             <Download size={14} /> Descargar en Excel
           </a>
         )}
       </div>
 
       {lista.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-black/12 py-16 text-center text-neutral-500">
+        <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-borde py-16 text-center text-tinta-suave">
           <Inbox size={30} />
           <p className="text-sm font-semibold">{filtro === 'nuevos' ? 'No hay mensajes sin leer.' : 'Todavía no ha llegado ningún mensaje.'}</p>
           <p className="max-w-sm text-[13px] leading-snug">
@@ -90,27 +90,27 @@ export const Mensajes: React.FC<{ onContador?: (n: number) => void }> = ({ onCon
       ) : (
         <div className="flex flex-col gap-2.5">
           {lista.map((m) => (
-            <article key={m.id} className={`rounded-xl border bg-white p-4 ${m.leido ? 'border-black/8' : 'border-marca/50 bg-marca/[0.04]'}`}>
+            <article key={m.id} className={`rounded-xl border bg-panel p-4 ${m.leido ? 'border-borde' : 'border-marca/50 bg-marca/[0.04]'}`}>
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="flex items-center gap-2 text-[15px] font-bold text-negro">
+                  <p className="flex items-center gap-2 text-[15px] font-bold text-tinta">
                     {!m.leido && <span className="h-2 w-2 shrink-0 rounded-full bg-marca" aria-label="Sin leer" />}
                     {m.nombre || 'Sin nombre'}
                   </p>
-                  <p className="mt-0.5 text-[12.5px] text-neutral-500">{formatoFecha(m.fecha)}</p>
+                  <p className="mt-0.5 text-[12.5px] text-tinta-suave">{formatoFecha(m.fecha)}</p>
                 </div>
                 <div className="flex shrink-0 gap-1">
                   <button
                     onClick={() => void marcar(m, !m.leido)}
                     title={m.leido ? 'Marcar como sin leer' : 'Marcar como leído'}
-                    className="oc-pulsable rounded-lg p-2 text-neutral-400 hover:bg-black/5 hover:text-negro"
+                    className="oc-pulsable rounded-lg p-2 text-tinta-tenue hover:bg-tinta/5 hover:text-tinta"
                   >
                     {m.leido ? <Mail size={15} /> : <MailOpen size={15} />}
                   </button>
                   <button
                     onClick={() => void eliminar(m)}
                     title="Eliminar"
-                    className="oc-pulsable rounded-lg p-2 text-neutral-400 hover:bg-red-50 hover:text-red-600"
+                    className="oc-pulsable rounded-lg p-2 text-tinta-tenue hover:bg-red-50 hover:text-red-600"
                   >
                     <Trash2 size={15} />
                   </button>
@@ -119,18 +119,18 @@ export const Mensajes: React.FC<{ onContador?: (n: number) => void }> = ({ onCon
 
               <div className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 text-[13px]">
                 {m.email && (
-                  <a href={`mailto:${m.email}`} className="inline-flex items-center gap-1.5 font-semibold text-negro hover:text-marca">
+                  <a href={`mailto:${m.email}`} className="inline-flex items-center gap-1.5 font-semibold text-tinta hover:text-marca">
                     <Mail size={13} /> {m.email}
                   </a>
                 )}
                 {m.telefono && (
-                  <a href={`tel:${m.telefono.replace(/[^\d+]/g, '')}`} className="inline-flex items-center gap-1.5 font-semibold text-negro hover:text-marca">
+                  <a href={`tel:${m.telefono.replace(/[^\d+]/g, '')}`} className="inline-flex items-center gap-1.5 font-semibold text-tinta hover:text-marca">
                     <Phone size={13} /> {m.telefono}
                   </a>
                 )}
               </div>
 
-              <p className="mt-3 whitespace-pre-line rounded-lg bg-black/[0.03] px-3.5 py-3 text-[13.5px] leading-relaxed text-gris-oscuro">
+              <p className="mt-3 whitespace-pre-line rounded-lg bg-tinta/[0.03] px-3.5 py-3 text-[13.5px] leading-relaxed text-tinta">
                 {m.mensaje}
               </p>
             </article>

@@ -19,9 +19,9 @@ export const AiChatButton: React.FC = () => {
           className="fixed inset-0 z-[100] flex items-end md:items-center justify-center md:justify-end p-4 md:p-8"
           onClick={() => setOpen(false)}
         >
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+          <div className="oc-velo-sitio absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
           <div
-            className="relative z-10 w-full max-w-sm bg-negro border border-white/10 rounded-[28px] p-7 shadow-2xl mb-24 md:mb-8"
+            className="oc-caja-esquina relative z-10 w-full max-w-sm bg-negro border border-white/10 rounded-[28px] p-7 shadow-2xl mb-24 md:mb-8"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -57,7 +57,7 @@ export const AiChatButton: React.FC = () => {
         onClick={() => setOpen(true)}
         aria-label="Agente IA de Offcourt (Próximamente)"
         {...marcar(`${K}.visible`)}
-        className="fixed bottom-5 right-5 md:bottom-6 md:right-6 z-[90] w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-300"
+        className="oc-pulsable oc-crece-hover fixed bottom-5 right-5 md:bottom-6 md:right-6 z-[90] w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center cursor-pointer hover:scale-105"
       >
         <span className="oc-ai-ring"></span>
         <span className="relative z-10 w-full h-full rounded-full bg-negro border border-marca/50 flex flex-col items-center justify-center shadow-[0_8px_30px_rgba(253,162,17,0.4)]">

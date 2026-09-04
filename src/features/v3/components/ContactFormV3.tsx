@@ -193,7 +193,7 @@ export const ContactFormV3: React.FC = () => {
                   type="submit"
                   disabled={status === 'sending'}
                   {...marcar(`${K}.botonEnviar`)}
-                  className="w-full bg-marca hover:bg-marca-oscuro disabled:opacity-60 text-negro font-sarabun font-bold uppercase tracking-widest text-sm px-10 py-5 rounded-[20px] transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:-translate-y-0.5 cursor-pointer"
+                  className="oc-pulsable w-full bg-marca hover:bg-marca-oscuro disabled:opacity-60 text-negro font-sarabun font-bold uppercase tracking-widest text-sm px-10 py-5 rounded-[20px] transition-colors duration-200 flex items-center justify-center gap-3 shadow-lg cursor-pointer"
                 >
                   <Send size={16} />
                   {status === 'sending' ? 'Enviando…' : <Tx k={`${K}.botonEnviar`} sel={`${K}.botonEnviar`} as="span" />}

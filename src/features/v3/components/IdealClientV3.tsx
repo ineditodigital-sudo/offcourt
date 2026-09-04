@@ -82,12 +82,12 @@ export const IdealClientV3: React.FC = () => {
             return (
               <div
                 key={idx}
-                className={`bento-card group relative overflow-hidden rounded-2xl bg-[#111111] border border-white/10 hover:border-marca/50 transition-all duration-500 flex flex-col justify-end ${disp.movil} ${disp.escritorio}`}
+                className={`bento-card group relative overflow-hidden rounded-2xl bg-[#111111] border border-white/10 hover:border-marca/50 transition-colors duration-500 flex flex-col justify-end ${disp.movil} ${disp.escritorio}`}
               >
                 {/* Background image */}
                 <div
                   {...marcar(`${k}.imagen`)}
-                  className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 group-hover:scale-105 transition-all duration-700"
+                  className="oc-crece-hover absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 group-hover:scale-105 transition-[opacity,transform] duration-700"
                   style={{ backgroundImage: `url(${item.imagen.src})` }}
                 />
                 {/* Gradient overlay */}
@@ -99,7 +99,7 @@ export const IdealClientV3: React.FC = () => {
                     <Icono clave={item.icono} size={15} className="text-marca" />
                   </div>
                   <Tx k={`${k}.titulo`} as="h3" className="font-outfit font-extrabold text-sm sm:text-base md:text-[15px] uppercase text-white leading-tight tracking-tight" />
-                  <div className="overflow-hidden max-h-0 group-hover:max-h-16 transition-all duration-500 ease-in-out">
+                  <div className="overflow-hidden max-h-0 group-hover:max-h-16 transition-[max-height] duration-500 ease-out">
                     <Tx k={`${k}.texto`} as="p" className="font-sarabun text-xs text-white/50 mt-1.5 leading-snug" />
                   </div>
                 </div>

@@ -107,7 +107,7 @@ export const ProjectsScrollV3: React.FC = () => {
               <div
                 key={item.id}
                 onClick={() => navigate(`/servicios/${item.id}`)}
-                className="v3-project-card group relative overflow-hidden rounded-[24px] cursor-pointer shadow-lg bg-negro flex-1 lg:hover:flex-[3] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] flex flex-col justify-end"
+                className="v3-project-card group relative overflow-hidden rounded-[24px] cursor-pointer shadow-lg bg-negro flex-1 lg:hover:flex-[3] transition-[flex-grow] duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] flex flex-col justify-end"
               >
                 <div className="absolute inset-0">
                   <div

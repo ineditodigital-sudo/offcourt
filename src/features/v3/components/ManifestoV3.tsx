@@ -82,7 +82,7 @@ export const ManifestoV3: React.FC = () => {
                       key={i}
                       href={p.archivo.src}
                       {...marcar(`${K}.presentaciones.${i}`)}
-                      className="border-2 border-marca text-marca hover:bg-marca hover:text-negro font-sarabun font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-[16px] inline-flex items-center justify-center gap-2 transition-all duration-300 shadow-md cursor-pointer"
+                      className="oc-pulsable border-2 border-marca text-marca hover:bg-marca hover:text-negro font-sarabun font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-[16px] inline-flex items-center justify-center gap-2 transition-colors duration-200 shadow-md cursor-pointer"
                     >
                       <Download size={16} /> <Tx k={`${K}.presentaciones.${i}.texto`} sel={`${K}.presentaciones.${i}`} as="span" />
                     </PdfLink>
@@ -114,7 +114,7 @@ export const ManifestoV3: React.FC = () => {
             >
               <span className="relative flex items-center justify-center">
                 <span className="absolute w-20 h-20 rounded-full bg-marca/40 animate-ping"></span>
-                <span className="relative w-20 h-20 rounded-full bg-marca flex items-center justify-center shadow-2xl hover:scale-110 transition-transform duration-300">
+                <span className="oc-crece-hover relative w-20 h-20 rounded-full bg-marca flex items-center justify-center shadow-2xl hover:scale-110 transition-transform duration-300">
                   <Play className="text-negro ml-1" size={32} fill="currentColor" />
                 </span>
               </span>
@@ -128,8 +128,8 @@ export const ManifestoV3: React.FC = () => {
       {/* Video Modal */}
       {videoOpen && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-4" onClick={() => setVideoOpen(false)}>
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
-          <div className="relative z-10 w-full max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div className="oc-velo-sitio absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+          <div className="oc-caja-sitio relative z-10 w-full max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setVideoOpen(false)} aria-label="Cerrar" className="absolute -top-10 right-0 text-white/80 hover:text-white z-20 cursor-pointer">
               <X size={28} />
             </button>

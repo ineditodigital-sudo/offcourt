@@ -32,25 +32,25 @@ const Grupo: React.FC<{ def: GrupoDef<Record<string, Def>>; ruta: string; nivel:
   if (nivel === 0) {
     return (
       <div className="flex flex-col gap-5">
-        {def.ayuda && <p className="text-[13px] leading-snug text-neutral-500">{def.ayuda}</p>}
+        {def.ayuda && <p className="text-[13px] leading-snug text-tinta-suave">{def.ayuda}</p>}
         {hijos.map(([clave, sub]) => <Nodo key={clave} def={sub} ruta={unir(ruta, clave)} nivel={nivel + 1} />)}
       </div>
     );
   }
 
   return (
-    <section className="overflow-hidden rounded-xl border border-black/10 bg-white">
+    <section className="overflow-hidden rounded-xl border border-borde bg-panel">
       <button
         type="button"
         onClick={() => setAbierto((v) => !v)}
-        className="oc-pulsable flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-black/[0.03]"
+        className="oc-pulsable flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-tinta/[0.03]"
       >
-        <span className="text-[14px] font-bold text-negro">{def.etiqueta}</span>
-        {abierto ? <ChevronUp size={16} className="shrink-0 text-neutral-400" /> : <ChevronDown size={16} className="shrink-0 text-neutral-400" />}
+        <span className="text-[14px] font-bold text-tinta">{def.etiqueta}</span>
+        {abierto ? <ChevronUp size={16} className="shrink-0 text-tinta-tenue" /> : <ChevronDown size={16} className="shrink-0 text-tinta-tenue" />}
       </button>
       {abierto && (
-        <div className="flex flex-col gap-4 border-t border-black/8 px-4 py-4">
-          {def.ayuda && <p className="-mt-1 text-[12.5px] leading-snug text-neutral-500">{def.ayuda}</p>}
+        <div className="flex flex-col gap-4 border-t border-borde px-4 py-4">
+          {def.ayuda && <p className="-mt-1 text-[12.5px] leading-snug text-tinta-suave">{def.ayuda}</p>}
           {hijos.map(([clave, sub]) => <Nodo key={clave} def={sub} ruta={unir(ruta, clave)} nivel={nivel + 1} />)}
         </div>
       )}
@@ -97,48 +97,48 @@ const Lista: React.FC<{ def: ListaDef<Record<string, Def>>; ruta: string; nivel:
   };
 
   return (
-    <section className="rounded-xl border border-black/10 bg-white">
+    <section className="rounded-xl border border-borde bg-panel">
       <div className="flex items-center justify-between gap-3 px-4 py-3">
         <div className="min-w-0">
-          <p className="text-[14px] font-bold text-negro">{def.etiqueta}</p>
-          {def.ayuda && <p className="mt-0.5 text-[12.5px] leading-snug text-neutral-500">{def.ayuda}</p>}
+          <p className="text-[14px] font-bold text-tinta">{def.etiqueta}</p>
+          {def.ayuda && <p className="mt-0.5 text-[12.5px] leading-snug text-tinta-suave">{def.ayuda}</p>}
         </div>
-        <span className="shrink-0 rounded-full bg-black/[0.06] px-2 py-0.5 text-[11px] font-bold text-neutral-600">{items.length}</span>
+        <span className="shrink-0 rounded-full bg-tinta/[0.06] px-2 py-0.5 text-[11px] font-bold text-tinta-suave">{items.length}</span>
       </div>
 
-      <div className="flex flex-col gap-2 border-t border-black/8 px-3 py-3">
+      <div className="flex flex-col gap-2 border-t border-borde px-3 py-3">
         {items.map((item, i) => {
           const titulo = String(item?.[def.campoTitulo] ?? '') || `${def.nombreItem} ${i + 1}`;
           const estaAbierto = abierto === i;
           return (
-            <div key={i} className="overflow-hidden rounded-lg border border-black/10 bg-[#fcfcfb]">
+            <div key={i} className="overflow-hidden rounded-lg border border-borde bg-panel-alto">
               <div className="flex items-center gap-1 px-2 py-1.5">
-                <GripVertical size={14} className="shrink-0 text-neutral-300" />
+                <GripVertical size={14} className="shrink-0 text-tinta-tenue" />
                 <button
                   type="button"
                   onClick={() => setAbierto(estaAbierto ? null : i)}
-                  className="oc-pulsable min-w-0 flex-1 truncate py-1 text-left text-[13.5px] font-semibold text-negro"
+                  className="oc-pulsable min-w-0 flex-1 truncate py-1 text-left text-[13.5px] font-semibold text-tinta"
                   title={titulo}
                 >
                   {titulo}
                 </button>
-                <button type="button" onClick={() => mover(i, -1)} disabled={i === 0} title="Subir" className="oc-pulsable rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro disabled:opacity-25">
+                <button type="button" onClick={() => mover(i, -1)} disabled={i === 0} title="Subir" className="oc-pulsable rounded p-1 text-tinta-tenue hover:bg-tinta/5 hover:text-tinta disabled:opacity-25">
                   <ChevronUp size={14} />
                 </button>
-                <button type="button" onClick={() => mover(i, 1)} disabled={i === items.length - 1} title="Bajar" className="oc-pulsable rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro disabled:opacity-25">
+                <button type="button" onClick={() => mover(i, 1)} disabled={i === items.length - 1} title="Bajar" className="oc-pulsable rounded p-1 text-tinta-tenue hover:bg-tinta/5 hover:text-tinta disabled:opacity-25">
                   <ChevronDown size={14} />
                 </button>
                 {def.agregar && (
-                  <button type="button" onClick={() => void quitar(i)} title={`Eliminar ${def.nombreItem.toLowerCase()}`} className="oc-pulsable rounded p-1 text-neutral-400 hover:bg-red-50 hover:text-red-600">
+                  <button type="button" onClick={() => void quitar(i)} title={`Eliminar ${def.nombreItem.toLowerCase()}`} className="oc-pulsable rounded p-1 text-tinta-tenue hover:bg-red-50 hover:text-red-600">
                     <Trash2 size={14} />
                   </button>
                 )}
-                <button type="button" onClick={() => setAbierto(estaAbierto ? null : i)} className="oc-pulsable rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro">
+                <button type="button" onClick={() => setAbierto(estaAbierto ? null : i)} className="oc-pulsable rounded p-1 text-tinta-tenue hover:bg-tinta/5 hover:text-tinta">
                   {estaAbierto ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
                 </button>
               </div>
               {estaAbierto && (
-                <div className="flex flex-col gap-4 border-t border-black/8 px-3 py-3">
+                <div className="flex flex-col gap-4 border-t border-borde px-3 py-3">
                   {Object.entries(def.plantilla).map(([clave, sub]) => (
                     <Nodo key={clave} def={sub} ruta={unir(ruta, i, clave)} nivel={nivel + 2} />
                   ))}
@@ -173,13 +173,13 @@ const Campo: React.FC<{ def: CampoDef<unknown>; ruta: string }> = ({ def, ruta }
 
   const encabezado = (
     <div className="mb-1.5 flex items-baseline justify-between gap-2">
-      <label className="text-[13px] font-bold text-gris-oscuro">{def.etiqueta}</label>
+      <label className="text-[13px] font-bold text-tinta">{def.etiqueta}</label>
       {cambiado && (
         <button
           type="button"
           onClick={() => escribir(structuredClone(porDefecto))}
           title="Volver al texto original"
-          className="oc-pulsable flex shrink-0 items-center gap-1 text-[11px] font-semibold text-neutral-400 hover:text-marca"
+          className="oc-pulsable flex shrink-0 items-center gap-1 text-[11px] font-semibold text-tinta-tenue hover:text-marca"
         >
           <RotateCcw size={11} /> Original
         </button>
@@ -191,7 +191,7 @@ const Campo: React.FC<{ def: CampoDef<unknown>; ruta: string }> = ({ def, ruta }
 
   const contador = (texto: string) =>
     def.max ? (
-      <span className={`ml-auto text-[11px] tabular-nums ${texto.length > def.max ? 'font-bold text-amber-600' : 'text-neutral-400'}`}>
+      <span className={`ml-auto text-[11px] tabular-nums ${texto.length > def.max ? 'font-bold text-amber-600' : 'text-tinta-tenue'}`}>
         {texto.length}/{def.max}
       </span>
     ) : null;
@@ -230,10 +230,10 @@ const Campo: React.FC<{ def: CampoDef<unknown>; ruta: string }> = ({ def, ruta }
 
     case 'booleano':
       return (
-        <div className="flex items-start justify-between gap-4 rounded-xl bg-black/[0.03] px-3.5 py-3">
+        <div className="flex items-start justify-between gap-4 rounded-xl bg-tinta/[0.03] px-3.5 py-3">
           <div className="min-w-0">
-            <p className="text-[13px] font-bold text-gris-oscuro">{def.etiqueta}</p>
-            {def.ayuda && <p className="mt-1 text-[12px] leading-snug text-neutral-500">{def.ayuda}</p>}
+            <p className="text-[13px] font-bold text-tinta">{def.etiqueta}</p>
+            {def.ayuda && <p className="mt-1 text-[12px] leading-snug text-tinta-suave">{def.ayuda}</p>}
           </div>
           <Interruptor valor={!!valor} onCambio={escribir} etiqueta={def.etiqueta} />
         </div>
@@ -248,7 +248,7 @@ const Campo: React.FC<{ def: CampoDef<unknown>; ruta: string }> = ({ def, ruta }
               type="color"
               value={/^#[0-9a-f]{6}$/i.test(String(valor)) ? String(valor) : '#000000'}
               onChange={(e) => escribir(e.target.value)}
-              className="h-11 w-14 shrink-0 cursor-pointer rounded-lg border border-black/10 bg-white p-1"
+              className="h-11 w-14 shrink-0 cursor-pointer rounded-lg border border-borde bg-panel p-1"
               aria-label={def.etiqueta}
             />
             <div className="flex flex-wrap gap-1.5">
@@ -276,10 +276,10 @@ const Campo: React.FC<{ def: CampoDef<unknown>; ruta: string }> = ({ def, ruta }
           <div>
             {encabezado}
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-marca text-negro">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-marca text-tinta">
                 <Icono clave={String(valor)} size={20} />
               </div>
-              <div className="oc-scroll grid max-h-32 flex-1 grid-cols-8 gap-1 overflow-y-auto rounded-xl border border-black/10 bg-white p-1.5 sm:grid-cols-10">
+              <div className="oc-scroll grid max-h-32 flex-1 grid-cols-8 gap-1 overflow-y-auto rounded-xl border border-borde bg-panel p-1.5 sm:grid-cols-10">
                 {def.opciones!.map((o) => (
                   <button
                     key={o.valor}
@@ -287,7 +287,7 @@ const Campo: React.FC<{ def: CampoDef<unknown>; ruta: string }> = ({ def, ruta }
                     title={o.etiqueta}
                     onClick={() => escribir(o.valor)}
                     className={`oc-pulsable flex aspect-square items-center justify-center rounded-lg ${
-                      valor === o.valor ? 'bg-marca text-negro' : 'text-neutral-500 hover:bg-black/[0.06] hover:text-negro'
+                      valor === o.valor ? 'bg-marca text-tinta' : 'text-tinta-suave hover:bg-tinta/[0.06] hover:text-tinta'
                     }`}
                   >
                     <Icono clave={o.valor} size={16} />
@@ -348,13 +348,13 @@ const CampoOrden: React.FC<{ def: CampoDef<unknown>; valor: string[]; escribir: 
   return (
     <div>
       <label className="oc-etiqueta">{def.etiqueta}</label>
-      <div className="flex flex-col gap-1.5 rounded-xl border border-black/10 bg-white p-2">
+      <div className="flex flex-col gap-1.5 rounded-xl border border-borde bg-panel p-2">
         {lista.map((clave, i) => (
-          <div key={clave} className="flex items-center gap-2 rounded-lg bg-black/[0.03] px-2.5 py-2">
-            <span className="w-5 shrink-0 text-center text-[11px] font-bold text-neutral-400 tabular-nums">{i + 1}</span>
-            <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-negro">{etiquetas.get(clave) ?? clave}</span>
-            <button type="button" onClick={() => mover(i, -1)} disabled={i === 0} title="Subir" className="oc-pulsable rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro disabled:opacity-25"><ChevronUp size={14} /></button>
-            <button type="button" onClick={() => mover(i, 1)} disabled={i === lista.length - 1} title="Bajar" className="oc-pulsable rounded p-1 text-neutral-400 hover:bg-black/5 hover:text-negro disabled:opacity-25"><ChevronDown size={14} /></button>
+          <div key={clave} className="flex items-center gap-2 rounded-lg bg-tinta/[0.03] px-2.5 py-2">
+            <span className="w-5 shrink-0 text-center text-[11px] font-bold text-tinta-tenue tabular-nums">{i + 1}</span>
+            <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-tinta">{etiquetas.get(clave) ?? clave}</span>
+            <button type="button" onClick={() => mover(i, -1)} disabled={i === 0} title="Subir" className="oc-pulsable rounded p-1 text-tinta-tenue hover:bg-tinta/5 hover:text-tinta disabled:opacity-25"><ChevronUp size={14} /></button>
+            <button type="button" onClick={() => mover(i, 1)} disabled={i === lista.length - 1} title="Bajar" className="oc-pulsable rounded p-1 text-tinta-tenue hover:bg-tinta/5 hover:text-tinta disabled:opacity-25"><ChevronDown size={14} /></button>
           </div>
         ))}
       </div>
@@ -371,16 +371,16 @@ const CampoImagen: React.FC<{
   return (
     <div>
       {encabezado}
-      <div className="flex gap-3 rounded-xl border border-black/10 bg-white p-2.5">
+      <div className="flex gap-3 rounded-xl border border-borde bg-panel p-2.5">
         <button
           type="button"
           onClick={() => setGaleria(true)}
-          className="oc-pulsable relative h-20 w-28 shrink-0 overflow-hidden rounded-lg bg-[#f1f1ef] hover:opacity-80"
+          className="oc-pulsable relative h-20 w-28 shrink-0 overflow-hidden rounded-lg bg-lienzo hover:opacity-80"
         >
           {valor.src ? (
             <img src={valor.src} alt="" className="h-full w-full object-cover" />
           ) : (
-            <span className="flex h-full w-full items-center justify-center text-neutral-400"><IconoImagen size={20} /></span>
+            <span className="flex h-full w-full items-center justify-center text-tinta-tenue"><IconoImagen size={20} /></span>
           )}
         </button>
         <div className="flex min-w-0 flex-1 flex-col justify-between gap-2">
@@ -420,13 +420,13 @@ const CampoArchivo: React.FC<{
   return (
     <div>
       {encabezado}
-      <div className="flex items-center gap-3 rounded-xl border border-black/10 bg-white p-2.5">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#f1f1ef] text-neutral-400">
+      <div className="flex items-center gap-3 rounded-xl border border-borde bg-panel p-2.5">
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-lienzo text-tinta-tenue">
           {esVideo ? <ExternalLink size={18} /> : <FileText size={18} />}
         </span>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-[13px] font-semibold text-negro">{valor.nombre || valor.src || 'Sin archivo'}</p>
-          {valor.src && <p className="truncate text-[11.5px] text-neutral-400">{valor.src}</p>}
+          <p className="truncate text-[13px] font-semibold text-tinta">{valor.nombre || valor.src || 'Sin archivo'}</p>
+          {valor.src && <p className="truncate text-[11.5px] text-tinta-tenue">{valor.src}</p>}
         </div>
         <Boton tamano="sm" onClick={() => setGaleria(true)}>{valor.src ? 'Cambiar' : 'Elegir'}</Boton>
       </div>
@@ -463,13 +463,13 @@ const CampoBoton: React.FC<{
   return (
     <div>
       {encabezado}
-      <div className="flex flex-col gap-2.5 rounded-xl border border-black/10 bg-white p-3">
+      <div className="flex flex-col gap-2.5 rounded-xl border border-borde bg-panel p-3">
         <div>
-          <label className="mb-1 block text-[11.5px] font-bold uppercase tracking-wide text-neutral-400">Texto del botón</label>
+          <label className="mb-1 block text-[11.5px] font-bold uppercase tracking-wide text-tinta-tenue">Texto del botón</label>
           <input value={valor.texto} onChange={(e) => escribir({ ...valor, texto: e.target.value })} className="oc-campo" />
         </div>
         <div>
-          <label className="mb-1 block text-[11.5px] font-bold uppercase tracking-wide text-neutral-400">Al pulsarlo</label>
+          <label className="mb-1 block text-[11.5px] font-bold uppercase tracking-wide text-tinta-tenue">Al pulsarlo</label>
           <select
             value={otro ? '__otro' : valor.url}
             onChange={(e) => {
@@ -490,7 +490,7 @@ const CampoBoton: React.FC<{
               placeholder="https://…  ·  /nosotros  ·  #contacto"
               className="oc-campo"
             />
-            <label className="mt-2 flex items-center gap-2 text-[12.5px] font-semibold text-gris-oscuro">
+            <label className="mt-2 flex items-center gap-2 text-[12.5px] font-semibold text-tinta">
               <input type="checkbox" checked={valor.nuevaPestana} onChange={(e) => escribir({ ...valor, nuevaPestana: e.target.checked })} className="accent-marca" />
               Abrir en una pestaña nueva
             </label>

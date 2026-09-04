@@ -4,6 +4,7 @@ import {
   Settings, PanelLeftClose, PanelLeftOpen, ChevronDown, X,
 } from 'lucide-react';
 import { PAGINAS, type Entrada } from './navegacion';
+import { Logo } from './ui';
 
 /**
  * Barra lateral con los módulos del panel.
@@ -80,20 +81,20 @@ export const BarraLateral: React.FC<Props> = ({
                 aria-current={activo ? 'page' : undefined}
                 aria-expanded={id === 'contenido' && !plegada ? contenidoAbierto : undefined}
                 className={`oc-item oc-pulsable relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13.5px] font-bold ${
-                  activo ? 'bg-marca/15 text-negro' : 'text-gris-oscuro hover:bg-black/[0.05]'
+                  activo ? 'bg-marca/15 text-tinta' : 'text-tinta hover:bg-tinta/[0.05]'
                 }`}
               >
                 <span className="relative flex shrink-0 items-center">
-                  <Icono size={18} className={activo ? 'text-marca-oscuro' : 'text-neutral-500'} />
+                  <Icono size={18} className={activo ? 'text-acento-texto' : 'text-tinta-suave'} />
                   {id === 'mensajes' && sinLeer > 0 && (
-                    <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-marca px-1 text-[10px] font-black text-negro">
+                    <span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-marca px-1 text-[10px] font-black text-tinta">
                       {sinLeer > 9 ? '9+' : sinLeer}
                     </span>
                   )}
                 </span>
                 <span className="oc-etiqueta-lateral flex-1">{etiqueta}</span>
                 {id === 'contenido' && !plegada && (
-                  <ChevronDown size={14} className={`oc-chevron shrink-0 text-neutral-400 ${contenidoAbierto ? '' : '-rotate-90'}`} />
+                  <ChevronDown size={14} className={`oc-chevron shrink-0 text-tinta-tenue ${contenidoAbierto ? '' : '-rotate-90'}`} />
                 )}
                 <span className="oc-globo" aria-hidden="true">{etiqueta}</span>
               </button>
@@ -101,16 +102,16 @@ export const BarraLateral: React.FC<Props> = ({
               {/* Páginas del sitio, dentro de «Contenido». Ver la nota de
                   .oc-submenu en admin.css sobre por qué no se anima el alto. */}
               {id === 'contenido' && contenidoAbierto && (
-                <div className="oc-submenu mb-1 ml-5 mt-0.5 border-l border-black/10 pl-2">
+                <div className="oc-submenu mb-1 ml-5 mt-0.5 border-l border-borde pl-2">
                   {PAGINAS.map((p) => (
                     <div key={p.id} className="mb-2">
-                      <p className="px-2 pb-0.5 pt-1 text-[10.5px] font-black uppercase tracking-wider text-neutral-400">{p.etiqueta}</p>
+                      <p className="px-2 pb-0.5 pt-1 text-[10.5px] font-black uppercase tracking-wider text-tinta-tenue">{p.etiqueta}</p>
                       {p.entradas.map((e) => (
                         <button
                           key={e.ruta}
                           onClick={() => { onEntrada(e); onCerrarCajon(); }}
                           className={`oc-pulsable block w-full truncate rounded-lg px-2 py-1.5 text-left text-[12.5px] font-semibold ${
-                            entrada.ruta === e.ruta ? 'bg-marca/20 text-negro' : 'text-gris-oscuro/85 hover:bg-black/[0.04]'
+                            entrada.ruta === e.ruta ? 'bg-marca/20 text-tinta' : 'text-tinta-suave hover:bg-tinta/[0.04]'
                           }`}
                         >
                           {e.etiqueta}
@@ -125,17 +126,37 @@ export const BarraLateral: React.FC<Props> = ({
         })}
       </nav>
 
-      {/* Plegar: solo tiene sentido en escritorio, donde la barra ocupa sitio */}
+    </>
+  );
+
+  /**
+   * Cabecera de la barra en escritorio, con el interruptor de plegado.
+   *
+   * Está arriba y no abajo porque es donde se busca: el gesto de encoger un
+   * panel se asocia a su esquina superior, no al pie de una lista que puede
+   * quedar fuera de la pantalla si hay muchas páginas abiertas.
+   *
+   * Plegada, el botón ocupa el ancho entero y se centra; así el objetivo sigue
+   * siendo grande y no hay que apuntar a un icono de 17 px.
+   */
+  const cabecera = (
+    <div className={`flex shrink-0 items-center border-b border-borde px-2 py-2 ${plegada ? 'justify-center' : 'justify-between'}`}>
+      {!plegada && (
+        <button onClick={() => onModulo('inicio')} title="Ir al inicio del panel" className="oc-pulsable ml-1 rounded-lg p-1">
+          <Logo className="h-6 w-auto" />
+        </button>
+      )}
       <button
         onClick={() => onPlegar(!plegada)}
         title={plegada ? 'Ampliar el menú' : 'Reducir el menú'}
-        className="oc-item oc-pulsable relative hidden items-center gap-3 border-t border-black/8 px-4 py-3 text-[12.5px] font-bold text-neutral-500 hover:bg-black/[0.04] hover:text-negro lg:flex"
+        aria-label={plegada ? 'Ampliar el menú' : 'Reducir el menú'}
+        aria-expanded={!plegada}
+        className="oc-item oc-pulsable relative rounded-lg p-2 text-tinta-tenue hover:bg-tinta/[0.05] hover:text-tinta"
       >
-        {plegada ? <PanelLeftOpen size={17} className="shrink-0" /> : <PanelLeftClose size={17} className="shrink-0" />}
-        <span className="oc-etiqueta-lateral">Reducir menú</span>
+        {plegada ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}
         <span className="oc-globo" aria-hidden="true">Ampliar el menú</span>
       </button>
-    </>
+    </div>
   );
 
   return (
@@ -143,8 +164,9 @@ export const BarraLateral: React.FC<Props> = ({
       {/* Escritorio */}
       <aside
         data-plegada={plegada}
-        className={`oc-lateral hidden shrink-0 flex-col border-r border-black/8 bg-white lg:flex ${plegada ? 'w-16' : 'w-60'}`}
+        className={`oc-lateral hidden shrink-0 flex-col border-r border-borde bg-panel lg:flex ${plegada ? 'w-16' : 'w-60'}`}
       >
+        {cabecera}
         {cuerpo}
       </aside>
 
@@ -154,11 +176,11 @@ export const BarraLateral: React.FC<Props> = ({
           <div className="oc-velo absolute inset-0 bg-black/40" onClick={onCerrarCajon} />
           <aside
             data-plegada="false"
-            className="oc-cajon absolute inset-y-0 left-0 flex w-[17rem] max-w-[85vw] flex-col bg-white shadow-2xl"
+            className="oc-cajon absolute inset-y-0 left-0 flex w-[17rem] max-w-[85vw] flex-col bg-panel shadow-2xl"
           >
-            <div className="flex items-center justify-between border-b border-black/8 px-4 py-3">
-              <img src="/logo_negro.svg" alt="Offcourt" className="h-6 w-auto" />
-              <button onClick={onCerrarCajon} aria-label="Cerrar menú" className="oc-pulsable rounded-lg p-1.5 text-neutral-400 hover:bg-black/5 hover:text-negro">
+            <div className="flex items-center justify-between border-b border-borde px-4 py-3">
+              <Logo className="h-6 w-auto" />
+              <button onClick={onCerrarCajon} aria-label="Cerrar menú" className="oc-pulsable rounded-lg p-1.5 text-tinta-tenue hover:bg-tinta/5 hover:text-tinta">
                 <X size={18} />
               </button>
             </div>

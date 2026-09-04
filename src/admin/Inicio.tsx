@@ -76,7 +76,7 @@ export const Inicio: React.FC<Props> = ({ onModulo, onEntrada, onAyuda, sinLeer 
           cola: ` · Última publicación ${tiempoRelativo(publicadoEn)}`,
         }
       : {
-          punto: 'bg-white/50',
+          punto: 'bg-panel/50',
           texto: 'Tu sitio muestra su contenido original.',
           cola: ' · Todavía no has publicado nada desde aquí',
         };
@@ -131,7 +131,7 @@ export const Inicio: React.FC<Props> = ({ onModulo, onEntrada, onAyuda, sinLeer 
           <div className="mt-4 flex flex-wrap gap-2">
             <button
               onClick={() => onModulo('contenido')}
-              className="oc-pulsable inline-flex items-center gap-2 rounded-lg bg-white px-3.5 py-2 text-[13px] font-bold text-negro hover:bg-white/90"
+              className="oc-pulsable inline-flex items-center gap-2 rounded-lg bg-panel px-3.5 py-2 text-[13px] font-bold text-tinta hover:bg-panel/90"
             >
               <MousePointerClick size={14} /> Editar mi sitio
             </button>
@@ -139,13 +139,13 @@ export const Inicio: React.FC<Props> = ({ onModulo, onEntrada, onAyuda, sinLeer 
               href="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="oc-pulsable inline-flex items-center gap-2 rounded-lg border border-white/25 px-3.5 py-2 text-[13px] font-bold text-white hover:border-white/50 hover:bg-white/10"
+              className="oc-pulsable inline-flex items-center gap-2 rounded-lg border border-white/25 px-3.5 py-2 text-[13px] font-bold text-white hover:border-white/50 hover:bg-panel/10"
             >
               <ExternalLink size={14} /> Ver mi sitio
             </a>
             <button
               onClick={onAyuda}
-              className="oc-pulsable inline-flex items-center gap-2 rounded-lg border border-white/25 px-3.5 py-2 text-[13px] font-bold text-white hover:border-white/50 hover:bg-white/10"
+              className="oc-pulsable inline-flex items-center gap-2 rounded-lg border border-white/25 px-3.5 py-2 text-[13px] font-bold text-white hover:border-white/50 hover:bg-panel/10"
             >
               <HelpCircle size={14} /> Recorrido rápido
             </button>
@@ -155,8 +155,8 @@ export const Inicio: React.FC<Props> = ({ onModulo, onEntrada, onAyuda, sinLeer 
 
       {/* ------------------------------------------------------- pendientes */}
       {pendientes.length > 0 && (
-        <section className="rounded-xl border border-black/10 bg-white px-4 py-3.5">
-          <h2 className="mb-2 text-[13.5px] font-bold text-negro">Para dejarlo redondo</h2>
+        <section className="rounded-xl border border-borde bg-panel px-4 py-3.5">
+          <h2 className="mb-2 text-[13.5px] font-bold text-tinta">Para dejarlo redondo</h2>
           <ul className="flex flex-col">
             {pendientes.map(({ Icono, texto, ir }) => (
               <li key={texto}>
@@ -164,9 +164,9 @@ export const Inicio: React.FC<Props> = ({ onModulo, onEntrada, onAyuda, sinLeer 
                   onClick={ir}
                   className="oc-pulsable group flex w-full items-center gap-3 rounded-lg px-1 py-2 text-left hover:bg-marca/[0.06]"
                 >
-                  <Icono size={15} className="shrink-0 text-marca-oscuro" />
-                  <span className="min-w-0 flex-1 text-[13px] leading-snug text-gris-oscuro">{texto}</span>
-                  <span className="flex shrink-0 items-center gap-0.5 text-[12px] font-bold text-neutral-400 transition-colors group-hover:text-marca-oscuro">
+                  <Icono size={15} className="shrink-0 text-acento-texto" />
+                  <span className="min-w-0 flex-1 text-[13px] leading-snug text-tinta">{texto}</span>
+                  <span className="flex shrink-0 items-center gap-0.5 text-[12px] font-bold text-tinta-tenue transition-colors group-hover:text-acento-texto">
                     Ir <ChevronRight size={13} />
                   </span>
                 </button>
@@ -178,22 +178,22 @@ export const Inicio: React.FC<Props> = ({ onModulo, onEntrada, onAyuda, sinLeer 
 
       {/* ----------------------------------------------------------- atajos */}
       <section>
-        <h2 className="mb-3 font-outfit text-[15px] font-extrabold uppercase tracking-tight text-negro">Todo lo que puedes cambiar</h2>
+        <h2 className="mb-3 font-outfit text-[15px] font-extrabold uppercase tracking-tight text-tinta">Todo lo que puedes cambiar</h2>
         <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
           {atajos.map(({ Icono, titulo, texto, ir }) => (
             <button
               key={titulo}
               onClick={ir}
-              className="oc-pulsable group flex items-center gap-3.5 rounded-xl border border-black/10 bg-white px-4 py-3 text-left hover:border-marca/60 hover:bg-marca/[0.04]"
+              className="oc-pulsable group flex items-center gap-3.5 rounded-xl border border-borde bg-panel px-4 py-3 text-left hover:border-marca/60 hover:bg-marca/[0.04]"
             >
-              <span className="oc-pulsable flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-marca/12 text-marca-oscuro transition-colors group-hover:bg-marca group-hover:text-negro">
+              <span className="oc-pulsable flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-marca/12 text-acento-texto transition-colors group-hover:bg-marca group-hover:text-tinta">
                 <Icono size={17} />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block text-[13.5px] font-bold text-negro">{titulo}</span>
-                <span className="block text-[12.5px] text-neutral-500">{texto}</span>
+                <span className="block text-[13.5px] font-bold text-tinta">{titulo}</span>
+                <span className="block text-[12.5px] text-tinta-suave">{texto}</span>
               </span>
-              <ArrowRight size={15} className="shrink-0 text-neutral-300 transition-colors group-hover:text-marca-oscuro" />
+              <ArrowRight size={15} className="shrink-0 text-tinta-tenue transition-colors group-hover:text-acento-texto" />
             </button>
           ))}
         </div>
@@ -226,13 +226,13 @@ const Cifra: React.FC<{
   <button
     onClick={onClick}
     className={`oc-pulsable flex items-center gap-3 rounded-xl border px-3.5 py-3 text-left ${
-      destacada ? 'border-marca/50 bg-marca/[0.07] hover:bg-marca/[0.11]' : 'border-black/10 bg-white hover:border-marca/50 hover:bg-marca/[0.04]'
+      destacada ? 'border-marca/50 bg-marca/[0.07] hover:bg-marca/[0.11]' : 'border-borde bg-panel hover:border-marca/50 hover:bg-marca/[0.04]'
     }`}
   >
-    <Icono size={16} className={`shrink-0 ${destacada ? 'text-marca-oscuro' : 'text-neutral-400'}`} />
+    <Icono size={16} className={`shrink-0 ${destacada ? 'text-acento-texto' : 'text-tinta-tenue'}`} />
     <span className="min-w-0">
-      <span className="block font-outfit text-[1.05rem] font-extrabold leading-none tracking-tight text-negro">{valor}</span>
-      <span className="mt-0.5 block text-[11.5px] leading-snug text-neutral-500">{etiqueta}</span>
+      <span className="block font-outfit text-[1.05rem] font-extrabold leading-none tracking-tight text-tinta">{valor}</span>
+      <span className="mt-0.5 block text-[11.5px] leading-snug text-tinta-suave">{etiqueta}</span>
     </span>
   </button>
 );

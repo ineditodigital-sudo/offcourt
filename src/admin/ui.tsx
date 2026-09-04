@@ -1,7 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, Loader2, AlertCircle, CheckCircle2, Info } from 'lucide-react';
+import { useTema } from './tema';
 
 /** Piezas de interfaz que se repiten por todo el panel. */
+
+/**
+ * Logotipo que sigue al tema. El archivo negro desaparece sobre el panel
+ * oscuro, así que no basta con uno solo; el sitio ya resolvía esto igual en su
+ * navbar y su pie.
+ */
+export const Logo: React.FC<{ className?: string }> = ({ className = 'h-6 w-auto' }) => {
+  const { tema } = useTema();
+  return <img src={tema === 'oscuro' ? '/logo_blanco.svg' : '/logo_negro.svg'} alt="Offcourt Sports Group" className={className} />;
+};
 
 export const Boton: React.FC<{
   onClick?: () => void;
@@ -17,10 +28,10 @@ export const Boton: React.FC<{
   const base = 'oc-pulsable inline-flex items-center justify-center gap-2 rounded-xl font-bold disabled:cursor-not-allowed disabled:opacity-50';
   const medida = tamano === 'sm' ? 'px-3 py-1.5 text-[13px]' : 'px-4 py-2.5 text-sm';
   const estilos = {
-    principal: 'bg-marca text-negro hover:bg-marca-oscuro shadow-sm',
-    normal: 'bg-white text-negro border border-black/10 hover:bg-black/[0.04]',
-    suave: 'text-gris-oscuro hover:bg-black/[0.06]',
-    peligro: 'bg-white text-red-600 border border-red-200 hover:bg-red-50',
+    principal: 'bg-marca text-tinta hover:bg-marca-oscuro shadow-sm',
+    normal: 'bg-panel text-tinta border border-borde hover:bg-tinta/[0.04]',
+    suave: 'text-tinta hover:bg-tinta/[0.06]',
+    peligro: 'bg-panel text-red-600 border border-red-200 hover:bg-red-50',
   }[tipo];
   return (
     <button type={submit ? 'submit' : 'button'} onClick={onClick} disabled={disabled || cargando} title={title} className={`${base} ${medida} ${estilos} ${className}`}>
@@ -63,18 +74,18 @@ export const Modal: React.FC<{
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div className="oc-velo absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={onCerrar} />
-      <div className={`oc-dialogo relative flex max-h-[88vh] w-full ${anchos} flex-col overflow-hidden rounded-2xl bg-white shadow-2xl`}>
-        <div className="flex items-start justify-between gap-4 border-b border-black/8 px-5 py-4">
+      <div className={`oc-dialogo relative flex max-h-[88vh] w-full ${anchos} flex-col overflow-hidden rounded-2xl bg-panel shadow-2xl`}>
+        <div className="flex items-start justify-between gap-4 border-b border-borde px-5 py-4">
           <div className="min-w-0">
-            <h2 className="font-outfit text-lg font-extrabold uppercase tracking-tight text-negro">{titulo}</h2>
-            {subtitulo && <p className="mt-0.5 text-[13px] text-neutral-500">{subtitulo}</p>}
+            <h2 className="font-outfit text-lg font-extrabold uppercase tracking-tight text-tinta">{titulo}</h2>
+            {subtitulo && <p className="mt-0.5 text-[13px] text-tinta-suave">{subtitulo}</p>}
           </div>
-          <button onClick={onCerrar} aria-label="Cerrar" className="oc-pulsable -mr-1 rounded-lg p-1.5 text-neutral-400 hover:bg-black/5 hover:text-negro">
+          <button onClick={onCerrar} aria-label="Cerrar" className="oc-pulsable -mr-1 rounded-lg p-1.5 text-tinta-tenue hover:bg-tinta/5 hover:text-tinta">
             <X size={18} />
           </button>
         </div>
         <div className="oc-scroll min-h-0 flex-1 overflow-y-auto px-5 py-4">{children}</div>
-        {pie && <div className="flex items-center justify-end gap-2 border-t border-black/8 bg-[#fafaf9] px-5 py-3.5">{pie}</div>}
+        {pie && <div className="flex items-center justify-end gap-2 border-t border-borde bg-panel-alto px-5 py-3.5">{pie}</div>}
       </div>
     </div>
   );
@@ -106,7 +117,7 @@ export function useConfirmacion() {
         </>
       }
     >
-      <div className="text-[14px] leading-relaxed text-gris-oscuro">{pregunta.texto}</div>
+      <div className="text-[14px] leading-relaxed text-tinta">{pregunta.texto}</div>
     </Modal>
   ) : null;
 
@@ -153,14 +164,14 @@ export const Interruptor: React.FC<{ valor: boolean; onCambio: (v: boolean) => v
     aria-checked={valor}
     aria-label={etiqueta}
     onClick={() => onCambio(!valor)}
-    className={`oc-interruptor relative h-6 w-11 shrink-0 rounded-full ${valor ? 'bg-marca' : 'bg-black/15'}`}
+    className={`oc-interruptor relative h-6 w-11 shrink-0 rounded-full ${valor ? 'bg-marca' : 'bg-borde-fuerte'}`}
   >
-    <span className={`oc-interruptor-pomo absolute top-0.5 h-5 w-5 rounded-full bg-white shadow ${valor ? 'left-[22px]' : 'left-0.5'}`} />
+    <span className={`oc-interruptor-pomo absolute top-0.5 h-5 w-5 rounded-full bg-panel shadow ${valor ? 'left-[22px]' : 'left-0.5'}`} />
   </button>
 );
 
 export const Cargando: React.FC<{ texto?: string }> = ({ texto = 'Cargando…' }) => (
-  <div className="flex h-full min-h-48 flex-col items-center justify-center gap-3 text-neutral-500">
+  <div className="flex h-full min-h-48 flex-col items-center justify-center gap-3 text-tinta-suave">
     <Loader2 size={26} className="animate-spin text-marca" />
     <p className="text-sm font-semibold">{texto}</p>
   </div>
