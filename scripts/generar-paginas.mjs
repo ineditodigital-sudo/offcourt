@@ -131,6 +131,27 @@ for (const p of lista) {
 }
 
 // El bundle SSR es material intermedio: no debe acabar en dist ni en el repo.
-rmSync(resolve(RAIZ, '.prerender'), { recursive: true, force: true });
+//
+// En Windows el borrado falla de vez en cuando con ENOTEMPTY aunque la carpeta
+// esté ya vacía: el antivirus o el propio explorador conservan un descriptor
+// abierto unos milisegundos después de que Vite suelte los archivos. Se
+// reintenta un momento y, si aun así no se puede, se avisa y se sigue: la
+// carpeta está en .gitignore y el build ya terminó su trabajo. Antes esto
+// tumbaba el build entero DESPUÉS de haber generado bien todas las páginas.
+function limpiarTemporal(dir, intentos = 5) {
+  for (let i = 0; i < intentos; i++) {
+    try {
+      rmSync(dir, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
+      return true;
+    } catch {
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 150);
+    }
+  }
+  return false;
+}
+
+if (!limpiarTemporal(resolve(RAIZ, '.prerender'))) {
+  console.warn('  [prerender] aviso: no se pudo borrar .prerender/ (está en .gitignore).');
+}
 
 console.log(`  [prerender] index.html ahora: ${kb(readFileSync(HTML).length)} KB`);
